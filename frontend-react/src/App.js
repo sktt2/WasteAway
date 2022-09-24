@@ -1,15 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ListBooks from './components/ListBooks.js';
 import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 import Header from './components/Header.js';
-import AddBook from './components/AddBook.js';
-import UpdateBook from './components/UpdateBook.js';
 import ListUsers from './components/ListUsers.js';
 import AddUser from './components/AddUser.js';
-import Login from './components/Login.js';
+import Login from './pages/Login.js';
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
-import Logout from './components/Logout.js';
+import Logout from './pages/Logout.js';
 import Error from './components/Error.js';
 
 /**
@@ -26,8 +23,6 @@ class App extends Component {
               <Header />
               <Switch> 
                 <Route path = "/login" component={Login}/> 
-                <Route path = "/list-books" component = {ListBooks}></Route>
-                <Route path = "/add-book" component = {AddBook}></Route>
                 <Route path = "/list-users" component = {ListUsers}></Route>
                 <Route path = "/add-user" component = {AddUser}></Route>  
                 <Route path = "/logout" component = {Logout}></Route>
