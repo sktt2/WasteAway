@@ -52,13 +52,7 @@ public class SecurityConfig {
                 .httpBasic()
                 .and() // "and()"" method allows us to continue configuring the parent
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/books").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/books/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/books/*").hasRole("ADMIN")
                 // your code here
-                .antMatchers(HttpMethod.POST, "/books/*/reviews").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.PUT, "/books/*/reviews/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/books/*/reviews/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                 .and()

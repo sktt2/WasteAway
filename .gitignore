@@ -108,3 +108,6 @@ target/
 
 #java h2 db files
 data/
+
+#properties file
+resources/
