@@ -1,4 +1,4 @@
-package csd.week6.book;
+package csd.app.book;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * 
  */
 @Repository
-public interface BookRepository extends JpaRepository <Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long> {
     // derived query to find books by title
     List<Book> findByTitle(String title);
 

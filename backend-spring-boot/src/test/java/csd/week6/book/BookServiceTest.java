@@ -1,4 +1,4 @@
-package csd.week6.book;
+package csd.app.book;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -17,31 +17,31 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
-    
+
     @Mock
     private BookRepository books;
 
     @InjectMocks
     private BookServiceImpl bookService;
-    
-    
+
     @Test
-    void addBook_NewTitle_ReturnSavedBook(){
+    void addBook_NewTitle_ReturnSavedBook() {
         // arrange ***
         Book book = new Book("This is a New Title");
         // mock the "findbytitle" operation
         when(books.findByTitle(any(String.class))).thenReturn(new ArrayList<Book>());
-        // mock the "save" operation 
+        // mock the "save" operation
         when(books.save(any(Book.class))).thenReturn(book);
 
         // act ***
         Book savedBook = bookService.addBook(book);
-        
+
         // assert ***
         assertNotNull(savedBook);
         verify(books).findByTitle(book.getTitle());
         verify(books).save(book);
     }
+
     /**
      * TODO: Activity 1 (Week 6)
      * Write a test case: when adding a new book but the title already exists
@@ -51,19 +51,19 @@ public class BookServiceTest {
      * 
      */
     @Test
-    void addBook_SameTitle_ReturnNull(){
+    void addBook_SameTitle_ReturnNull() {
         // your code here
-                
+
     }
 
     @Test
-    void updateBook_NotFound_ReturnNull(){
+    void updateBook_NotFound_ReturnNull() {
         Book book = new Book("Updated Title of Book");
         Long bookId = 10L;
         when(books.findById(bookId)).thenReturn(Optional.empty());
-        
+
         Book updatedBook = bookService.updateBook(bookId, book);
-        
+
         assertNull(updatedBook);
         verify(books).findById(bookId);
     }

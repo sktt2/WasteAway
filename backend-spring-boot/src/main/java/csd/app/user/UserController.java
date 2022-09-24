@@ -1,4 +1,4 @@
-package csd.week6.user;
+package csd.app.user;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class UserController {
     private UserRepository users;
     private BCryptPasswordEncoder encoder;
 
-    public UserController(UserRepository users, BCryptPasswordEncoder encoder){
+    public UserController(UserRepository users, BCryptPasswordEncoder encoder) {
         this.users = users;
         this.encoder = encoder;
     }
@@ -23,15 +23,16 @@ public class UserController {
     }
 
     /**
-    * Using BCrypt encoder to encrypt the password for storage 
-    * @param user
+     * Using BCrypt encoder to encrypt the password for storage
+     * 
+     * @param user
      * @return
      */
     @PostMapping("/users")
-    public User addUser(@Valid @RequestBody User user){
+    public User addUser(@Valid @RequestBody User user) {
         // your code here
         user.setPassword(encoder.encode(user.getPassword()));
         return users.save(user);
     }
-   
+
 }

@@ -1,16 +1,14 @@
-package csd.week6.book;
+package csd.app.book;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class BookServiceImpl implements BookService {
-   
-    private BookRepository books;
-    
 
-    public BookServiceImpl(BookRepository books){
+    private BookRepository books;
+
+    public BookServiceImpl(BookRepository books) {
         this.books = books;
     }
 
@@ -19,12 +17,11 @@ public class BookServiceImpl implements BookService {
         return books.findAll();
     }
 
-    
     @Override
-    public Book getBook(Long id){
+    public Book getBook(Long id) {
         return books.findById(id).orElse(null);
     }
-    
+
     /**
      * Added logic to avoid adding books with the same title
      * Return null if there exists a book with the same title
@@ -32,15 +29,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book addBook(Book book) {
         List<Book> sameTitles = books.findByTitle(book.getTitle());
-        if(sameTitles.size() == 0)
+        if (sameTitles.size() == 0)
             return books.save(book);
         else
             return null;
     }
-    
+
     @Override
-    public Book updateBook(Long id, Book newBookInfo){
-        return books.findById(id).map(book -> {book.setTitle(newBookInfo.getTitle());
+    public Book updateBook(Long id, Book newBookInfo) {
+        return books.findById(id).map(book -> {
+            book.setTitle(newBookInfo.getTitle());
             return books.save(book);
         }).orElse(null);
 
@@ -52,7 +50,7 @@ public class BookServiceImpl implements BookService {
      * Cascading: removing a book will also remove all its associated reviews
      */
     @Override
-    public void deleteBook(Long id){
+    public void deleteBook(Long id) {
         books.deleteById(id);
     }
 

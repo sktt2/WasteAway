@@ -1,9 +1,9 @@
-package csd.week6.review;
+package csd.app.review;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import csd.week6.book.Book;
+import csd.app.book.Book;
 import lombok.*;
 
 @Entity
@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Review {
-    private  @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     @NotNull(message = "Book review should not be null")
     // null elements are considered valid, so we need a size constraints too
     @Size(min = 10, message = "Book review should be at least 10 characters long")

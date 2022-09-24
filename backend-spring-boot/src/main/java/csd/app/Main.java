@@ -1,14 +1,14 @@
-package csd.week6;
+package csd.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import csd.week6.book.Book;
-import csd.week6.book.BookRepository;
-import csd.week6.user.User;
-import csd.week6.user.UserRepository;
+import csd.app.book.Book;
+import csd.app.book.BookRepository;
+import csd.app.user.User;
+import csd.app.user.UserRepository;
 
 @SpringBootApplication
 public class Main {

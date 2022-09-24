@@ -1,4 +1,4 @@
-package csd.week6.user;
+package csd.app.user;
 
 import java.util.Optional;
 
