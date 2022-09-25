@@ -6,10 +6,6 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import lombok.*;
 
 @Entity
@@ -72,35 +68,4 @@ public class User {
     // // @JoinColumn(name = "userinfo_id", referencedColumnName = "id")
     // // private UserInfo userInfo;
 
-    // /*
-    // * Return a collection of authorities granted to the user.
-    // */
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    // return Arrays.asList(new SimpleGrantedAuthority(role));
-    // }
-
-    // /*
-    // * The various is___Expired() methods return a boolean to indicate whether
-    // * or not the user’s account is enabled or expired.
-    // */
-    // @Override
-    // public boolean isAccountNonExpired() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isAccountNonLocked() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isCredentialsNonExpired() {
-    // return true;
-    // }
-
-    // @Override
-    // public boolean isEnabled() {
-    // return true;
-    // }
 }

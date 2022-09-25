@@ -1,7 +1,6 @@
 package csd.app.security.jwt;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,11 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
