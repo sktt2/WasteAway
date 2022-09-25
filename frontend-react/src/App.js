@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {HashRouter as Router, Route, Switch} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Header from './components/Header.js';
 import ListUsers from './components/ListUsers.js';
 import AddUser from './components/AddUser.js';
@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import Logout from './pages/Logout.js';
 import Error from './components/Error.js';
-
+import Product from './pages/Product.js';
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
  * the switch component switches between routes, the path decides the route in browser
@@ -20,13 +20,14 @@ class App extends Component {
     return (
         <Container>
           <Router>
-              <Header />
+              <Header/>
               <Switch> 
                 <Route path = "/login" component={Login}/> 
                 <Route path = "/list-users" component = {ListUsers}></Route>
                 <Route path = "/add-user" component = {AddUser}></Route>  
                 <Route path = "/logout" component = {Logout}></Route>
                 <Route path = "/error" component = {Error}></Route>
+                <Route path = "/product" component = {Product}></Route>
                 <Route path = "/" component={Login}/> 
               </Switch>
           </Router>
