@@ -13,9 +13,7 @@ import "react-multi-carousel/lib/styles.css";
 // From components
 import CardComponent from '../components/Card';
 import CarouselComponent from '../components/Carousel';
-
-
-
+import ProductService from '../services/ProductService'
 
 const responsive = {
         desktop: {
@@ -41,26 +39,18 @@ class Product extends Component {
         this.setState({ pokemon: res.data["results"] });
     }
 
-    loadPokemon = () => {
-        axios
-        .get(this.state.url)
-        .then(res => {
-            this.setState(prevState => {
-            return {
-                pokemon: [...prevState.pokemon, ...res.data.results],
-                url: res.data.next
-            };
-            });
-        })
-        .catch(function(error) {
-            // handle error
-            console.log(error);
-        });
-    };
+
+    async getProducts() {
+        const res = await ProductService.getProducts();
+        console.log(res.data)
+    }
 
     render() {
         return (
             <div className="container">
+                <form>
+                    <button onClick={this.getProducts()}>TEST</button>
+                </form>
                 <Carousel responsive={responsive}>
                     {this.state.pokemon.map((pokemon, i)=>(
                         <CarouselComponent title={pokemon.name} description='hello' imgSource="address" buttonLink={pokemon.url} ></CarouselComponent>
@@ -70,19 +60,17 @@ class Product extends Component {
                 <br></br>
 
                 <React.Fragment>
-                    {this.state.pokemon ? (
-                        <div className="row">
-                            <InfiniteScroll>
-                                <Row xs={1} md={4} className="g-4">
-                                    {this.state.pokemon.map((pokemon, i) => (
-                                        <Col>
-                                        <CardComponent title={pokemon.name} description='hello' imgSource="address" buttonLink={pokemon.url}></CardComponent>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </InfiniteScroll>
-                        </div>
-                    ):(<h1>Loading Pokemon</h1>)}
+                    <div className="row">
+                        <InfiniteScroll>
+                            <Row xs={1} md={4} className="g-4">
+                                {this.state.pokemon.map((pokemon, i) => (
+                                    <Col>
+                                    <CardComponent title={pokemon.name} description='hello' imgSource="address" buttonLink={pokemon.url}></CardComponent>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </InfiniteScroll>
+                    </div>
                 </React.Fragment>
             </div>
         );

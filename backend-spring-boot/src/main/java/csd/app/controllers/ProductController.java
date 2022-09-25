@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import csd.app.product.Product;
 import csd.app.product.ProductRepository;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class ProductController {
     private ProductRepository products;
