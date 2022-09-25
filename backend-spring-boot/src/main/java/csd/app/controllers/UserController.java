@@ -1,4 +1,4 @@
-package csd.app.user;
+package csd.app.controllers;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import javax.validation.Valid;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import csd.app.user.Status;
+import csd.app.user.User;
+import csd.app.user.UserRepository;
 
 @RestController
 public class UserController {
@@ -31,7 +35,6 @@ public class UserController {
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
         // your code here
-        user.setPassword(encoder.encode(user.getPassword()));
         return users.save(user);
     }
 
