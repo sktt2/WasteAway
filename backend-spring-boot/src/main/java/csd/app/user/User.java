@@ -1,18 +1,10 @@
 package csd.app.user;
 
-import java.util.Arrays;
-import java.util.Collection;
+import csd.app.roles.*;
+import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import lombok.*;
 
@@ -20,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 
@@ -30,58 +21,51 @@ import lombok.*;
  * e.g., what authorities (roles) are granted to the user and whether the
  * account is enabled or not
  */
-public class User implements UserDetails {
-    private static final long serialVersionUID = 1L;
+public class User {
+    // private static final long serialVersionUID = 1L;
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
     @NotNull(message = "Username should not be null")
-    @Size(min = 5, max = 20, message = "Username should be between 5 and 20 characters")
+    @Column(unique = true)
     private String username;
 
+    // @NotNull(message = "name should not be null")
+    // private String name;
+
+    @Email
+    @Column(unique = true)
+    @NotNull(message = "email should not be null")
+    private String email;
+
+    // @NotNull(message = "address should not be null")
+    // private String address;
+
     @NotNull(message = "Password should not be null")
-    @Size(min = 8, message = "Password should be at least 8 characters")
     private String password;
 
-    @NotNull(message = "Authorities should not be null")
-    // We define two roles/authorities: ROLE_USER or ROLE_ADMIN
-    private String authorities;
+    // @NotNull(message = "Status should not be null")
+    // // Status TODO
+    // private String status;
 
-    public User(String username, String password, String authorities) {
+    // @NotNull(message = "phone number should not be null")
+    // @Column(unique = true, length = 8)
+    // private int phoneNumber;
+
+    private String attempt;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public User(String username, String email, String password) {
         this.username = username;
+        this.email = email;
         this.password = password;
-        this.authorities = authorities;
     }
 
-    /*
-     * Return a collection of authorities granted to the user.
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(authorities));
-    }
+    // // @OneToOne(cascade = CascadeType.ALL)
+    // // @JoinColumn(name = "userinfo_id", referencedColumnName = "id")
+    // // private UserInfo userInfo;
 
-    /*
-     * The various is___Expired() methods return a boolean to indicate whether
-     * or not the user’s account is enabled or expired.
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
