@@ -60,9 +60,8 @@ public class Main {
         }
 
         ProductRepository products = ctx.getBean(ProductRepository.class);
-        System.out.println("[Add product]:"
-                + products.save(new Product(000001, "ASUS LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now())));
-
+        Product newProd = new Product(000001, "ASUS LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now());
+        System.out.println("[Add product]:"+ products.save(newProd));
     }
 
 }
