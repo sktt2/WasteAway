@@ -13,6 +13,10 @@ import csd.app.user.User;
 import csd.app.user.UserRepository;
 import csd.app.roles.*;
 
+import csd.app.product.Product;
+import csd.app.product.ProductRepository;
+import java.time.LocalDateTime;
+
 @SpringBootApplication
 public class Main {
 
@@ -55,6 +59,9 @@ public class Main {
             System.out.println("[Add user]: " + users.save(user));
         }
 
+        ProductRepository products = ctx.getBean(ProductRepository.class);
+        Product newProd = new Product(000001, "ASUS LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now());
+        System.out.println("[Add product]:"+ products.save(newProd));
     }
 
 }

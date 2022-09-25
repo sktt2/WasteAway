@@ -6,7 +6,7 @@ class Header extends Component {
     render(){
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="/">Bookstore Demo</Navbar.Brand>
+                <Navbar.Brand href="/">Waste Away</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
@@ -14,10 +14,10 @@ class Header extends Component {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                    <Nav.Link href='/#/list-books'>Books</Nav.Link>
-                    <Nav.Link href='/#/list-users'>Users</Nav.Link>
-                    <Nav.Link href='/#/login'>Login</Nav.Link>
-                    <Nav.Link href='/#/logout'>Logout</Nav.Link>
+                    <Nav.Link href='/list-users'>Users</Nav.Link>
+                    <Nav.Link href='/login'>Login</Nav.Link>
+                    <Nav.Link href='/logout'>Logout</Nav.Link>
+                    <Nav.Link href='/product'>Product</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
