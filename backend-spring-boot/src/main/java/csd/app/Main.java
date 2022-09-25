@@ -1,5 +1,7 @@
 package csd.app;
 
+import java.util.Optional;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -14,14 +16,18 @@ public class Main {
     public static void main(String[] args) {
 
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
-
+        //
         // JPA user repository init
         UserRepository users = ctx.getBean(UserRepository.class);
         BCryptPasswordEncoder encoder = ctx.getBean(BCryptPasswordEncoder.class);
-        System.out.println("[Add user]: " + users.save(
-                new User("admin", encoder.encode("goodpassword"), "ROLE_ADMIN")).getUsername());
-        System.out.println("[Add user]: " + users.save(
-                new User("abcde", encoder.encode("goodpassword"), "ROLE_USER")).getUsername());
+        Optional<User> user = users.findByUsername("testuser");
+        if (!user.isPresent()) {
+
+            System.out.println("[Add user]: " + users.save(
+                    new User("testuser", "Test", "testuser@email.com", "asdsad", 87654321, "admin",
+                            encoder.encode("testpassword"), "0"))
+                    .getUsername());
+        }
 
     }
 
