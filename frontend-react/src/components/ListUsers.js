@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import BookService from '../services/BookService';
+// import BookService from '../services/BookService';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class ListUsers extends Component {
     constructor(props) {
@@ -12,15 +13,15 @@ class ListUsers extends Component {
         this.addUser = this.addUser.bind(this);
     }
         
-    componentDidMount() {
-        BookService.getUsers()
-            .then((res) => {
-                this.setState({ users:res.data });
-            })
-            .catch(() => {
-                this.props.history.push('/error');
-            });
-    }
+    // componentDidMount() {
+    //     BookService.getUsers()
+    //         .then((res) => {
+    //             this.setState({ users:res.data });
+    //         })
+    //         .catch(() => {
+    //             this.props.history.push('/error');
+    //         });
+    // }
     
     addUser() {
         this.props.history.push('/add-user');
