@@ -8,11 +8,27 @@ class AddProduct extends Component {
     constructor(props){
         super(props)
         this.state = {
-            username: '',
-            password: '',
+            productname: '',
+            description: '',
+            conditions: '',
             file: null
         }
+        this.changeProductname = this.changeProductname.bind(this)
+        this.changeDescription = this.changeDescription.bind(this)
+        this.changeConditions = this.changeConditions.bind(this)
         this.uploadImage = this.uploadImage.bind(this)
+    }
+
+    changeProductname(event) {
+        this.setState({productname: event.target.value});
+    }
+
+    changeDescription(event) {
+        this.setState({description: event.target.value});
+    }
+
+    changeConditions(event) {
+        this.setState({conditions: event.target.value});
     }
 
     uploadImage(event) {
@@ -21,11 +37,10 @@ class AddProduct extends Component {
 
     addProductClicked = (event) => {
         event.preventDefault();
-        // let username = this.state.username;
-        // let password = this.state.password;
-        // let authHeader = window.btoa(username + ':' + password);
-        // let user = {'username': username, 'authHeader': authHeader};
-        // localStorage.setItem('user', JSON.stringify(user));
+        let productname = this.state.productname;
+        let description = this.state.description;
+        let conditions = this.state.conditions;
+        // store values into product table with specific user details
         this.props.history.push('/product');
     }
 
@@ -38,28 +53,15 @@ class AddProduct extends Component {
                         <form>
                             <div>
                                 <label>Product Name</label>
-                                <input placeholder="Product name" name="productname" className="form-control"/>
+                                <input placeholder="Product name" name="productname" className="form-control" value={this.state.productname} onChange={this.changeProductname}/>
                             </div>
                             <div>
                                 <label>Description</label>
-                                <Form.Control placeholder="Description" name="description" as="textarea" rows={3} />
+                                <Form.Control placeholder="Description" name="description" as="textarea" rows={3} value={this.state.description} onChange={this.changeDescription}/>
                             </div>
                             <div>
-                                <label>Condition</label>
-                                <Form>
-                                    <div key={`inline-"radio"`} className="mb-3">
-                                        <Form.Check inline label="1" name="group1" type="radio" id={`inline-"radio"-1`}/>
-                                        <Form.Check inline label="2" name="group1" type="radio" id={`inline-"radio"-2`}/>
-                                        <Form.Check inline label="3" name="group1" type="radio" id={`inline-"radio"-3`}/>
-                                        <Form.Check inline label="4" name="group1" type="radio" id={`inline-"radio"-4`}/>
-                                        <Form.Check inline label="5" name="group1" type="radio" id={`inline-"radio"-5`}/>
-                                        <Form.Check inline label="6" name="group1" type="radio" id={`inline-"radio"-6`}/>
-                                        <Form.Check inline label="7" name="group1" type="radio" id={`inline-"radio"-7`}/>
-                                        <Form.Check inline label="8" name="group1" type="radio" id={`inline-"radio"-8`}/>
-                                        <Form.Check inline label="9" name="group1" type="radio" id={`inline-"radio"-9`}/>
-                                        <Form.Check inline label="10" name="group1" type="radio" id={`inline-"radio"-10`}/>
-                                    </div>
-                                </Form>
+                                <label>Condition of Product</label>
+                                <Form.Control placeholder="Conditions" name="conditions" as="textarea" rows={3} value={this.state.conditions} onChange={this.changeConditions}/>
                             </div>
                             <div>
                                 <Form.Group controlId="formFile" className="mb-3">
