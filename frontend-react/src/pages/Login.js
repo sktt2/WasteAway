@@ -27,7 +27,7 @@ class Login extends Component {
         let authHeader = window.btoa(username + ':' + password);
         let user = {'username': username, 'authHeader': authHeader};
         localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/list-books');
+        this.props.history.push('/product');
     }
 
     render() {

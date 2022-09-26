@@ -18,6 +18,7 @@ class Header extends Component {
                     <Nav.Link href='/login'>Login</Nav.Link>
                     <Nav.Link href='/logout'>Logout</Nav.Link>
                     <Nav.Link href='/product'>Product</Nav.Link>
+                    <Nav.Link href='/addproduct'>Add Product</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
