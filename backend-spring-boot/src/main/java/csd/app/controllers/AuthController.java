@@ -28,7 +28,8 @@ import csd.app.security.jwt.*;
 import csd.app.payload.request.*;
 import csd.app.payload.response.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+// change origins to ur react server 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
