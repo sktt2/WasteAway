@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class Login extends Component {
+class Register extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -20,21 +20,16 @@ class Login extends Component {
         this.setState({password: event.target.value});
     }
 
-    loginClicked = (event) => {
+    registerClicked = (event) => {
         event.preventDefault();
         let username = this.state.username;
         let password = this.state.password;
         let authHeader = window.btoa(username + ':' + password);
         let user = {'username': username, 'authHeader': authHeader};
         localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/product');
+        this.props.history.push('/login');
     }
 
-    registerClicked = (event) => {
-        event.preventDefault();
-        this.props.history.push('/register');
-    }
-    
     render() {
         return (
             <div className="container">
@@ -51,8 +46,6 @@ class Login extends Component {
                                 <input placeholder="password" name="password" className="form-control" value={this.state.password} onChange={this.changePassword}/>
                             </div>
                             <br></br>
-                            <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
-                            {" "}
                             <button className="btn btn-success" onClick={this.registerClicked}>Register</button>
                         </form>
                     </div>
@@ -62,4 +55,4 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default Register
