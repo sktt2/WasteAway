@@ -9,6 +9,7 @@ import { Container } from 'react-bootstrap';
 import Logout from './pages/Logout.js';
 import Error from './components/Error.js';
 import Product from './pages/Product.js';
+import Register from './pages/Register.js'
 import AddProduct from './pages/AddProduct.js';
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
@@ -30,6 +31,7 @@ class App extends Component {
                 <Route path = "/error" component = {Error}></Route>
                 <Route path = "/product" component = {Product}></Route>
                 <Route path = "/addproduct" component = {AddProduct}></Route>
+                <Route path = "/register" component = {Register}></Route>
                 <Route path = "/" component={Login}/> 
               </Switch>
           </Router>
