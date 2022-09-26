@@ -11,6 +11,7 @@ import Error from './components/Error.js';
 import Product from './pages/Product.js';
 import Register from './pages/Register.js'
 import AddProduct from './pages/AddProduct.js';
+import ForgotPass from './pages/ForgotPass.js';
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
  * the switch component switches between routes, the path decides the route in browser
@@ -32,6 +33,7 @@ class App extends Component {
                 <Route path = "/product" component = {Product}></Route>
                 <Route path = "/addproduct" component = {AddProduct}></Route>
                 <Route path = "/register" component = {Register}></Route>
+                <Route path = "/forgotpass" component = {ForgotPass}></Route>
                 <Route path = "/" component={Login}/> 
               </Switch>
           </Router>
