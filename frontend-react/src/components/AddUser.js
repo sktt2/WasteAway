@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BookService from '../services/BookService';
+// import BookService from '../services/BookService';
 
 class AddUser extends Component {
     constructor(props) {
@@ -31,16 +31,17 @@ class AddUser extends Component {
     }
 
     saveUser = (event) => {
-        event.preventDefault();
-        let newuser = {username:this.state.username, password:this.state.password, authorities:this.state.authorities};
-        console.log("new user ", JSON.stringify(newuser));
-        BookService.addUser(newuser)
-            .then(res => {
-                this.props.history.push('/list-users');
-            })
-            .catch(() => {
-                this.props.history.push('/error');
-            });
+        // event.preventDefault();
+        // let newuser = {username:this.state.username, password:this.state.password, authorities:this.state.authorities};
+        // console.log("new user ", JSON.stringify(newuser));
+        // BookService.addUser(newuser)
+        //     .then(res => {
+        //         this.props.history.push('/list-users');
+        //     })
+        //     .catch(() => {
+        //         this.props.history.push('/error');
+        //     });
+        this.props.history.push('/list-users');
     }
 
     cancel() {

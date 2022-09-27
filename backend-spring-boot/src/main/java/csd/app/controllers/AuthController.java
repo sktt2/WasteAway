@@ -28,7 +28,8 @@ import csd.app.security.jwt.*;
 import csd.app.payload.request.*;
 import csd.app.payload.response.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+// change origins to ur react server 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -38,6 +39,9 @@ public class AuthController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserInfoRepository userInfoRepository;
+    
     @Autowired
     RoleRepository roleRepository;
 
@@ -112,6 +116,13 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        UserInfo userInfo = new UserInfo(user.getId(),
+                            signUpRequest.getName(), 
+                            signUpRequest.getAddress(), 
+                            signUpRequest.getPhoneNumber());
+        userInfoRepository.save(userInfo);
+        
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

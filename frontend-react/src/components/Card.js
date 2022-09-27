@@ -16,16 +16,12 @@ function CardComponent(props) {
         <Card>
             <Card.Img variant="top" src={bulbasaur} alt={imgSource}/>
             <Card.Body>
-            <Card.Title>{title}</Card.Title>
-            <Card.Text>
-                {condition}
-            </Card.Text>
-            <Card.Text>
-                {address}
-            </Card.Text>
-            {/* <Card.Text>
-                {description}
-            </Card.Text> */}
+                <Card.Title>{title}</Card.Title>
+                <Card.Text>
+                    {condition}
+                    <br></br>
+                    {address}
+                </Card.Text>
             <Button variant="primary" href={buttonLink}>More details</Button>
             </Card.Body>
         </Card>
