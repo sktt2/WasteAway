@@ -40,6 +40,9 @@ public class AuthController {
     UserRepository userRepository;
 
     @Autowired
+    UserInfoRepository userInfoRepository;
+    
+    @Autowired
     RoleRepository roleRepository;
 
     @Autowired
@@ -113,6 +116,13 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        UserInfo userInfo = new UserInfo(user.getId(),
+                            signUpRequest.getName(), 
+                            signUpRequest.getAddress(), 
+                            signUpRequest.getPhoneNumber());
+        userInfoRepository.save(userInfo);
+        
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
