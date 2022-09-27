@@ -53,4 +53,9 @@ public class Product {
         this.address = address;
         this.dateTime = dateTime;
     }
+
+    public Product(int ownerId, String name, int contactDetails, String conditions, String address, LocalDateTime dateTime, String description) {
+        this(ownerId, name, contactDetails, conditions, address, dateTime);
+        this.description = description;
+    }
 }

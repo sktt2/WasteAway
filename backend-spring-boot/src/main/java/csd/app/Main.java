@@ -60,8 +60,17 @@ public class Main {
         }
 
         ProductRepository products = ctx.getBean(ProductRepository.class);
-        Product newProd = new Product(000001, "ASUS LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now());
+
+        Product newProd = new Product(000001, "LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now());
         System.out.println("[Add product]:"+ products.save(newProd));
+        Product newProd2 = new Product(000002, "ADIDAS", 87223344, "Used", "Plaza Singapura", LocalDateTime.now(), "this is a description of the product");
+        System.out.println("[Add product]:"+ products.save(newProd2));
+        Product newProd3 = new Product(000001, "IPHONE3", 87223344, "Like-New", "NUS hall", LocalDateTime.now(),  "this is a description of the product");
+        System.out.println("[Add product]:"+ products.save(newProd3));
+        Product newProd4 = new Product(000003, "AIRPODS", 87223344, "Spoilt", "Coney Island", LocalDateTime.now(), "this is a description of the product");
+        System.out.println("[Add product]:"+ products.save(newProd4));
+        Product newProd5 = new Product(000004, "WATERBOTTLE", 87223344, "New", "Tekong", LocalDateTime.now(),  "this is a description of the product");
+        System.out.println("[Add product]:"+ products.save(newProd5));
     }
 
 }
