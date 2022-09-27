@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import axios from "axios";
-
 import InfiniteScroll from "react-infinite-scroller";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -25,47 +23,37 @@ const responsive = {
 
 class Product extends Component {
 
-    // Making use of the pokemon api first
     state = {
-        url: "https://pokeapi.co/api/v2/pokemon/?limit=200",
-        pokemon: [],
-        itemsCountPerPage: 20,
-        activePage: 1
-    };
-
-    
-    async componentDidMount() {
-        const res = await axios.get(this.state.url);
-        this.setState({ pokemon: res.data["results"] });
+        url: "http://localhost:3000/product/",
+        data: []
     }
+    
 
-
-    async getProducts() {
+    async componentDidMount(){
         const res = await ProductService.getProducts();
         console.log(res.data)
+        this.setState({data: res.data})
     }
-
+    
+        
     render() {
         return (
             <div className="container">
-                <form>
-                    <button onClick={this.getProducts()}>TEST</button>
-                </form>
                 <Carousel responsive={responsive}>
-                    {this.state.pokemon.map((pokemon, i)=>(
-                        <CarouselComponent title={pokemon.name} description='hello' imgSource="address" buttonLink={pokemon.url} ></CarouselComponent>
+                    {this.state.data.map((data, i)=>(
+                        <CarouselComponent title={data.name} condition={data.conditions} address={data.address} imgSource="address" buttonLink={"hello"} ></CarouselComponent>
                     ))}
                 </Carousel>
-
                 <br></br>
-
                 <React.Fragment>
                     <div className="row">
                         <InfiniteScroll>
                             <Row xs={1} md={4} className="g-4">
-                                {this.state.pokemon.map((pokemon, i) => (
+                                {this.state.data.map((data, i) => (
                                     <Col>
-                                    <CardComponent title={pokemon.name} description='hello' imgSource="address" buttonLink={pokemon.url}></CardComponent>
+                                    <CardComponent title={data.name} description={data.description} 
+                                    address={data.address} condition={data.conditions}
+                                    imgSource="address" buttonLink={this.state.url+data.id}></CardComponent>
                                     </Col>
                                 ))}
                             </Row>

@@ -7,6 +7,10 @@ class ProductService {
     async getProducts() {
         return axios.get(API_URL + '/products')
     }
+
+    async getProduct(id) {
+        return axios.get(API_URL + '/products/' + id)
+    }
 }
 
 export default new ProductService()
