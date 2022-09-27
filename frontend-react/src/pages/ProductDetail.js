@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-multi-carousel/lib/styles.css";
-
-// From components
-import CardComponent from '../components/Card';
+import Card from 'react-bootstrap/Card';
 import ProductService from '../services/ProductService'
+import bulbasaur from '../bulbasaur.jpg'
 
 class ProductDetail extends Component {
     constructor(props){
         super(props)
-        console.log(this.props.match)
         this.state = {
             id: this.props.match.params.id,
             data: []
@@ -18,16 +16,25 @@ class ProductDetail extends Component {
     
     async componentDidMount(){
         const res = await ProductService.getProduct(this.state.id);
-        console.log(res.data)
         this.setState({data: res.data})
     }
 
     render() {
         return (
-            <div className="container">
-                <CardComponent title={this.state.data.name} description={this.state.data.description} 
-                    address={this.state.data.address} condition={this.state.data.conditions}
-                    imgSource="address" buttonLink={this.state.url+this.state.data.id}></CardComponent>
+            <div className="container" style={{width: '55%'}}>
+                 <Card>
+                    <Card.Img variant="top" src={bulbasaur}/>
+                    <Card.Body>
+                        <Card.Title>{this.state.data.name}</Card.Title>
+                        <Card.Text>
+                            {this.state.data.conditions}
+                            <br></br>
+                            {this.state.data.address}
+                            <br></br>
+                            {this.state.data.description}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             </div>
         );
     }
