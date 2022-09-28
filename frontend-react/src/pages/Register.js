@@ -7,9 +7,11 @@ class Register extends Component {
         this.state = {
             username: '',
             password: '',
+            showpassword: 'password'
         }
         this.changeUsername = this.changeUsername.bind(this);
         this.changePassword = this.changePassword.bind(this);
+        this.showPasswordClicked = this.showPasswordClicked.bind(this);
     }
 
     changeUsername(event) {
@@ -30,6 +32,19 @@ class Register extends Component {
         this.props.history.push('/login');
     }
 
+    loginClicked = (event) => {
+        event.preventDefault();
+        this.props.history.push('/login');
+    }
+
+    showPasswordClicked = (event) => {
+        if (this.state.showpassword === 'password') {
+            this.setState({showpassword: 'text'});
+        } else {
+            this.setState({showpassword: 'password'});
+        }
+    }
+
     render() {
         return (
             <div className="container">
@@ -43,10 +58,16 @@ class Register extends Component {
                             </div>
                             <div>
                                 <label>Password</label>
-                                <input placeholder="password" name="password" className="form-control" value={this.state.password} onChange={this.changePassword}/>
+                                <input placeholder="password" name="password" className="form-control" type = {this.state.showpassword} value={this.state.password} onChange={this.changePassword}/>
+                            </div>
+                            <div>
+                                <label>Show Password</label>
+                                <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
                             </div>
                             <br></br>
                             <button className="btn btn-success" onClick={this.registerClicked}>Register</button>
+                            {" "}
+                            <button className="btn btn-success" onClick={this.loginClicked}>Return to Login</button>
                         </form>
                     </div>
                 </div>

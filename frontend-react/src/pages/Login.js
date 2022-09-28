@@ -7,9 +7,11 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
+            showpassword: 'password'
         }
         this.changeUsername = this.changeUsername.bind(this);
         this.changePassword = this.changePassword.bind(this);
+        this.showPasswordClicked = this.showPasswordClicked.bind(this);
     }
 
     changeUsername(event) {
@@ -35,6 +37,14 @@ class Login extends Component {
         this.props.history.push('/register');
     }
 
+    showPasswordClicked = (event) => {
+        if (this.state.showpassword === 'password') {
+            this.setState({showpassword: 'text'});
+        } else {
+            this.setState({showpassword: 'password'});
+        }
+    }
+
     render() {
         return (
             <div className="container">
@@ -48,7 +58,11 @@ class Login extends Component {
                             </div>
                             <div>
                                 <label>Password</label>
-                                <input placeholder="password" name="password" className="form-control" value={this.state.password} onChange={this.changePassword}/>
+                                <input placeholder="password" name="password" type={this.state.showpassword} className="form-control" value={this.state.password} onChange={this.changePassword}/>
+                            </div>
+                            <div>
+                                <label>Show Password</label>
+                                <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
                             </div>
                             <a href="/forgotpass" class="card-link">Forgot password?</a>
                             <br></br>
