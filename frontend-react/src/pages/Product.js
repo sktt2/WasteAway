@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import InfiniteScroll from "react-infinite-scroller";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
@@ -22,10 +21,13 @@ const responsive = {
     };
 
 class Product extends Component {
-
-    state = {
-        url: "http://localhost:3000/product/",
-        data: []
+    constructor(props){
+        super(props)
+        this.state = {
+            url: "http://localhost:3000/product/",
+            data: []
+        }
+        
     }
     
 
@@ -41,23 +43,23 @@ class Product extends Component {
             <div className="container">
                 <Carousel responsive={responsive}>
                     {this.state.data.map((data, i)=>(
-                        <CarouselComponent title={data.name} condition={data.conditions} address={data.address} imgSource="address" buttonLink={"hello"} ></CarouselComponent>
+                        <CarouselComponent title={data.productName} condition={data.condition} address={data.address} imgSource={data.imageUrl} buttonLink={"hello"} ></CarouselComponent>
                     ))}
                 </Carousel>
                 <br></br>
                 <React.Fragment>
                     <div className="row">
-                        <InfiniteScroll>
-                            <Row xs={1} md={4} className="g-4">
-                                {this.state.data.map((data, i) => (
-                                    <Col>
-                                    <CardComponent title={data.name} description={data.description} 
-                                    address={data.address} condition={data.conditions}
-                                    imgSource="address" buttonLink={this.state.url+data.id}></CardComponent>
-                                    </Col>
-                                ))}
-                            </Row>
-                        </InfiniteScroll>
+                        <Row xs={1} md={4} className="g-4">
+                            {this.state.data.map((data, i) => (
+                                <Col>
+                                <CardComponent 
+                                    title={data.productName} description={data.description} 
+                                    address={data.address} condition={data.condition}
+                                    imgSource={data.imageUrl} buttonLink={this.state.url+data.id}>
+                                </CardComponent>
+                                </Col>
+                            ))}
+                        </Row>
                     </div>
                 </React.Fragment>
             </div>

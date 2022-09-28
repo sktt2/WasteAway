@@ -14,7 +14,7 @@ function CardComponent(props) {
 
     return (
         <Card>
-            <Card.Img variant="top" src={bulbasaur} alt={imgSource}/>
+            <Card.Img variant="top" src={imgSource || bulbasaur} />
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
                 <Card.Text>

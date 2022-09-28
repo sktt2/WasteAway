@@ -1,10 +1,16 @@
 package csd.app.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import csd.app.payload.response.ProductResponse;
 import csd.app.product.Product;
 import csd.app.product.ProductNotFoundException;
 import csd.app.product.ProductRepository;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -16,15 +22,22 @@ public class ProductController {
     }
 
     @GetMapping("/api/products")
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getProducts() {
+        List<Product> products = productRepository.findAll();
+        List<ProductResponse> resp = new ArrayList<>();
+        for (Product product : products) {
+            ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(), product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),product.getUser());
+            resp.add(prodResp);
+        }
+        return resp;
     }
 
     @GetMapping("/api/products/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public  ResponseEntity<?> getProduct(@PathVariable Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
-        return product;
+        ProductResponse resp = new ProductResponse(id, product.getProductName(), product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(), product.getUser());
+        return ResponseEntity.ok(resp);
     }
 
 }
