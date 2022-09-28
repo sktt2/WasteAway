@@ -14,11 +14,10 @@ class Header extends Component {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                    <Nav.Link href='/list-users'>Users</Nav.Link>
                     <Nav.Link href='/login'>Login</Nav.Link>
-                    <Nav.Link href='/logout'>Logout</Nav.Link>
-                    <Nav.Link href='/product'>Product</Nav.Link>
+                    <Nav.Link href='/product'>Products</Nav.Link>
                     <Nav.Link href='/addproduct'>Add Product</Nav.Link>
+                    <Nav.Link href='/logout'>Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

@@ -36,6 +36,7 @@ public class Main {
 
         // JPA user repository init
         UserRepository users = ctx.getBean(UserRepository.class);
+        ProductRepository products = ctx.getBean(ProductRepository.class);
         BCryptPasswordEncoder encoder = ctx.getBean(BCryptPasswordEncoder.class);
         Optional<User> testuser = users.findByUsername("testuser");
         Optional<User> testadmin = users.findByUsername("testadmin");
@@ -49,6 +50,15 @@ public class Main {
             role.add(userRole);
             user.setRoles(role);
             System.out.println("[Add user]: " + users.save(user));
+            Product newProd = new Product("CAMERA",  "OLD", "BLK1111122222", LocalDateTime.now());
+            newProd.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd));
+            Product newProd2 = new Product("ADIDAS",  "Used", "Plaza Singapura", LocalDateTime.now(), "this is a description of the product");
+            newProd2.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd2));
+            Product newProd4 = new Product("AIRPODS",  "Spoilt", "Coney Island", LocalDateTime.now(), "this is a description of the product");
+            newProd4.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd4));
         }
         if (!testadmin.isPresent()) {
             User user = new User("testadmin", "testadmin@email.com", encoder.encode("password"));
@@ -57,11 +67,17 @@ public class Main {
             role.add(adminRole);
             user.setRoles(role);
             System.out.println("[Add user]: " + users.save(user));
+            Product newProd = new Product("LAPTOP",  "New", "SMU lvl 4", LocalDateTime.now());
+            newProd.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd));
+            Product newProd3 = new Product("IPHONE3",  "Like-New", "NUS hall", LocalDateTime.now(),  "this is a description of the product");
+            newProd3.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd3));
+            Product newProd5 = new Product("WATERBOTTLE",  "New", "Tekong", LocalDateTime.now(),  "this is a description of the product");
+            newProd5.setUser(user);
+            System.out.println("[Add product]:"+ products.save(newProd5));
         }
 
-        ProductRepository products = ctx.getBean(ProductRepository.class);
-        Product newProd = new Product(000001, "ASUS LAPTOP", 87223344, "New", "SMU lvl 4", LocalDateTime.now());
-        System.out.println("[Add product]:"+ products.save(newProd));
     }
 
 }

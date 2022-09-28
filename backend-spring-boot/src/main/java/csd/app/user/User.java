@@ -1,5 +1,6 @@
 package csd.app.user;
 
+import csd.app.product.Product;
 import csd.app.roles.*;
 import java.util.*;
 
@@ -57,6 +58,12 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserInfo userInfo;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
 
     public User(String username, String email, String password) {
         this.username = username;

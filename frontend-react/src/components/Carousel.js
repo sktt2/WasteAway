@@ -1,18 +1,19 @@
 import bulbasaur from '../bulbasaur.jpg'
 
-
 function CarouselComponent(props) {
   const title = props.title;
   const description = props.description;
-  const buttonLink = props.buttonLink;
+  const condition = props.condition;
   const imgSource = props.imgSource
+  const address = props.address
 
     return (
-        <div style={{width: 100}}>
+        <div>
             <img src={bulbasaur} alt={imgSource}></img>
             <h1>{title}</h1>
-            <h2>{description}</h2>
-            <div>{buttonLink}</div>
+            {/* <div>{description}</div> */}
+            <div>{condition}</div>
+            <div>{address}</div>
         </div>
     );
 }
