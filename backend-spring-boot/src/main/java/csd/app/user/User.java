@@ -1,5 +1,6 @@
 package csd.app.user;
 
+import csd.app.product.Product;
 import csd.app.roles.*;
 import java.util.*;
 
@@ -60,6 +61,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
 
     public User(String username, String email, String password) {
         this.username = username;
