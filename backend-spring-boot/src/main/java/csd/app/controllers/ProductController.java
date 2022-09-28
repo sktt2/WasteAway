@@ -6,6 +6,8 @@ import csd.app.product.Product;
 import csd.app.product.ProductNotFoundException;
 import csd.app.product.ProductRepository;
 
+import javax.validation.Valid;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class ProductController {
@@ -25,6 +27,11 @@ public class ProductController {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
         return product;
+    }
+
+    @PostMapping("/api/products")
+    public Product addProduct(@Valid @RequestBody Product product) {
+        return productRepository.save(product);
     }
 
 }

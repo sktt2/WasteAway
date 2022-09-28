@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Form from 'react-bootstrap/Form';
-import bulbasaur from '../bulbasaur.jpg';
+import ProductService from '../services/ProductService';
 
 class AddProduct extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             productname: '',
@@ -17,31 +17,47 @@ class AddProduct extends Component {
         this.changeDescription = this.changeDescription.bind(this)
         this.changeConditions = this.changeConditions.bind(this)
         this.uploadImage = this.uploadImage.bind(this)
+        this.addProductClicked = this.addProductClicked.bind(this)
     }
 
     changeProductname(event) {
-        this.setState({productname: event.target.value});
+        this.setState({productname: event.target.value})
     }
 
     changeDescription(event) {
-        this.setState({description: event.target.value});
+        this.setState({description: event.target.value})
     }
 
     changeConditions(event) {
-        this.setState({conditions: event.target.value});
+        this.setState({conditions: event.target.value})
     }
 
     uploadImage(event) {
-        this.setState({file: bulbasaur})
+        this.setState({file: URL.createObjectURL(event.target.files[0])})
     }
 
     addProductClicked = (event) => {
         event.preventDefault();
-        let productname = this.state.productname;
-        let description = this.state.description;
-        let conditions = this.state.conditions;
-        // store values into product table with specific user details
-        this.props.history.push('/product');
+        let name = this.state.productname
+        let description = this.state.description
+        let conditions = this.state.conditions
+        let newProduct = {
+            name: name,
+            description: description,
+            conditions: conditions,
+            address: "hello from the underground dungeon",
+            dateTime: new Date().toISOString(),
+            user: {id: 1}
+        }
+        ProductService.addProduct(newProduct)
+        .then((response) => {
+            console.log(response)
+            this.props.history.push('/products')
+        })
+        .catch((error) => {
+            console.log(error)
+            this.props.history.push('/error')
+        })
     }
 
     render() {
@@ -66,10 +82,10 @@ class AddProduct extends Component {
                             <div>
                                 <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>Product Image</Form.Label>
-                                    <Form.Control type="file" onChange={this.uploadImage}/>
+                                    <Form.Control type="file" accept="image/*" onChange={this.uploadImage}/>
                                 </Form.Group>
-                                <div style={{width: 100}}>
-                                    <img src={this.state.file}/>
+                                <div>
+                                    <img className="container-fluid w-100" src={this.state.file}/>
                                 </div>
                             </div>
                             <br></br>

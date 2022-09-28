@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -62,6 +63,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
