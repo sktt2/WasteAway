@@ -16,6 +16,7 @@ class ProductDetail extends Component {
     
     async componentDidMount(){
         const res = await ProductService.getProduct(this.state.id);
+        console.log(res)
         this.setState({data: res.data})
     }
 
@@ -23,11 +24,11 @@ class ProductDetail extends Component {
         return (
             <div className="container" style={{width: '55%'}}>
                  <Card>
-                    <Card.Img variant="top" src={bulbasaur}/>
+                    <Card.Img variant="top" src={this.state.data.imageUrl || bulbasaur}/>
                     <Card.Body>
-                        <Card.Title>{this.state.data.name}</Card.Title>
+                        <Card.Title>{this.state.data.productName}</Card.Title>
                         <Card.Text>
-                            {this.state.data.conditions}
+                            {this.state.data.condition}
                             <br></br>
                             {this.state.data.address}
                             <br></br>

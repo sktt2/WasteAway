@@ -1,7 +1,6 @@
 package csd.app.product;
 
-import java.time.LocalDateTime;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.URL;
 
 import csd.app.user.User;
 import lombok.*;
@@ -23,39 +24,43 @@ public class Product {
 
     @NotNull(message = "Product name should not be empty")
     @Size(min = 1, max = 100, message = "Product name should be at least 1 character long")
-    private String name;
+    private String productName;
 
     @Size(min = 5, max = 200, message = "Product description should be at least 5 characters long")
     private String description;
 
     @NotNull(message = "Product name should not be empty")
     @Size(min = 1, max = 100, message = "Product name should be at least 1 character long")
-    private String conditions;
-
-    @NotNull(message = "Address should not be empty")
-    @Size(min = 5, max = 80, message = "Address should be at least 20 characters")
-    private String address;
+    @Column(name="conditions")
+    private String condition;
 
     @NotNull(message = "Date and time should not be empty")
-    private LocalDateTime dateTime;
+    private String dateTime;
+
+    @NotNull(message = "Category should not be empty")
+    private String category;
+
+    // To be done
+    // @NotNull(message = "Image url should not be empty")
+    private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name="owner_id", nullable=false)
     private User user;
 
 
     public Product() {
     }
 
-    public Product(String name, String conditions, String address, LocalDateTime dateTime) {
-        this.name = name;
-        this.conditions = conditions;
-        this.address = address;
+    public Product(String productName, String condition, String dateTime, String category) {
+        this.productName = productName;
+        this.condition = condition;
         this.dateTime = dateTime;
+        this.category = category;
     }
 
-    public Product(String name, String conditions, String address, LocalDateTime dateTime, String description) {
-        this(name, conditions, address, dateTime);
+    public Product(String productName, String condition, String dateTime, String category, String description) {
+        this(productName, condition, dateTime, category);
         this.description = description;
     }
 }
