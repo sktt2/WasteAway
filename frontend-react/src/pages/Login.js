@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Login extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             username: '',
@@ -15,11 +15,11 @@ class Login extends Component {
     }
 
     changeUsername(event) {
-        this.setState({username: event.target.value});
+        this.setState({ username: event.target.value });
     }
 
     changePassword(event) {
-        this.setState({password: event.target.value});
+        this.setState({ password: event.target.value });
     }
 
     loginClicked = (event) => {
@@ -27,7 +27,7 @@ class Login extends Component {
         let username = this.state.username;
         let password = this.state.password;
         let authHeader = window.btoa(username + ':' + password);
-        let user = {'username': username, 'authHeader': authHeader};
+        let user = { 'username': username, 'authHeader': authHeader };
         localStorage.setItem('user', JSON.stringify(user));
         this.props.history.push('/product');
     }
@@ -39,9 +39,9 @@ class Login extends Component {
 
     showPasswordClicked = (event) => {
         if (this.state.showpassword === 'password') {
-            this.setState({showpassword: 'text'});
+            this.setState({ showpassword: 'text' });
         } else {
-            this.setState({showpassword: 'password'});
+            this.setState({ showpassword: 'password' });
         }
     }
 
@@ -50,15 +50,15 @@ class Login extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className = "card-body">
+                    <div className="card-body">
                         <form>
                             <div>
                                 <label>Username</label>
-                                <input placeholder="username" name="username" className="form-control" value={this.state.username} onChange={this.changeUsername}/>
+                                <input placeholder="username" name="username" required className="form-control" value={this.state.username} onChange={this.changeUsername} />
                             </div>
                             <div>
                                 <label>Password</label>
-                                <input placeholder="password" name="password" type={this.state.showpassword} className="form-control" value={this.state.password} onChange={this.changePassword}/>
+                                <input placeholder="password" name="password" type={this.state.showpassword} required className="form-control" value={this.state.password} onChange={this.changePassword} />
                             </div>
                             <div>
                                 <label>Show Password</label>
