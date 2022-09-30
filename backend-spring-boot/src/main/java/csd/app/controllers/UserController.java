@@ -26,6 +26,11 @@ public class UserController {
         return users.findAll();
     }
 
+    @GetMapping("/api/auth/users/{username}") 
+    public User getUserByUsername(@PathVariable String username) {
+        return users.findByUsername(username).get();
+    }
+
     /**
      * Using BCrypt encoder to encrypt the password for storage
      * 

@@ -16,6 +16,10 @@ class ProductService {
     async addProduct(product) {
         return axios.post(API_URL + '/products', product, config)
     }
+
+    async getUserByUsername(username) {
+        return axios.get(API_URL + '/auth/users/' + username)
+    }
 }
 
 export default new ProductService()

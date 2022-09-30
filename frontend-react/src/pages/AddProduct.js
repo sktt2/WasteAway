@@ -9,19 +9,33 @@ class AddProduct extends Component {
         super(props)
         this.state = {
             productname: '',
+            category: '',
             description: '',
             conditions: '',
-            file: null
+            image: null,
+            user: null
         }
         this.changeProductname = this.changeProductname.bind(this)
+        this.changeCategory = this.changeCategory.bind(this)
         this.changeDescription = this.changeDescription.bind(this)
         this.changeConditions = this.changeConditions.bind(this)
         this.uploadImage = this.uploadImage.bind(this)
+        this.validateInputs = this.validateInputs.bind(this)
         this.addProductClicked = this.addProductClicked.bind(this)
+    }
+
+    async componentDidMount() {
+        var curruser = JSON.parse(localStorage.getItem('user'))
+        const res = await ProductService.getUserByUsername(curruser.username)
+        this.setState({user: res.data})
     }
 
     changeProductname(event) {
         this.setState({productname: event.target.value})
+    }
+
+    changeCategory(event) {
+        this.setState({category: event.target.value})
     }
 
     changeDescription(event) {
@@ -33,21 +47,38 @@ class AddProduct extends Component {
     }
 
     uploadImage(event) {
-        this.setState({file: URL.createObjectURL(event.target.files[0])})
+        // save image into database
+        this.setState({image: URL.createObjectURL(event.target.files[0])})
+    }
+
+    // Return proper error modal on invalid input
+    validateInputs = (event) => {
+        if (this.state.productname == '' || this.state.category == 'DEFAULT' || this.state.description == '' || this.state.conditions == '') {
+            return false;
+        } else {
+            this.addProductClicked(event)
+        }
     }
 
     addProductClicked = (event) => {
         event.preventDefault();
-        let name = this.state.productname
+        let productname = this.state.productname
+        let category = this.state.category
+        if (category == 'DEFAULT') {
+            category = null
+        }
         let description = this.state.description
         let conditions = this.state.conditions
+        let image = this.state.image
+        let user = this.state.user
         let newProduct = {
-            name: name,
+            productName: productname,
+            category: category,
             description: description,
-            conditions: conditions,
-            address: "hello from the underground dungeon",
+            condition: conditions,
             dateTime: new Date().toISOString(),
-            user: {id: 1}
+            imageUrl: image,
+            user: user
         }
         ProductService.addProduct(newProduct)
         .then((response) => {
@@ -69,15 +100,29 @@ class AddProduct extends Component {
                         <form>
                             <div>
                                 <label>Product Name</label>
-                                <input placeholder="Product name" name="productname" className="form-control" value={this.state.productname} onChange={this.changeProductname}/>
+                                <Form.Control placeholder="Product name" name="productname" className="form-control" value={this.state.productname} onChange={this.changeProductname} required/>
+                            </div>
+                            <div>
+                                <label>Category</label>
+                                <Form.Select value={this.state.category} onChange={this.changeCategory}>
+                                    <option value="DEFAULT" hidden>Select category</option>
+                                    <option value="BOOKS">Books</option>
+                                    <option value="ELECTRONICS">Electronics</option>
+                                    <option value="FASHION">Fashion</option>
+                                    <option value="FOOD">Food</option>
+                                    <option value="TOYS">Toys</option>
+                                    <option value="UTILITY">Utility</option>
+                                    <option value="VIDEOGAMES">Video Games</option>
+                                    <option value="OTHERS">Others</option>
+                                </Form.Select>
                             </div>
                             <div>
                                 <label>Description</label>
-                                <Form.Control placeholder="Description" name="description" as="textarea" rows={3} value={this.state.description} onChange={this.changeDescription}/>
+                                <Form.Control placeholder="Description" name="description" as="textarea" rows={3} value={this.state.description} onChange={this.changeDescription} required/>
                             </div>
                             <div>
                                 <label>Condition of Product</label>
-                                <Form.Control placeholder="Conditions" name="conditions" as="textarea" rows={3} value={this.state.conditions} onChange={this.changeConditions}/>
+                                <Form.Control placeholder="Conditions" name="conditions" as="textarea" rows={3} value={this.state.conditions} onChange={this.changeConditions} required/>
                             </div>
                             <div>
                                 <Form.Group controlId="formFile" className="mb-3">
@@ -85,11 +130,11 @@ class AddProduct extends Component {
                                     <Form.Control type="file" accept="image/*" onChange={this.uploadImage}/>
                                 </Form.Group>
                                 <div>
-                                    <img className="container-fluid w-100" src={this.state.file}/>
+                                    <img className="container-fluid w-100" src={this.state.image}/>
                                 </div>
                             </div>
                             <br></br>
-                            <button className="btn btn-success" onClick={this.addProductClicked}>Add Product</button>
+                            <button className="btn btn-success" onClick={this.validateInputs}>Add Product</button>
                         </form>
                     </div>
                 </div>
