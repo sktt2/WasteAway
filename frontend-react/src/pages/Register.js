@@ -10,45 +10,36 @@ class Register extends Component {
         this.state = {
             username: '',
             showpassword: 'password',
-            address: '',
-            mobile: '',
 
             // Input Validation
-            formErrors: { email: '', password: '' },
+            formErrors: { email: '', password: '', address: '', mobile: '' },
             emailValid: false,
             passwordValid: false,
+            addressValid: false,
+            mobileValid: false,
             formValid: false
         }
         this.changeUsername = this.changeUsername.bind(this);
         this.showPasswordClicked = this.showPasswordClicked.bind(this);
-        this.changeAddress = this.changeAddress.bind(this);
-        this.changeMobile = this.changeMobile.bind(this);
     }
 
     changeUsername(event) {
         this.setState({ username: event.target.value });
     }
 
-    changeAddress(event) {
-        this.setState({ address: event.target.value });
-    }
-
-    changeMobile(event) {
-        this.setState({ mobile: event.target.value });
-    }
-
     registerClicked = (event) => {
-        //event.preventDefault();
         let username = this.state.username;
+        let email = this.state.email;
         let password = this.state.password;
-        let authHeader = window.btoa(username + ':' + password);
+        let address = this.state.address;
+        let mobile = this.state.mobile;
+        let authHeader = window.btoa(username + ':' + email + ':' + password + ':' + address + ':' + mobile);
         let user = { 'username': username, 'authHeader': authHeader };
         localStorage.setItem('user', JSON.stringify(user));
         this.props.history.push('/register');
     }
 
     loginClicked = (event) => {
-        event.preventDefault();
         this.props.history.push('/login');
     }
 
@@ -71,16 +62,29 @@ class Register extends Component {
         let fieldValidationErrors = this.state.formErrors;
         let emailValid = this.state.emailValid;
         let passwordValid = this.state.passwordValid;
+        let addressValid = this.state.addressValid;
+        let mobileValid = this.state.mobileValid;
 
         switch (fieldName) {
+            // Email must contain both '@' sign and '.com'
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
                 fieldValidationErrors.email = emailValid ? '' : ' is invalid';
                 break;
-            // Password must contain at least 8 characters
+            // Password must be at least length 8
             case 'password':
                 passwordValid = value.length >= 8;
                 fieldValidationErrors.password = passwordValid ? '' : ' is too short';
+                break;
+            // Address must be at least length 15
+            case 'address':
+                addressValid = value.length >= 15;
+                fieldValidationErrors.address = addressValid ? '' : ' is invalid';
+                break;
+            // Mobile must have only numbers and have length 8
+            case 'mobile':
+                mobileValid = value.length === 8 && value.match(/^[0-9\b]+$/);
+                fieldValidationErrors.mobile = mobileValid ? '' : ' is invalid';
                 break;
             default:
                 break;
@@ -88,12 +92,14 @@ class Register extends Component {
         this.setState({
             formErrors: fieldValidationErrors,
             emailValid: emailValid,
-            passwordValid: passwordValid
+            passwordValid: passwordValid,
+            addressValid: addressValid,
+            mobileValid: mobileValid
         }, this.validateForm);
     }
 
     validateForm() {
-        this.setState({ formValid: this.state.emailValid && this.state.passwordValid });
+        this.setState({ formValid: this.state.emailValid && this.state.passwordValid && this.state.addressValid && this.state.mobileValid });
     }
 
     errorClass(error) {
@@ -126,13 +132,13 @@ class Register extends Component {
                                 <label>Show Password</label>
                                 <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
                             </div>
-                            <div>
+                            <div className={`form-group ${this.errorClass(this.state.formErrors.address)}`}>
                                 <label>Home Address</label>
-                                <input placeholder="address" name="address" required className="form-control" value={this.state.address} onChange={this.changeAddress} />
+                                <input placeholder="address" name="address" required className="form-control" value={this.state.address} onChange={this.handleUserInput} />
                             </div>
-                            <div>
+                            <div className={`form-group ${this.errorClass(this.state.formErrors.mobile)}`}>
                                 <label>Mobile Phone</label>
-                                <input placeholder="mobile" name="mobile" required className="form-control" value={this.state.mobile} onChange={this.changeMobile} />
+                                <input placeholder="mobile" name="mobile" required className="form-control" value={this.state.mobile} onChange={this.handleUserInput} />
                             </div>
                             <br></br>
                             <button className="btn btn-success" disabled={!this.state.formValid}>Register</button>
