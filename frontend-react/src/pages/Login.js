@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AuthService from '../services/AuthService';
 
 class Login extends Component {
     constructor(props) {
@@ -29,7 +30,15 @@ class Login extends Component {
         let authHeader = window.btoa(username + ':' + password);
         let user = { 'username': username, 'authHeader': authHeader };
         localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/product');
+        AuthService.signin(username, password)
+        .then(response => {
+            console.log(response)
+            this.props.history.push('/product');
+        })
+        .catch(response => {
+            console.log(response)
+            this.props.history.push('/login')
+        })
     }
 
     registerClicked = (event) => {
@@ -62,9 +71,9 @@ class Login extends Component {
                             </div>
                             <div>
                                 <label>Show Password</label>
-                                <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
+                                <input type="checkbox" name="showpassword" className="form-control" onChange={this.showPasswordClicked}></input>
                             </div>
-                            <a href="/forgotpass" class="card-link">Forgot password?</a>
+                            <a href="/forgotpass" className="card-link">Forgot password?</a>
                             <br></br>
                             <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
                             {" "}

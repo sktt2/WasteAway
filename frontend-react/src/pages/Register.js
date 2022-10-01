@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // From components
 import { FormErrors } from '../components/FormErrors';
+import AuthService from '../services/AuthService';
 
 class Register extends Component {
     constructor(props) {
@@ -12,31 +13,39 @@ class Register extends Component {
             showpassword: 'password',
 
             // Input Validation
-            formErrors: { email: '', password: '', address: '', mobile: '' },
+            formErrors: { username: '', name: '', email: '', password: '', address: '', mobile: '' },
+            usernameValid: false,
+            nameValid: false,
             emailValid: false,
             passwordValid: false,
             addressValid: false,
             mobileValid: false,
             formValid: false
         }
-        this.changeUsername = this.changeUsername.bind(this);
         this.showPasswordClicked = this.showPasswordClicked.bind(this);
     }
 
-    changeUsername(event) {
-        this.setState({ username: event.target.value });
-    }
-
     registerClicked = (event) => {
+        event.preventDefault()
         let username = this.state.username;
+        let name = this.state.name
         let email = this.state.email;
         let password = this.state.password;
         let address = this.state.address;
         let mobile = this.state.mobile;
         let authHeader = window.btoa(username + ':' + email + ':' + password + ':' + address + ':' + mobile);
         let user = { 'username': username, 'authHeader': authHeader };
-        localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/register');
+        AuthService.register(username, email, password, name, address, mobile)
+        .then(response => {
+            console.log(response)
+            AuthService.signin(username, password)
+            localStorage.setItem('user', JSON.stringify(user));
+            this.props.history.push('/products')
+        })
+        .catch(response => {
+            console.log(response)
+            this.props.history.push('/register')
+        })
     }
 
     loginClicked = (event) => {
@@ -60,12 +69,24 @@ class Register extends Component {
 
     validateField(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
+        let usernameValid = this.state.usernameValid
+        let nameValid = this.state.nameValid
         let emailValid = this.state.emailValid;
         let passwordValid = this.state.passwordValid;
         let addressValid = this.state.addressValid;
         let mobileValid = this.state.mobileValid;
 
         switch (fieldName) {
+            // Username must be at least length 5
+            case 'username':
+                usernameValid = value.length >= 5
+                fieldValidationErrors.username = usernameValid ? '' : ' is too short'
+                break
+            // Name must not be blank
+            case 'name':
+                nameValid = value.length >= 1;
+                fieldValidationErrors.name = nameValid ? '' : ' must not be blank'
+                break
             // Email must contain both '@' sign and '.com'
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
@@ -91,6 +112,8 @@ class Register extends Component {
         }
         this.setState({
             formErrors: fieldValidationErrors,
+            usernameValid: usernameValid,
+            nameValid: nameValid,
             emailValid: emailValid,
             passwordValid: passwordValid,
             addressValid: addressValid,
@@ -99,7 +122,9 @@ class Register extends Component {
     }
 
     validateForm() {
-        this.setState({ formValid: this.state.emailValid && this.state.passwordValid && this.state.addressValid && this.state.mobileValid });
+        this.setState({ formValid: this.state.usernameValid && this.state.nameValid 
+            && this.state.emailValid && this.state.passwordValid 
+            && this.state.addressValid && this.state.mobileValid });
     }
 
     errorClass(error) {
@@ -118,7 +143,11 @@ class Register extends Component {
                             </div>
                             <div>
                                 <label>Username</label>
-                                <input placeholder="username" name="username" required className="form-control" value={this.state.username} onChange={this.changeUsername} />
+                                <input placeholder="username" name="username" required className="form-control" value={this.state.username} onChange={this.handleUserInput} />
+                            </div>
+                            <div>
+                                <label>Name</label>
+                                <input placeholder="name" name="name" required className="form-control" value={this.state.name} onChange={this.handleUserInput} />
                             </div>
                             <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
                                 <label>Email</label>
@@ -130,7 +159,7 @@ class Register extends Component {
                             </div>
                             <div>
                                 <label>Show Password</label>
-                                <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
+                                <input type="checkbox" name="showpassword" className="form-control" onChange={this.showPasswordClicked}></input>
                             </div>
                             <div className={`form-group ${this.errorClass(this.state.formErrors.address)}`}>
                                 <label>Home Address</label>
@@ -141,7 +170,7 @@ class Register extends Component {
                                 <input placeholder="mobile" name="mobile" required className="form-control" value={this.state.mobile} onChange={this.handleUserInput} />
                             </div>
                             <br></br>
-                            <button className="btn btn-success" disabled={!this.state.formValid}>Register</button>
+                            <button className="btn btn-success" disabled={!this.state.formValid} onClick={this.registerClicked}>Register</button>
                             {" "}
                             <button className="btn btn-success" onClick={this.loginClicked}>Return to Login</button>
                         </form>
