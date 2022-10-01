@@ -21,8 +21,10 @@ class AuthService {
         console.log(localStorage);
       });
   }
+
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem('user_id')
   }
 
   register(username, email, password, name, address, phoneNumber) {

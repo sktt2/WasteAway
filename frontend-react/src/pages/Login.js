@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AuthService from '../services/AuthService';
 
 
 class Login extends Component {
@@ -41,7 +42,15 @@ class Login extends Component {
         let rememberme = this.state.isrememberme;
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('rememberme', rememberme ? JSON.stringify(user) : '');
-        this.props.history.push('/product');
+        AuthService.signin(username, password)
+        .then(response => {
+            console.log(response)
+            this.props.history.push('/product');
+        })
+        .catch(response => {
+            console.log(response)
+            this.props.history.push('/login')
+        })
     }
 
     registerClicked = (event) => {
@@ -97,7 +106,7 @@ class Login extends Component {
                                 Remember me
                                 </label>
                             </div>
-                            <a href="/forgotpass" class="card-link">Forgot password?</a>
+                            <a href="/forgotpass" className="card-link">Forgot password?</a>
                             <br></br>
                             <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
                             {" "}
