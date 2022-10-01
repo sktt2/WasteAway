@@ -141,7 +141,7 @@ class Register extends Component {
                                 <input placeholder="mobile" name="mobile" required className="form-control" value={this.state.mobile} onChange={this.handleUserInput} />
                             </div>
                             <br></br>
-                            <button className="btn btn-success" disabled={!this.state.formValid}>Register</button>
+                            <button className="btn btn-success" onClick={this.loginClicked} disabled={!this.state.formValid}>Register</button>
                             {" "}
                             <button className="btn btn-success" onClick={this.loginClicked}>Return to Login</button>
                         </form>

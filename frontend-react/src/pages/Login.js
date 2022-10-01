@@ -8,12 +8,21 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            showpassword: 'password'
+            showpassword: 'password',
+            isrememberme: false,
         }
         this.changeUsername = this.changeUsername.bind(this);
         this.changePassword = this.changePassword.bind(this);
         this.showPasswordClicked = this.showPasswordClicked.bind(this);
     }
+
+    componentDidMount() {
+        if (localStorage.hasOwnProperty('rememberme')) {
+            var retrieveUsername = JSON.parse(localStorage.getItem('rememberme')) ;
+            let user = retrieveUsername.username;
+            this.setState({ username: user });
+        }
+      }
 
     changeUsername(event) {
         this.setState({ username: event.target.value });
@@ -29,7 +38,9 @@ class Login extends Component {
         let password = this.state.password;
         let authHeader = window.btoa(username + ':' + password);
         let user = { 'username': username, 'authHeader': authHeader };
+        let rememberme = this.state.isrememberme;
         localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('rememberme', rememberme ? JSON.stringify(user) : '');
         this.props.history.push('/product');
     }
 
@@ -46,6 +57,13 @@ class Login extends Component {
         }
     }
 
+    isRememberMeClicked = (event) => {
+        if (this.state.isrememberme === false) {
+            this.setState({ isrememberme: true });
+        } else {
+            this.setState({ isrememberme: false });
+        }
+    }
     render() {
         return (
             <div className="container">
@@ -72,6 +90,12 @@ class Login extends Component {
 </svg> }
                                 </button>
                                 </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={this.isRememberMeClicked}/>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                Remember me
+                                </label>
                             </div>
                             <a href="/forgotpass" class="card-link">Forgot password?</a>
                             <br></br>
