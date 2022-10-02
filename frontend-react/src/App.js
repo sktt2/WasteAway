@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Header from './components/Header.js';
-import AddUser from './components/AddUser.js';
 import Login from './pages/Login.js';
+import AlreadyLoggedIn from './pages/AlreadyLoggedIn.js';
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import Logout from './pages/Logout.js';
@@ -27,7 +27,7 @@ class App extends Component {
               <Header/>
               <Switch> 
                 <Route path = "/login" component={Login}/> 
-                <Route path = "/add-user" component = {AddUser}></Route>  
+                <Route path = "/alreadyloggedin" component={AlreadyLoggedIn}/> 
                 <Route path = "/logout" component = {Logout}></Route>
                 <Route path = "/error" component = {Error}></Route>
                 <Route path = "/product/:id" component = {ProductDetail}></Route>

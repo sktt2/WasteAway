@@ -1,10 +1,13 @@
 import { Component } from "react";
+import AuthService from "../services/AuthService";
 
 class Logout extends Component {
+
     componentDidMount() {
-        localStorage.removeItem('user');
-        this.props.history.push('/');
+        AuthService.logout()
+        console.log(localStorage)
     }
+
     render(){
         return (
             <div>You have logged out</div>
