@@ -17,8 +17,12 @@ class Login extends Component {
     }
 
     componentDidMount() {
+        if (localStorage.hasOwnProperty('user_id')) {
+            this.props.history.push('/alreadyloggedin')
+        }
         if (localStorage.hasOwnProperty('rememberme')) {
             var retrieveUsername = JSON.parse(localStorage.getItem('rememberme'));
+            console.log(retrieveUsername)
             let user = retrieveUsername.username;
             this.setState({ username: user });
         }
@@ -39,11 +43,16 @@ class Login extends Component {
         let authHeader = window.btoa(username + ':' + password);
         let user = { 'username': username, 'authHeader': authHeader };
         let rememberme = this.state.isrememberme;
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('rememberme', rememberme ? JSON.stringify(user) : '');
         AuthService.signin(username, password)
             .then(response => {
                 console.log(response)
+                localStorage.setItem('user', JSON.stringify(user));
+                if (rememberme) {
+                    localStorage.setItem('rememberme', JSON.stringify(user));
+                } else if (localStorage.hasOwnProperty('rememberme')) {
+                    localStorage.removeItem('rememberme')
+                }
+                console.log(localStorage)
                 this.props.history.push('/product');
             })
             .catch(response => {
