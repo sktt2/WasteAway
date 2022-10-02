@@ -2,31 +2,48 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Form from 'react-bootstrap/Form';
-import bulbasaur from '../bulbasaur.jpg';
+import ProductService from '../services/ProductService';
 
 class AddProduct extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            username: '',
-            password: '',
-            file: null
+            validated: ''
         }
-        this.uploadImage = this.uploadImage.bind(this)
+        this.validateInputs = this.validateInputs.bind(this)
+        this.addProductClicked = this.addProductClicked.bind(this)
     }
 
-    uploadImage(event) {
-        this.setState({file: bulbasaur})
+    // Return proper error modal on invalid input
+    validateInputs = (event) => {
+        const form = event.currentTarget
+        if (form.checkValidity() === false) {
+            event.preventDefault()
+            event.stopPropagation()
+        } else {
+            this.addProductClicked(event)
+        }
+        this.setState({validated: 'was-validated'})
     }
 
     addProductClicked = (event) => {
         event.preventDefault();
-        // let username = this.state.username;
-        // let password = this.state.password;
-        // let authHeader = window.btoa(username + ':' + password);
-        // let user = {'username': username, 'authHeader': authHeader};
-        // localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/product');
+        let newProduct = {
+            productName: this.state.productname,
+            category: this.state.category,
+            description: this.state.description,
+            condition: this.state.conditions,
+            dateTime: new Date().toISOString(),
+            imageUrl: this.state.image,
+            userId: JSON.parse(localStorage.getItem('user')).id
+        }
+        ProductService.addProduct(newProduct)
+        .then(() => {
+            this.props.history.push('/products')
+        })
+        .catch(() => {
+            this.props.history.push('/error')
+        })
     }
 
     render() {
@@ -35,43 +52,67 @@ class AddProduct extends Component {
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className = "card-body">
-                        <form>
+                        <form noValidate className={this.state.validated} onSubmit={this.validateInputs}>
                             <div>
-                                <label>Product Name</label>
-                                <input placeholder="Product name" name="productname" className="form-control"/>
+                                <Form.Group>
+                                    <Form.Label>Product Name</Form.Label>
+                                    <Form.Control placeholder="Product name" name="productname" value={this.state.productname || ''} onChange={event => this.setState({productname: event.target.value})} required/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a product name.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
                             </div>
                             <div>
-                                <label>Description</label>
-                                <Form.Control placeholder="Description" name="description" as="textarea" rows={3} />
+                                <Form.Group>
+                                    <Form.Label>Category</Form.Label>
+                                    <Form.Select value={this.state.category} onChange={event => this.setState({category: event.target.value})} required>
+                                        <option value="" hidden>Select category</option>
+                                        <option value="BOOKS">Books</option>
+                                        <option value="ELECTRONICS">Electronics</option>
+                                        <option value="FASHION">Fashion</option>
+                                        <option value="FOOD">Food</option>
+                                        <option value="TOYS">Toys</option>
+                                        <option value="UTILITY">Utility</option>
+                                        <option value="VIDEOGAMES">Video Games</option>
+                                        <option value="OTHERS">Others</option>
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        Select a category.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
                             </div>
                             <div>
-                                <label>Condition</label>
-                                <Form>
-                                    <div key={`inline-"radio"`} className="mb-3">
-                                        <Form.Check inline label="1" name="group1" type="radio" id={`inline-"radio"-1`}/>
-                                        <Form.Check inline label="2" name="group1" type="radio" id={`inline-"radio"-2`}/>
-                                        <Form.Check inline label="3" name="group1" type="radio" id={`inline-"radio"-3`}/>
-                                        <Form.Check inline label="4" name="group1" type="radio" id={`inline-"radio"-4`}/>
-                                        <Form.Check inline label="5" name="group1" type="radio" id={`inline-"radio"-5`}/>
-                                        <Form.Check inline label="6" name="group1" type="radio" id={`inline-"radio"-6`}/>
-                                        <Form.Check inline label="7" name="group1" type="radio" id={`inline-"radio"-7`}/>
-                                        <Form.Check inline label="8" name="group1" type="radio" id={`inline-"radio"-8`}/>
-                                        <Form.Check inline label="9" name="group1" type="radio" id={`inline-"radio"-9`}/>
-                                        <Form.Check inline label="10" name="group1" type="radio" id={`inline-"radio"-10`}/>
-                                    </div>
-                                </Form>
+                                <Form.Group>
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control placeholder="Description" name="description" as="textarea" rows={3} value={this.state.description} onChange={event => this.setState({description: event.target.value})} required/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide the product description.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </div>
+                            <div>
+                                <Form.Group>
+                                    <Form.Label>Condition of Product</Form.Label>
+                                    <Form.Control placeholder="Conditions" name="conditions" as="textarea" rows={3} value={this.state.conditions} onChange={event => this.setState({conditions: event.target.value})} required/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide the product condition.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
                             </div>
                             <div>
                                 <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>Product Image</Form.Label>
-                                    <Form.Control type="file" onChange={this.uploadImage}/>
+                                    <Form.Control type="file" accept="image/*" onChange={event => this.setState({image: URL.createObjectURL(event.target.files[0])})} required/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide the product image.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
-                                <div style={{width: 100}}>
-                                    <img src={this.state.file}/>
+                                <div>
+                                    <img className="container-fluid w-100" src={this.state.image}/>
                                 </div>
                             </div>
                             <br></br>
-                            <button className="btn btn-success" onClick={this.addProductClicked}>Add Product</button>
+                            <button className="btn btn-success" type="submit">Add Product</button>
                         </form>
                     </div>
                 </div>
