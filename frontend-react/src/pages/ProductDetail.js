@@ -16,7 +16,6 @@ class ProductDetail extends Component {
     
     async componentDidMount(){
         const res = await ProductService.getProduct(this.state.id);
-        console.log(res)
         this.setState({data: res.data})
     }
 

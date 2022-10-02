@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.ProductResponse;
+import csd.app.payload.request.AddProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductNotFoundException;
 import csd.app.product.ProductRepository;
+import csd.app.user.User;
+import csd.app.user.UserRepository;
 
 import javax.validation.Valid;
 
@@ -18,8 +21,11 @@ import javax.validation.Valid;
 public class ProductController {
     private ProductRepository productRepository;
 
-    public ProductController(ProductRepository products) {
+    private UserRepository userRepository;
+
+    public ProductController(ProductRepository products, UserRepository users) {
         this.productRepository = products;
+        this.userRepository = users;
     }
 
     @GetMapping("/api/products")
@@ -42,8 +48,13 @@ public class ProductController {
     }
 
     @PostMapping("/api/products")
-    public Product addProduct(@Valid @RequestBody Product product) {
-        return productRepository.save(product);
+    public Product addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+        Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
+                                        addProductRequest.getDateTime(), addProductRequest.getCategory(), 
+                                        addProductRequest.getDescription());
+        User user = userRepository.findById(addProductRequest.getUserId()).get();
+        newProduct.setUser(user);
+        return productRepository.save(newProduct);
     }
 
 }

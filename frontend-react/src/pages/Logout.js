@@ -5,7 +5,6 @@ class Logout extends Component {
 
     componentDidMount() {
         AuthService.logout()
-        console.log(localStorage)
     }
 
     render(){

@@ -8,17 +8,10 @@ class AddProduct extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            user: null,
             validated: ''
         }
         this.validateInputs = this.validateInputs.bind(this)
         this.addProductClicked = this.addProductClicked.bind(this)
-    }
-
-    async componentDidMount() {
-        var curruser = JSON.parse(localStorage.getItem('user'))
-        const res = await ProductService.getUserByUsername(curruser.username)
-        this.setState({user: res.data})
     }
 
     // Return proper error modal on invalid input
@@ -42,16 +35,13 @@ class AddProduct extends Component {
             condition: this.state.conditions,
             dateTime: new Date().toISOString(),
             imageUrl: this.state.image,
-            user: this.state.user
+            userId: JSON.parse(localStorage.getItem('user')).id
         }
-        console.log(JSON.stringify(newProduct))
         ProductService.addProduct(newProduct)
-        .then((response) => {
-            console.log(response)
+        .then(() => {
             this.props.history.push('/products')
         })
-        .catch((error) => {
-            console.log(error)
+        .catch(() => {
             this.props.history.push('/error')
         })
     }
@@ -62,11 +52,11 @@ class AddProduct extends Component {
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className = "card-body">
-                        <form noValidate class={this.state.validated} onSubmit={this.validateInputs}>
+                        <form noValidate className={this.state.validated} onSubmit={this.validateInputs}>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Product Name</Form.Label>
-                                    <Form.Control placeholder="Product name" name="productname" className="form-control" value={this.state.productname} onChange={event => this.setState({productname: event.target.value})} required/>
+                                    <Form.Control placeholder="Product name" name="productname" value={this.state.productname || ''} onChange={event => this.setState({productname: event.target.value})} required/>
                                     <Form.Control.Feedback type="invalid">
                                         Please provide a product name.
                                     </Form.Control.Feedback>
