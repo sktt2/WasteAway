@@ -1,7 +1,5 @@
 package csd.app.payload.response;
 
-import java.time.LocalDateTime;
-
 import csd.app.user.User;
 import lombok.*;
 

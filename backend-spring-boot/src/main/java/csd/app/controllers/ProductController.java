@@ -3,17 +3,23 @@ package csd.app.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.ProductResponse;
 import csd.app.product.Product;
+import csd.app.product.ProductGA;
+import csd.app.product.ProductGARepository;
 import csd.app.product.ProductNotFoundException;
 import csd.app.product.ProductRepository;
 import csd.app.user.User;
+import csd.app.user.UserRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -23,6 +29,13 @@ public class ProductController {
     public ProductController(ProductRepository products) {
         this.productRepository = products;
     }
+
+    @Autowired
+    ProductGARepository productGARepository;
+
+    @Autowired
+    UserRepository userRepository;
+
 
     @GetMapping("/api/products")
     public List<ProductResponse> getProducts() {
@@ -78,4 +91,20 @@ public class ProductController {
         return ResponseEntity.ok(new MessageResponse("Product has been removed"));
     }
 
+    @PostMapping("/api/products/give")
+    public ResponseEntity<?> giveProduct(@RequestBody ProductGA pGA){
+        Long productId = pGA.getId();
+        Long receiverId = pGA.getReceiverId();
+        
+        // Check product exists
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+
+        // Check receiver exists
+        User user = userRepository.findById(receiverId).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        
+        ProductGA productGA =  new ProductGA(productId, receiverId);
+        productGARepository.save(productGA);
+
+        return ResponseEntity.ok(new MessageResponse("Item given successfully"));
+    }
 }
