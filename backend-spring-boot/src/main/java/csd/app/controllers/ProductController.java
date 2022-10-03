@@ -26,12 +26,8 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class ProductController {
+    @Autowired
     private ProductRepository productRepository;
-
-    public ProductController(ProductRepository products, UserRepository users) {
-        this.productRepository = products;
-        this.userRepository = users;
-    }
 
     @Autowired
     ProductGARepository productGARepository;
@@ -60,6 +56,16 @@ public class ProductController {
                 product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),
                 product.getUser());
         return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/api/products")
+    public Product addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+        Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
+                addProductRequest.getDateTime(), addProductRequest.getCategory(),
+                addProductRequest.getDescription());
+        User user = userRepository.findById(addProductRequest.getUserId()).get();
+        newProduct.setUser(user);
+        return productRepository.save(newProduct);
     }
 
     @GetMapping("api/products/user/{id}")
@@ -117,5 +123,7 @@ public class ProductController {
         productGARepository.save(productGA);
 
         return ResponseEntity.ok(new MessageResponse("Item given successfully"));
+
     }
+
 }

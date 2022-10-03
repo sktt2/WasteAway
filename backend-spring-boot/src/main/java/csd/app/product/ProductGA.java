@@ -1,6 +1,5 @@
 package csd.app.product;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,7 +15,7 @@ import lombok.*;
 @Setter
 
 public class ProductGA {
-    
+
     @NotNull
     private @Id Long id;
 
@@ -27,16 +26,15 @@ public class ProductGA {
     @JoinColumn(name = "id")
     private Product product;
 
-    public ProductGA(){
+    public ProductGA() {
     }
 
     public ProductGA(Long productId) {
         this.id = productId;
     }
-    
+
     public ProductGA(Long productId, Long receiverId) {
         this(productId);
         this.receiverId = receiverId;
     }
 }
-
