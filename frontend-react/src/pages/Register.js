@@ -39,7 +39,7 @@ class Register extends Component {
         let mobile = this.state.mobile;
         let authHeader = window.btoa(username + ':' + name + ':' + email + ':' + password + ':' + confirmpassword + ':' + address + ':' + mobile);
         let user = { 'username': username, 'authHeader': authHeader };
-        AuthService.register(username, name, email, password, confirmpassword, address, mobile)
+        AuthService.register(username, name, email, password, address, mobile)
             .then(() => {
                 AuthService.signin(username, password)
                 localStorage.setItem('user', JSON.stringify(user));
