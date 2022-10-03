@@ -6,6 +6,9 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import AuthService from "../services/AuthService";
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class Login extends Component {
     constructor(props) {
         super(props);

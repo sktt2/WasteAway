@@ -5,6 +5,9 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ProductService from "../services/ProductService";
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class AddProduct extends Component {
     constructor(props) {
         super(props);
@@ -54,7 +57,7 @@ class AddProduct extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className="card-body">
+                    <div className={styles.inputCard}>
                         <Form noValidate className={this.state.validated} onSubmit={this.validateInputs}>
                             <div>
                                 <Form.Group>

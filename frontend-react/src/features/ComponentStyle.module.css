@@ -1,0 +1,21 @@
+.productCard{
+    background-color: rgb(223,228,212);
+    border: 5px solid rgb(223,228,212);
+    box-shadow: 2px 2px 2px;
+}
+.productCard:hover{
+    transform:scale(1.05);
+    box-shadow: 5px 5px 5px;
+}
+.inputCard{
+    background-color: rgb(223,228,212);
+    padding: 20px;
+}
+.navbar{
+    background-color: rgb(223,228,212);
+}
+.productDetails{
+    background-color: rgb(223,228,212);
+    border-radius: 0 0 20px 20px;
+    padding: 20px;
+}

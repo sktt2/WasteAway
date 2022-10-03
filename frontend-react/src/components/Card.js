@@ -1,7 +1,11 @@
 import { Fragment } from "react"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
-import bulbasaur from "../bulbasaur.jpg"
+import bulbasaur from "../bulbasaur.jpg";
+
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 
 function CardComponent(props) {
     const title = props.title
@@ -97,4 +101,3 @@ function CardComponent(props) {
 }
 
 export default CardComponent
-

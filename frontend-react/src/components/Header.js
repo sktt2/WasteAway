@@ -7,6 +7,14 @@ import Button from "react-bootstrap/Button";
 import AuthService from "../services/AuthService";
 
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
+
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
+
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +55,7 @@ class Header extends Component {
             );
         }
         return (
-            <Navbar bg="light" expand="lg">
+            <Navbar className={styles.navbar} expand="lg">
                 <Container>
                     <Navbar.Brand href="/">Waste Away</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
