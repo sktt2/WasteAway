@@ -41,7 +41,7 @@ public class AuthController {
 
     @Autowired
     UserInfoRepository userInfoRepository;
-    
+
     @Autowired
     RoleRepository roleRepository;
 
@@ -67,12 +67,12 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
+        UserInfo userinfo = userInfoRepository.getById(userDetails.getId());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
-                        roles));
+                        roles, userinfo));
     }
 
     @PostMapping("/signup")
@@ -118,11 +118,10 @@ public class AuthController {
         userRepository.save(user);
 
         UserInfo userInfo = new UserInfo(user.getId(),
-                            signUpRequest.getName(), 
-                            signUpRequest.getAddress(), 
-                            signUpRequest.getPhoneNumber());
+                signUpRequest.getName(),
+                signUpRequest.getAddress(),
+                signUpRequest.getPhoneNumber());
         userInfoRepository.save(userInfo);
-        
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

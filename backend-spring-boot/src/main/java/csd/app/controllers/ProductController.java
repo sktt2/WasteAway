@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.ProductResponse;
 import csd.app.payload.request.AddProductRequest;
+import csd.app.payload.request.GiveProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductGA;
 import csd.app.product.ProductGARepository;
 import csd.app.product.ProductNotFoundException;
 import csd.app.product.ProductRepository;
+import csd.app.user.SameUserException;
 import csd.app.user.User;
 import csd.app.user.UserRepository;
 
@@ -107,19 +109,21 @@ public class ProductController {
     }
 
     @PostMapping("/api/products/give")
-    public ResponseEntity<?> giveProduct(@RequestBody ProductGA pGA) {
-        Long productId = pGA.getId();
-        Long receiverId = pGA.getReceiverId();
+    public ResponseEntity<?> giveProduct(@Valid @RequestBody GiveProductRequest giveProductRequest) {
+        Long productId = giveProductRequest.getProductId();
+        String receiverUsername = giveProductRequest.getReceiverUsername();
 
         // Check product exists
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-
+        User owner = product.getUser();
         // Check receiver exists
-        User user = userRepository.findById(receiverId)
+        User user = userRepository.findByUsername(receiverUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        ProductGA productGA = new ProductGA(productId, receiverId);
+        if (user.getId() == owner.getId()) {
+            throw new SameUserException();
+        }
+        ProductGA productGA = new ProductGA(productId, user.getId());
         productGARepository.save(productGA);
 
         return ResponseEntity.ok(new MessageResponse("Item given successfully"));
