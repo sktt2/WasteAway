@@ -10,6 +10,7 @@ class Login extends Component {
       password: "",
       showpassword: "password",
       isrememberme: false,
+      messageDisplay: false
     };
     this.changeUsername = this.changeUsername.bind(this);
     this.changePassword = this.changePassword.bind(this);
@@ -51,8 +52,9 @@ class Login extends Component {
         }
         this.props.history.push("/product");
       })
-      .catch(() => {
-        this.props.history.push("/login");
+      .catch((err) => {
+        console.log(err)
+        this.setState({messageDisplay: true})
       });
   };
 
@@ -83,6 +85,9 @@ class Login extends Component {
         <div className="card col-md-6 offset-md-3 offset-md-3">
           <div className="card-body">
             <form>
+              <div style={{display: this.state.messageDisplay? 'block' : 'none'}}>
+                <label>Username/Password is incorrect!</label>
+              </div>
               <div>
                 <label>Username</label>
                 <input

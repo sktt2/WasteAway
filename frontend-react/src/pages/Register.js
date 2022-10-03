@@ -24,12 +24,14 @@ class Register extends Component {
             confirmPasswordValid: false,
             addressValid: false,
             mobileValid: false,
-            formValid: false
+            formValid: false,
+            messageDisplay: false
         }
         this.showPasswordClicked = this.showPasswordClicked.bind(this);
     }
 
     registerClicked = (event) => {
+        event.preventDefault();
         let username = this.state.username;
         let name = this.state.name
         let email = this.state.email;
@@ -45,8 +47,9 @@ class Register extends Component {
                 localStorage.setItem('user', JSON.stringify(user));
                 this.props.history.push('/products')
             })
-            .catch(() => {
-                this.props.history.push('/register')
+            .catch((err) => {
+                console.log(err)
+                this.setState({messageDisplay: true})
             })
     }
 
@@ -152,6 +155,9 @@ class Register extends Component {
                         <form>
                             <div className="panel panel-default">
                                 <FormErrors formErrors={this.state.formErrors} />
+                            </div>
+                            <div style={{display: this.state.messageDisplay? 'block' : 'none'}}>
+                                <label>Username/Email has already been used!</label>
                             </div>
                             <div>
                                 <label>Username</label>
