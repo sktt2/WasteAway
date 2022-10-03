@@ -22,7 +22,6 @@ class Login extends Component {
     }
     if (localStorage.hasOwnProperty("rememberme")) {
       var retrieveUsername = JSON.parse(localStorage.getItem("rememberme"));
-      console.log(retrieveUsername);
       let user = retrieveUsername.username;
       this.setState({ username: user });
     }
@@ -50,11 +49,9 @@ class Login extends Component {
         } else if (localStorage.hasOwnProperty("rememberme")) {
           localStorage.removeItem("rememberme");
         }
-        console.log(localStorage);
         this.props.history.push("/product");
       })
-      .catch((response) => {
-        console.log(response);
+      .catch(() => {
         this.props.history.push("/login");
       });
   };

@@ -33,7 +33,6 @@ class Product extends Component {
 
     async componentDidMount(){
         const res = await ProductService.getProducts();
-        console.log(res.data)
         this.setState({data: res.data})
     }
     

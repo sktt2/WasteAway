@@ -40,14 +40,12 @@ class Register extends Component {
         let authHeader = window.btoa(username + ':' + name + ':' + email + ':' + password + ':' + confirmpassword + ':' + address + ':' + mobile);
         let user = { 'username': username, 'authHeader': authHeader };
         AuthService.register(username, name, email, password, confirmpassword, address, mobile)
-            .then(response => {
-                console.log(response)
+            .then(() => {
                 AuthService.signin(username, password)
                 localStorage.setItem('user', JSON.stringify(user));
                 this.props.history.push('/products')
             })
-            .catch(response => {
-                console.log(response)
+            .catch(() => {
                 this.props.history.push('/register')
             })
     }
