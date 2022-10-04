@@ -55,8 +55,10 @@ class Register extends Component {
             .catch(error => {
                 // Read body of error response and display message get to alert
                 console.log(error);
-                this.setState({ errormessage: "Username/Email has already been used!" });
-                this.setState({ messageDisplay: true });
+                this.setState({ 
+                    errormessage: "Username/Email has already been used!",
+                    messageDisplay: true,
+                });
             })
     };
 
@@ -67,7 +69,6 @@ class Register extends Component {
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className="card-body">
                         <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
-                            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
                             <p>
                                 {this.state.errormessage}
                             </p>

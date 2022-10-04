@@ -60,8 +60,10 @@ class Login extends Component {
             .catch((err) => {
                 // Read body of error response and display message get to alert
                 console.log(err)
-                this.setState({ errormessage: "Username/Password is incorrect!" });
-                this.setState({ messageDisplay: true })
+                this.setState({ 
+                    errormessage: "Username/Password is incorrect!",
+                    messageDisplay: true,
+                });
             });
     };
 
@@ -88,7 +90,6 @@ class Login extends Component {
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className="card-body">
                         <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
-                            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
                             <p>
                                 {this.state.errormessage}
                             </p>
