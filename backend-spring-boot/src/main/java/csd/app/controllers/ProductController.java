@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.ProductResponse;
+import csd.app.payload.response.MessageResponse;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductNotFoundException;
@@ -48,13 +49,15 @@ public class ProductController {
     }
 
     @PostMapping("/api/products")
-    public Product addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+    public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
                                         addProductRequest.getDateTime(), addProductRequest.getCategory(), 
                                         addProductRequest.getDescription());
-        User user = userRepository.findById(addProductRequest.getUserId()).get();
+        User user = userRepository.findById(addProductRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("Error: User not found."));
         newProduct.setUser(user);
-        return productRepository.save(newProduct);
+        productRepository.save(newProduct);
+        return ResponseEntity.ok(new MessageResponse("Product registered successfully!"));
     }
 
 }

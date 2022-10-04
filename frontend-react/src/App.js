@@ -22,7 +22,7 @@ class App extends Component {
 
   render() {
     return (
-        <Container>
+        <Container fluid={true}>
           <Router>
               <Header/>
               <Switch> 

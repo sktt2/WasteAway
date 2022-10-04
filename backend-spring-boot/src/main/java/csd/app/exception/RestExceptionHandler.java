@@ -7,9 +7,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import csd.app.payload.response.MessageResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -59,4 +62,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         response.sendError(HttpStatus.BAD_REQUEST.value());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<MessageResponse> handleRuntimeException(RuntimeException ex) {
+        MessageResponse messageResponse = new MessageResponse(ex.getMessage());
+          return new ResponseEntity<MessageResponse>(messageResponse, HttpStatus.BAD_REQUEST);
+      }  
 }
