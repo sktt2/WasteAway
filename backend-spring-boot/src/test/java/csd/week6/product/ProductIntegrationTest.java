@@ -15,6 +15,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import csd.app.product.Product;
 import csd.app.product.ProductRepository;
 import csd.app.user.User;
@@ -26,101 +33,118 @@ import csd.app.user.UserInfoRepository;
 @SpringBootTest(classes = csd.app.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class ProductIntegrationTest {
 
-    @LocalServerPort
-    private int port;
+        @LocalServerPort
+        private int port;
 
-    private final String baseUrl = "http://localhost:";
+        private final String baseUrl = "http://localhost:";
 
-    @Autowired
-    /**
-     * Use TestRestTemplate for testing a real instance of your application as an
-     * external actor.
-     * TestRestTemplate is just a convenient subclass of RestTemplate that is
-     * suitable for integration tests.
-     * It is fault tolerant, and optionally can carry Basic authentication headers.
-     */
-    private TestRestTemplate restTemplate;
+        @Autowired
+        /**
+         * Use TestRestTemplate for testing a real instance of your application as an
+         * external actor.
+         * TestRestTemplate is just a convenient subclass of RestTemplate that is
+         * suitable for integration tests.
+         * It is fault tolerant, and optionally can carry Basic authentication headers.
+         */
+        private TestRestTemplate restTemplate;
 
-    @Autowired
-    private ProductRepository products;
+        @Autowired
+        private ProductRepository products;
 
-    @Autowired
-    private UserRepository users;
+        @Autowired
+        private UserRepository users;
 
-    @Autowired
-    private UserInfoRepository userInfos;
+        @Autowired
+        private UserInfoRepository userInfos;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+        @Autowired
+        private BCryptPasswordEncoder encoder;
 
-    @AfterEach
-    void tearDown() {
-        // clear the database after each test
-        products.deleteAll();
-        users.deleteAll();
-        userInfos.deleteAll();
-    }
+        @Autowired
+        private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
-    public void getProducts_Success() throws Exception {
-        URI uri = new URI(baseUrl + port + "/api/products");
-        User user = new User("tester1", "abc@test.com", encoder.encode("password"));
-        users.save(user);
-        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
-        userInfos.save(userInfo);
-        Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
-                "ELECTRONICS");
-        product.setUser(user);
-        products.save(product);
+        @AfterEach
+        void tearDown() {
+                // clear the database after each test
+                products.deleteAll();
+                users.deleteAll();
+                userInfos.deleteAll();
+        }
 
-        ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
-                Product[].class);
-        Product[] products = result.getBody();
+        @Test
+        public void getProducts_Success() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products");
+                User user = new User("tester1", "abc@test.com", encoder.encode("password"));
+                users.save(user);
+                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
+                userInfos.save(userInfo);
+                Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
+                                "ELECTRONICS");
+                product.setUser(user);
+                products.save(product);
 
-        assertEquals(200, result.getStatusCode().value());
-        assertEquals(1, products.length);
-    }
+                ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
+                                Product[].class);
+                Product[] products = result.getBody();
 
-    @Test
-    public void getProduct_ValidProductId_Success() throws Exception {
-        User user = new User("tester2", "blabla@hotmail.com", encoder.encode("password"));
-        users.save(user);
-        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
-        userInfos.save(userInfo);
-        Product product = new Product("CAMERA", "OLD",
-                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-        product.setUser(user);
-        Long id = products.save(product).getId();
-        URI uri = new URI(baseUrl + port + "/api/products/" + id);
+                assertEquals(200, result.getStatusCode().value());
+                assertEquals(1, products.length);
+        }
 
-        ResponseEntity<Product> result = restTemplate.getForEntity(uri,
-                Product.class);
+        @Test
+        public void getProduct_ValidProductId_Success() throws Exception {
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password"));
+                users.save(user);
+                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
+                userInfos.save(userInfo);
+                Product product = new Product("CAMERA", "OLD",
+                                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+                product.setUser(user);
+                Long id = products.save(product).getId();
+                URI uri = new URI(baseUrl + port + "/api/products/" + id);
 
-        assertEquals(200, result.getStatusCode().value());
-        assertEquals(product.getProductName(), result.getBody().getProductName());
-    }
+                ResponseEntity<Product> result = restTemplate.getForEntity(uri,
+                                Product.class);
 
-    @Test
-    public void getProduct_InvalidProductId_Failure() throws Exception {
-        URI uri = new URI(baseUrl + port + "/api/products/4");
+                assertEquals(200, result.getStatusCode().value());
+                assertEquals(product.getProductName(), result.getBody().getProductName());
+        }
 
-        ResponseEntity<Product> result = restTemplate.getForEntity(uri,
-                Product.class);
+        @Test
+        public void getProduct_InvalidProductId_Failure() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products/4");
 
-        assertEquals(400, result.getStatusCode().value());
-    }
+                ResponseEntity<Product> result = restTemplate.getForEntity(uri,
+                                Product.class);
 
-    // @Test
-    // public void addBook_Success() throws Exception {
-    // URI uri = new URI(baseUrl + port + "/books");
-    // Book book = new Book("A New Hope");
-    // users.save(new User("admin", encoder.encode("goodpassword"), "ROLE_ADMIN"));
+                assertEquals(400, result.getStatusCode().value());
+        }
 
-    // ResponseEntity<Book> result = restTemplate.withBasicAuth("admin",
-    // "goodpassword")
-    // .postForEntity(uri, book, Book.class);
+        @Test
+        public void addProduct_Success() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products");
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password"));
+                users.save(user);
 
-    // assertEquals(201, result.getStatusCode().value());
-    // assertEquals(book.getTitle(), result.getBody().getTitle());
-    // }
+                JSONObject productJsonObject = new JSONObject();
+                productJsonObject.put("productName", "CAMERA");
+                productJsonObject.put("condition", "NEW");
+                productJsonObject.put("dateTime", LocalDateTime.now().toString());
+                productJsonObject.put("category", "ELECTRONICS");
+                productJsonObject.put("description", "Test Description");
+                productJsonObject.put("imageUrl", "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+                productJsonObject.put("userId", user.getId());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+                ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+                JsonNode root = objectMapper.readTree(result.getBody());
+
+                assertEquals(200, result.getStatusCode().value());
+                assertEquals("Product registered successfully!", root.path("message").asText());
+        }
 }
