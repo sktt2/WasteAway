@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// From components
-import { FormErrors } from '../components/FormErrors';
-
 class ForgotPass extends Component {
     constructor(props) {
         super(props)
@@ -83,9 +80,6 @@ class ForgotPass extends Component {
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className="card-body">
                         <form>
-                            <div className="panel panel-default">
-                                <FormErrors formErrors={this.state.formErrors} />
-                            </div>
                             <div>
                                 <label>Username</label>
                                 <input placeholder="username" name="username" required className="form-control" value={this.state.username} onChange={this.changeUsername} />
