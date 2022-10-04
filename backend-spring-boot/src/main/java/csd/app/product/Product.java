@@ -31,7 +31,7 @@ public class Product {
 
     @NotNull(message = "Product condition should not be empty")
     @Size(min = 1, max = 100, message = "Product condition should be at least 1 character long")
-    @Column(name="conditions")
+    @Column(name = "conditions")
     private String condition;
 
     @NotNull(message = "Date and time should not be empty")
@@ -45,9 +45,8 @@ public class Product {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name="owner_id", nullable=false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User user;
-
 
     public Product() {
     }

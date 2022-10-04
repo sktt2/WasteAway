@@ -34,25 +34,29 @@ public class ProductController {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
-            ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(), product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),product.getUser());
+            ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
+                    product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(),
+                    product.getImageUrl(), product.getUser());
             resp.add(prodResp);
         }
         return resp;
     }
 
     @GetMapping("/api/products/{id}")
-    public  ResponseEntity<?> getProduct(@PathVariable Long id) {
+    public ResponseEntity<?> getProduct(@PathVariable Long id) {
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException(id));
-        ProductResponse resp = new ProductResponse(id, product.getProductName(), product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(), product.getUser());
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        ProductResponse resp = new ProductResponse(id, product.getProductName(), product.getCondition(),
+                product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),
+                product.getUser());
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/api/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
-                                        addProductRequest.getDateTime(), addProductRequest.getCategory(), 
-                                        addProductRequest.getDescription());
+                addProductRequest.getDateTime(), addProductRequest.getCategory(),
+                addProductRequest.getDescription());
         User user = userRepository.findById(addProductRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Error: User not found."));
         newProduct.setUser(user);
