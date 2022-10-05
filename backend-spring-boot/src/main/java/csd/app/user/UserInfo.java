@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Entity
@@ -20,10 +23,11 @@ import lombok.*;
  * e.g., what authorities (roles) are granted to the user and whether the
  * account is enabled or not
  */
-public class UserInfo implements Serializable{
+public class UserInfo implements Serializable {
     // private static final long serialVersionUID = 1L;
+    @JsonIgnore
     private @Id Long id;
-    
+
     @NotNull(message = "Please enter your name")
     @Column
     private String name;
@@ -42,13 +46,13 @@ public class UserInfo implements Serializable{
     // private int phoneNumber;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "id")
     private User user;
 
-
     public UserInfo(Long id, String name, String address, int phoneNumber) {
         this.id = id;
-        this.name =name;
+        this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }

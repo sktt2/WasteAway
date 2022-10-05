@@ -64,12 +64,12 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
+        UserInfo userinfo = userInfoRepository.getReferenceById(userDetails.getId());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
-                        roles));
+                        roles, userinfo));
     }
 
     @PostMapping("/signup")

@@ -1,5 +1,6 @@
 package csd.app.product;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,10 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.URL;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import csd.app.user.User;
 import lombok.*;
@@ -45,8 +48,13 @@ public class Product {
     private String imageUrl;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "owner_id", nullable = false)
     private User user;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private ProductGA productGA;
 
     public Product() {
     }
