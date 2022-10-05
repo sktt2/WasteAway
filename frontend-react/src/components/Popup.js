@@ -11,12 +11,17 @@ export default class PopUp extends Component {
         this.state = {
             username: "",
             error: false,
-            errorMessage: "",
+            errorMessage: "",   
+            title: props.title,
+            label: props.label,
+            buttons: props.buttons
         }
     }
+    
     handleClick = () => {
         this.props.closePopUp()
     }
+
     handleSubmit = async (e) => {
         e.preventDefault()
         const { username } = this.state
@@ -32,7 +37,7 @@ export default class PopUp extends Component {
             })
                 .then((response) => {
                     if (response.status === 200) {
-                        this.props.closePopUp(true)
+                        this.props.closePopUp(true, true)
                     }
                 })
                 .catch((e) => {
@@ -40,10 +45,25 @@ export default class PopUp extends Component {
                         error: true,
                         errorMessage: e.response.data.message,
                     })
-                    console.log(e.response.data.message)
                 })
         }
     }
+
+    handleDelete = async (e) => {
+        e.preventDefault()
+        ProductService.removeProduct(this.props.productId)
+        .then( (response)=>{
+            if (response.status === 200){
+                this.props.closePopUp(true)
+            }
+        }).catch((e) =>{
+            this.setState({
+                error: true,
+                errorMessage: e.response.data.message,
+            })
+        })
+    }
+
     handleUserInput = (e) => {
         const value = e.target.value
         this.setState({ username: value })
@@ -53,24 +73,39 @@ export default class PopUp extends Component {
         return (
             <div className={styles.popup_container}>
                 <div className={styles.popup_content}>
-                    <span className="close" onClick={this.handleClick}>
-                        &times;
-                    </span>
-                    <form onSubmit={this.handleSubmit}>
-                        <h3>Give Away</h3>
-                        <label style={{ marginBottom: "5px" }}>
-                            Username:
-                            <input
-                                style={{ marginLeft: "10px" }}
-                                type="text"
-                                value={this.state.username}
-                                onChange={this.handleUserInput}
-                            />
-                        </label>
-                        <br />
-                        <input type="submit" />
-                    </form>
-                    {this.state.error && <p style={{ color: "red" }}>{this.state.errorMessage}</p>}
+                    {this.state.buttons === 2 && (
+                        <div>
+                        <span className="close" onClick={this.handleClick}>
+                            &times;
+                        </span>
+                            <h3>{this.state.title}</h3>
+                            <button onClick={this.handleDelete}>YES</button>
+                            <button onClick={this.handleClick}>NO</button>
+                            <br />
+                        </div>
+                    )}
+                    {this.state.buttons === 1 && (
+                        <div>
+                        <span className="close" onClick={this.handleClick}>
+                            &times;
+                        </span>
+                        <form onSubmit={this.handleSubmit}>
+                            <h3>{this.state.title}</h3>
+                            <label style={{ marginBottom: "5px" }}>
+                                {this.state.label}
+                                <input
+                                    style={{ marginLeft: "10px" }}
+                                    type="text"
+                                    value={this.state.username}
+                                    onChange={this.handleUserInput}
+                                />
+                            </label>
+                            <br />
+                            <input type="submit" />
+                        </form>
+                        {this.state.error && <p style={{ color: "red" }}>{this.state.errorMessage}</p>}
+                        </div>
+                    )}
                 </div>
             </div>
         )

@@ -47,7 +47,7 @@ function CardComponent(props) {
                             <Button
                                 variant="primary"
                                 onClick={() => {
-                                    triggerPopUp(id)
+                                    triggerPopUp(id, "giveaway")
                                 }}>
                                 Give away
                             </Button>

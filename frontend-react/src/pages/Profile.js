@@ -39,6 +39,9 @@ class Profile extends Component {
             popup: false,
             popupProduct: 0,
             give: {},
+            title: "",
+            label: "",
+            button: 0
         }
         this.triggerPopUp = this.triggerPopUp.bind(this)
         this.closePopUp = this.closePopUp.bind(this)
@@ -50,30 +53,44 @@ class Profile extends Component {
         this.setState({ data: res.data })
         const object = give.data.reduce((obj, item) => ((obj[item.id] = item.receiverId), obj), {})
         this.setState({ give: object })
-        console.log(this.state)
     }
 
     handleChange = (event, newValue) => {
         this.setState({ value: newValue })
     }
-    triggerPopUp = (productId) => {
-        this.setState({
-            popup: true,
-            popupProduct: productId,
-        })
+    triggerPopUp = (productId, inputType) => {
+        if (inputType === "giveaway"){
+            this.setState({
+                button: 1,
+                title: "Give away",
+                label: "Username",
+                popup: true,
+                popupProduct: productId,
+            })
+        } else {
+            this.setState({
+                button: 2,
+                title: "Are you sure you want to remove product?",
+                popup: true,
+                popupProduct: productId,
+            })
+        }
+        
     }
 
-    closePopUp = async (reload) => {
+    closePopUp = async (reload, give) => {
         this.setState({
             popup: false,
         })
-        if (reload) {
+        if (reload && give) {
             const give = await ProductService.getGAProductByOwner(StorageHelper.getUserId())
             const object = give.data.reduce(
                 (obj, item) => ((obj[item.id] = item.receiverId), obj),
                 {}
             )
             this.setState({ give: object })
+        } else if (reload) {
+            window.location.reload('false')
         }
     }
     giveProduct = () => {}
@@ -104,9 +121,10 @@ class Profile extends Component {
                                     address={data.address}
                                     condition={data.condition}
                                     imgSource={data.imageUrl}
-                                    buttons={2}
+                                    buttons={4}
                                     triggerPopUp={this.triggerPopUp}
-                                    buttonLink={this.state.url + data.id}></CardComponent>
+                                    buttonLink={this.state.url + data.id}
+                                    editDetailLink = {this.state.url + "edit/" + data.id}></CardComponent>
                             </Col>
                         ))}
                     </Row>
@@ -138,8 +156,8 @@ class Profile extends Component {
         return (
             <div>
                 <div>
-                    {this.state.popup && (
-                        <PopUp closePopUp={this.closePopUp} productId={this.state.popupProduct} />
+                    {this.state.popup && ( 
+                        <PopUp closePopUp={this.closePopUp} productId={this.state.popupProduct} title={this.state.title} label={this.state.label} buttons={this.state.button} />
                     )}
                 </div>
                 <div>

@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form';
 import ProductService from '../services/ProductService';
 import StorageHelper from "../services/StorageHelper"
-import { Popover } from 'react-bootstrap';
 
 class EditProduct extends Component {
     constructor(props) {
@@ -22,7 +21,7 @@ class EditProduct extends Component {
     async componentDidMount(){
         const res = await ProductService.getProduct(this.state.id);
         this.setState({data: res.data})
-        if (res.data.ownerName != StorageHelper.getUserName()){
+        if (res.data.ownerName !== StorageHelper.getUserName()){
             this.props.history.push('/profile')
         }
     }
@@ -55,9 +54,9 @@ class EditProduct extends Component {
         ProductService.updateProductDetail(id, body)
         .then(() => {
             document.getElementById("successMessage").style.display = "block";
-            setTimeout(5000)
-            window.location.reload('false')
-            
+            setTimeout(function(){
+                window.location.reload('false')
+             }, 2000);
         })
         .catch(() => {
             this.props.history.push('/error')
