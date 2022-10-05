@@ -63,13 +63,17 @@ class Profile extends Component {
         })
     }
 
-    closePopUp = (reload) => {
+    closePopUp = async (reload) => {
         this.setState({
             popup: false,
         })
         if (reload) {
-            const give = ProductService.getGAProductByOwner(StorageHelper.getUserId())
-            this.setState({ give: give.data })
+            const give = await ProductService.getGAProductByOwner(StorageHelper.getUserId())
+            const object = give.data.reduce(
+                (obj, item) => ((obj[item.id] = item.receiverId), obj),
+                {}
+            )
+            this.setState({ give: object })
         }
     }
     giveProduct = () => {}
@@ -111,7 +115,7 @@ class Profile extends Component {
         }
         let giveaway = this.filterProduct("giveaway")
         let giveawayTab
-        if (!giveaway) giveawayTab = "No Products Found"
+        if (giveaway.length === 0) giveawayTab = "No Products Found"
         else {
             giveawayTab = (
                 <div className="row">
