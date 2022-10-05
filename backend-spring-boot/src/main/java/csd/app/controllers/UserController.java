@@ -14,7 +14,7 @@ import csd.app.user.UserRepository;
 public class UserController {
     private UserRepository users;
 
-    public UserController(UserRepository users, BCryptPasswordEncoder encoder) {
+    public UserController(UserRepository users) {
         this.users = users;
     }
 
@@ -25,19 +25,7 @@ public class UserController {
 
     @GetMapping("/api/auth/users/{username}")
     public User getUserByUsername(@PathVariable String username) {
-        return users.findByUsername(username).get();
+        return users.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Error: User not found."));
     }
-
-    /**
-     * Using BCrypt encoder to encrypt the password for storage
-     * 
-     * @param user
-     * @return
-     */
-    @PostMapping("/users")
-    public User addUser(@Valid @RequestBody User user) {
-        // your code here
-        return users.save(user);
-    }
-
 }

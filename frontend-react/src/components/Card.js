@@ -3,10 +3,6 @@ import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import bulbasaur from "../bulbasaur.jpg"
 
-// const handleClick = (fn, key) => {
-// console.log(fn, key)
-// }
-
 function CardComponent(props) {
     const title = props.title
     const id = props.id
@@ -18,6 +14,7 @@ function CardComponent(props) {
     const triggerPopUp = props.triggerPopUp
     const { buttons = 1 } = props
     const editDetailLink = props.editDetailLink
+
     return (
         <Card style={{ minHeight: 450, maxHeight: 450 }}>
             <Card.Img
@@ -93,9 +90,11 @@ function CardComponent(props) {
                         More details
                     </Button>
                 )}
+
             </Card.Body>
         </Card>
     )
 }
 
 export default CardComponent
+

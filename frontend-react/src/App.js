@@ -21,6 +21,7 @@ import EditProduct from "./pages/EditProduct.js"
  * component decides which component to render for that route.
  */
 class App extends Component {
+
     render() {
         return (
             <Container>
