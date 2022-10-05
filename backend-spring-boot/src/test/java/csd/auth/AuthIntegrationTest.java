@@ -79,6 +79,7 @@ public class AuthIntegrationTest {
 
         assertEquals(200, result.getStatusCode().value());
         assertEquals("User registered successfully!", root.path("message").asText());
+        assertEquals(true, users.existsByUsername("tester1"));
     }
 
     @Test
@@ -102,6 +103,7 @@ public class AuthIntegrationTest {
 
         assertEquals(400, result.getStatusCode().value());
         assertEquals("Error: Username is already taken!", root.path("message").asText());
+        assertEquals(false, users.existsByEmail("tester1@email.com"));
     }
 
     @Test 
@@ -125,6 +127,7 @@ public class AuthIntegrationTest {
 
         assertEquals(400, result.getStatusCode().value());
         assertEquals("Error: Email is already in use!", root.path("message").asText());
+        assertEquals(false, users.existsByUsername("tester1"));
     }
 
     @Test 

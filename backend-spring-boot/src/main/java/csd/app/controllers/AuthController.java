@@ -37,11 +37,8 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
-    @Autowired
-    UserInfoRepository userInfoRepository;
-    
     @Autowired
     RoleRepository roleRepository;
 
@@ -77,11 +74,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userService.getUserByUsername(signUpRequest.getUsername()) != null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.getUserByEmail(signUpRequest.getEmail()) != null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
@@ -115,15 +112,14 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        userService.addUser(user);
 
         UserInfo userInfo = new UserInfo(user.getId(),
                             signUpRequest.getName(), 
                             signUpRequest.getAddress(), 
                             signUpRequest.getPhoneNumber());
-        userInfoRepository.save(userInfo);
+        userService.addUserInfo(userInfo);
         
-
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
