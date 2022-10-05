@@ -30,6 +30,9 @@ class ProductService {
     async giveProduct(body) {
         return axios.post(API_URL + "give", body)
     }
+    async getGAProductByOwner(id) {
+        return axios.get(API_URL + "give/" + id)
+    }
 }
 
 export default new ProductService()

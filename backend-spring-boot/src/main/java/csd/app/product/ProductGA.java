@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.*;
 
 @Entity
@@ -23,6 +25,7 @@ public class ProductGA {
     private Long receiverId;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "id")
     private Product product;
 

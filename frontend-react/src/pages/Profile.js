@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import StorageHelper from "../services/StorageHelper"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
-import { Box, Tab, Tabs, Typography } from "@mui/material"
+import { Box, Tab, Tabs } from "@mui/material"
 // From components
 import CardComponent from "../components/Card"
 import ProductService from "../services/ProductService"
@@ -38,6 +38,7 @@ class Profile extends Component {
             value: 0,
             popup: false,
             popupProduct: 0,
+            give: {},
         }
         this.triggerPopUp = this.triggerPopUp.bind(this)
         this.closePopUp = this.closePopUp.bind(this)
@@ -45,7 +46,11 @@ class Profile extends Component {
 
     async componentDidMount() {
         const res = await ProductService.getProductByOwner(StorageHelper.getUserId())
+        const give = await ProductService.getGAProductByOwner(StorageHelper.getUserId())
         this.setState({ data: res.data })
+        const object = give.data.reduce((obj, item) => ((obj[item.id] = item.receiverId), obj), {})
+        this.setState({ give: object })
+        console.log(this.state)
     }
 
     handleChange = (event, newValue) => {
@@ -56,32 +61,30 @@ class Profile extends Component {
             popup: true,
             popupProduct: productId,
         })
-        console.log(this.state)
     }
 
     closePopUp = (reload) => {
         this.setState({
             popup: false,
         })
-        // todo reload when succesfully submitted
-        // if (reload) {
-        // authService.getGiveawayProductsByOwner
-        // }
+        if (reload) {
+            const give = ProductService.getGAProductByOwner(StorageHelper.getUserId())
+            this.setState({ give: give.data })
+        }
     }
     giveProduct = () => {}
     filterProduct(type) {
         switch (type) {
             case "available":
-                break
+                return this.state.data.filter((value) => !this.state.give[value.id])
             case "giveaway":
-                break
+                return this.state.data.filter((value) => this.state.give[value.id])
             default:
                 return this.state.data
         }
     }
     render() {
-        // to change to available
-        let available = this.filterProduct("avail")
+        let available = this.filterProduct("available")
         let availableTab
         if (!available) availableTab = "No Products Found"
         else {

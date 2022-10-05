@@ -66,6 +66,7 @@ public class User {
     private UserInfo userInfo;
 
     @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 

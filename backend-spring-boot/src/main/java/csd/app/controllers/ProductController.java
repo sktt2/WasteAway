@@ -42,10 +42,12 @@ public class ProductController {
         List<Product> products = productRepository.findAll();
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
-            ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
-                    product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(),
-                    product.getImageUrl(), product.getUser());
-            resp.add(prodResp);
+            if (!productGARepository.existsById(product.getId())) {
+                ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
+                        product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(),
+                        product.getImageUrl(), product.getUser());
+                resp.add(prodResp);
+            }
         }
         return resp;
     }
@@ -130,4 +132,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("api/products/give/{id}")
+    public List<ProductGA> getGiveAwayByOwner(@PathVariable Long id) {
+        List<ProductGA> productGAs = productGARepository.findAll();
+        List<ProductGA> resp = new ArrayList<>();
+        for (ProductGA productGA : productGAs) {
+            Product product = productRepository.getReferenceById(productGA.getId());
+            // .orElseThrow(() -> new ProductNotFoundException(productGA.getId()));
+            if (id == product.getUser().getId()) {
+                resp.add(productGA);
+            }
+        }
+        return resp;
+    }
 }
