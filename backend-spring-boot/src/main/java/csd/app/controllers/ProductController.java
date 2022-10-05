@@ -98,10 +98,12 @@ public class ProductController {
             product.setDescription(PR.getDescription());
             product.setImageUrl(PR.getImageUrl());
             product.setProductName(PR.getProductName());
-            productService.updateProduct(product);
+            if (productService.updateProduct(product) == null) {
+                return ResponseEntity.badRequest().body(new MessageResponse("Product does not exist"));
+            }
             return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
         }
-        return ResponseEntity.ok(new MessageResponse("Failed to update product detail"));
+        return ResponseEntity.badRequest().body((new MessageResponse("Failed to update product detail")));
     }
 
     @DeleteMapping("api/products/remove/{id}")
