@@ -17,8 +17,9 @@ function CardComponent(props) {
     const condition = props.condition
     const triggerPopUp = props.triggerPopUp
     const { buttons = 1 } = props
+    const editDetailLink = props.editDetailLink
     return (
-        <Card style={{ minHeight: 400, maxHeight: 400 }}>
+        <Card style={{ minHeight: 450, maxHeight: 450 }}>
             <Card.Img
                 variant="top"
                 src={imgSource || bulbasaur}
@@ -31,6 +32,42 @@ function CardComponent(props) {
                     <br></br>
                     {address}
                 </Card.Text>
+                {buttons === 4 && (
+                    <div>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                padding: "0px 10px"
+                            }}>
+                            <Button variant="primary" href={buttonLink}>
+                                More details
+                            </Button>
+                            <Button
+                                variant="primary"
+                                onClick={() => {
+                                    triggerPopUp(id)
+                                }}>
+                                Give away
+                            </Button>
+                        
+                        </div>
+                        <div style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                padding: "5px 10px"
+                            }}>
+                            <Button href={editDetailLink}>
+                                Edit details
+                            </Button>
+                            <Button onClick={()=>{triggerPopUp(id)}}>
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
+                )}
                 {buttons === 2 && (
                     <div
                         style={{

@@ -13,6 +13,7 @@ import Register from "./pages/Register.js"
 import AddProduct from "./pages/AddProduct.js"
 import ForgotPass from "./pages/ForgotPass.js"
 import Profile from "./pages/Profile"
+import EditProduct from "./pages/EditProduct.js"
 
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
@@ -30,6 +31,7 @@ class App extends Component {
                         <Route path="/alreadyloggedin" component={AlreadyLoggedIn} />
                         <Route path="/logout" component={Logout}></Route>
                         <Route path="/error" component={Error}></Route>
+                        <Route path="/product/edit/:id" component={EditProduct}></Route>
                         <Route path="/product/:id" component={ProductDetail}></Route>
                         <Route path="/profile" component={Profile}></Route>
                         <Route path="/product" component={Product}></Route>
