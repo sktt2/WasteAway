@@ -58,9 +58,7 @@ class Login extends Component {
                 this.props.history.push("/product");
             })
             .catch((err) => {
-                // Read body of error response and display message get to alert
-                console.log(err)
-                this.setState({ 
+                this.setState({
                     errormessage: "Username/Password is incorrect!",
                     messageDisplay: true,
                 });
@@ -90,9 +88,7 @@ class Login extends Component {
                 <div className="card col-md-6 offset-md-3 offset-md-3">
                     <div className="card-body">
                         <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
-                            <p>
-                                {this.state.errormessage}
-                            </p>
+                            {this.state.errormessage}
                         </Alert>
                         <Form noValidate className={this.state.validated} onSubmit={this.validateInputs}>
                             <div>
