@@ -39,7 +39,7 @@ public class Main {
         // JPA user repository init
         UserRepository users = ctx.getBean(UserRepository.class);
         ProductRepository products = ctx.getBean(ProductRepository.class);
-        UserInfoRepository userInfos =  ctx.getBean(UserInfoRepository.class);
+        UserInfoRepository userInfos = ctx.getBean(UserInfoRepository.class);
         BCryptPasswordEncoder encoder = ctx.getBean(BCryptPasswordEncoder.class);
         Optional<User> testuser = users.findByUsername("testuser");
         Optional<User> testadmin = users.findByUsername("testadmin");
@@ -55,18 +55,63 @@ public class Main {
             System.out.println("[Add user]: " + users.save(user));
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
             userInfos.save(userInfo);
-            Product newProd = new Product("CAMERA",  "OLD", LocalDateTime.now().toString(), "ELECTRONICS");
+            Product newProd = new Product("CAMERA", "OLD", LocalDateTime.now().toString(), "ELECTRONICS");
             newProd.setImageUrl("https://c.tenor.com/Ru4rM3mFd-0AAAAj/dino-dinosaur.gif");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
-            newProd = new Product("ADIDAS",  "Used", LocalDateTime.now().toString(), "FASHION", "this is a description of the product");
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("ADIDAS", "Used", LocalDateTime.now().toString(), "FASHION",
+                    "this is a description of the product");
             newProd.setImageUrl("https://c.tenor.com/Ru4rM3mFd-0AAAAj/dino-dinosaur.gif");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
-            newProd = new Product("AIRPODS",  "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS", "this is a description of the product");
-            newProd.setImageUrl("https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
         }
         if (!testadmin.isPresent()) {
             User user = new User("testadmin", "testadmin@email.com", encoder.encode("password"));
@@ -77,17 +122,81 @@ public class Main {
             System.out.println("[Add user]: " + users.save(user));
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 111", 12345678);
             userInfos.save(userInfo);
-            Product newProd = new Product("LAPTOP",  "New", LocalDateTime.now().toString(), "ELECTRONICS");
+            Product newProd = new Product("LAPTOP", "New", LocalDateTime.now().toString(), "ELECTRONICS");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
-            newProd = new Product("IPHONE3",  "Like-New", LocalDateTime.now().toString(), "ELECTRONICS", "this is a description of the product");
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("IPHONE3", "Like-New", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
             newProd.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
-            newProd = new Product("WATERBOTTLE",  "New", LocalDateTime.now().toString(), "UTILITY",  "this is a description of the product");
-            newProd.setImageUrl("https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&qlt=95&.v=1654034080576");
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("WATERBOTTLE", "New", LocalDateTime.now().toString(), "UTILITY",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&qlt=95&.v=1654034080576");
             newProd.setUser(user);
-            System.out.println("[Add product]:"+ products.save(newProd));
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
+                    "this is a description of the product");
+            newProd.setImageUrl(
+                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+            newProd.setUser(user);
+            System.out.println("[Add product]:" + products.save(newProd));
+
         }
 
     }
