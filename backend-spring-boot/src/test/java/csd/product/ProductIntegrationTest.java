@@ -1,4 +1,4 @@
-package csd.week6.product;
+package csd.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
