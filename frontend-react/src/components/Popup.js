@@ -2,7 +2,6 @@ import React, { Fragment, Component } from "react"
 import styles from "../styles/popup.module.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 
-import { FormErrors } from "../components/FormErrors"
 import ProductService from "../services/ProductService"
 
 export default class PopUp extends Component {

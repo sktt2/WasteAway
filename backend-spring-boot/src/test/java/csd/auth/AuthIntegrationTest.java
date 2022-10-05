@@ -135,6 +135,8 @@ public class AuthIntegrationTest {
         URI uri = new URI(baseUrl + port + "/api/auth/signin");
         User user = new User("tester2", "tester2@email.com", encoder.encode("password"));
         users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), "Tester 2", "TesterVille Street 2", 81112111);
+        userInfos.save(userInfo);
         JSONObject personJsonObject = new JSONObject();
         personJsonObject.put("username", "tester2");
         personJsonObject.put("password", "password");

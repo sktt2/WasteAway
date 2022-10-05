@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.MessageResponse;
@@ -15,8 +14,6 @@ import csd.app.payload.request.GiveProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
-import csd.app.product.ProductGARepository;
-import csd.app.product.ProductNotFoundException;
 
 import csd.app.user.SameUserException;
 import csd.app.user.User;
@@ -45,7 +42,7 @@ public class ProductController {
         List<Product> products = productService.listProducts();
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
-            if (!productGARepository.existsById(product.getId())) {
+            if (productService.getProductGA(product.getId()) == null) {
                 ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
                         product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(),
                         product.getImageUrl(), product.getUser());
@@ -79,7 +76,7 @@ public class ProductController {
 
     @GetMapping("api/products/user/{id}")
     public List<ProductResponse> getProductByOwner(User user) {
-        List<Product> products = productService.getProductByUser(user);
+        List<Product> products = productService.getProductsByUser(user);
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
             ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
@@ -101,7 +98,7 @@ public class ProductController {
             product.setDescription(PR.getDescription());
             product.setImageUrl(PR.getImageUrl());
             product.setProductName(PR.getProductName());
-            productService.addProduct(product);
+            productService.updateProduct(product);
             return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
         }
         return ResponseEntity.ok(new MessageResponse("Failed to update product detail"));
@@ -110,7 +107,7 @@ public class ProductController {
     @DeleteMapping("api/products/remove/{id}")
     public ResponseEntity<?> removeProduct(@PathVariable Long id) {
         Product product = productService.getProduct(id);
-        productRepository.delete(product);
+        productService.deleteProduct(product);
         return ResponseEntity.ok(new MessageResponse("Product has been removed"));
     }
 
@@ -128,7 +125,7 @@ public class ProductController {
             throw new SameUserException();
         }
         ProductGA productGA = new ProductGA(productId, user.getId());
-        productGARepository.save(productGA);
+        productService.addProductGA(productGA);
 
         return ResponseEntity.ok(new MessageResponse("Item given successfully"));
 
@@ -136,10 +133,10 @@ public class ProductController {
 
     @GetMapping("api/products/give/{id}")
     public List<ProductGA> getGiveAwayByOwner(@PathVariable Long id) {
-        List<ProductGA> productGAs = productGARepository.findAll();
+        List<ProductGA> productGAs = productService.listProductGAs();
         List<ProductGA> resp = new ArrayList<>();
         for (ProductGA productGA : productGAs) {
-            Product product = productService.getReferenceById(productGA.getId());
+            Product product = productService.getProduct(productGA.getId());
             // .orElseThrow(() -> new ProductNotFoundException(productGA.getId()));
             if (id == product.getUser().getId()) {
                 resp.add(productGA);

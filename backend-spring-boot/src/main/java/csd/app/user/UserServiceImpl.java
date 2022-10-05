@@ -49,6 +49,10 @@ public class UserServiceImpl implements UserService {
         return users.save(user);
     }
 
+    public UserInfo getUserInfoById(Long id) {
+        return userInfos.getReferenceById(id);
+    }
+
     public UserInfo addUserInfo(UserInfo userInfo) {
         if (userInfos.findById(userInfo.getId()).orElse(null) != null) {
             return null;
