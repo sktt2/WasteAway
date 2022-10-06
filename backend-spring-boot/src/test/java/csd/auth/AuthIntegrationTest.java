@@ -3,7 +3,9 @@ package csd.auth;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URI;
+import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import csd.app.user.*;
+import csd.app.roles.*;
 
 /** Start an actual HTTP server listening at a random port */
-@SpringBootTest(classes = csd.app.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = csd.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AuthIntegrationTest {
 
     @LocalServerPort
@@ -42,6 +45,9 @@ public class AuthIntegrationTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
+    private RoleRepository roles;
+
+    @Autowired
     private UserRepository users;
 
     @Autowired
@@ -52,6 +58,23 @@ public class AuthIntegrationTest {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    private static boolean initialized = false;
+
+    @BeforeEach
+    void init() {
+        if (!initialized) {
+            Optional<Role> roleAdmin = roles.findByName(ERole.ROLE_ADMIN);
+            Optional<Role> roleUser = roles.findByName(ERole.ROLE_USER);
+            if (!roleAdmin.isPresent()) {
+                roles.save(new Role(ERole.ROLE_ADMIN));
+            }
+            if (!roleUser.isPresent()) {
+                roles.save(new Role(ERole.ROLE_USER));
+            }
+        }
+        initialized = true;
+    }
 
     @AfterEach
     void tearDown() {
@@ -77,23 +100,24 @@ public class AuthIntegrationTest {
         ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
         JsonNode root = objectMapper.readTree(result.getBody());
 
-        assertEquals(200, result.getStatusCode().value());
+        //assertEquals(200, result.getStatusCode().value());
         assertEquals("User registered successfully!", root.path("message").asText());
         assertEquals(true, users.existsByUsername("tester1"));
+        assertEquals(200, result.getStatusCode().value());
     }
 
     @Test
     public void registerUser_InvalidUsername_Failure() throws Exception {
         URI uri = new URI(baseUrl + port + "/api/auth/signup");
-        User user = new User("testadmin", "testadmin@email.com", encoder.encode("password"));
+        User user = new User("tester8", "tester8@email.com", encoder.encode("password"));
         users.save(user);
         JSONObject personJsonObject = new JSONObject();
-        personJsonObject.put("username", "testadmin");
-        personJsonObject.put("email", "tester1@email.com");
+        personJsonObject.put("username", "tester8");
+        personJsonObject.put("email", "tester9@email.com");
         personJsonObject.put("password", "password");
-        personJsonObject.put("name", "Tester 1");
-        personJsonObject.put("address", "TesterVille Street 1");
-        personJsonObject.put("phoneNumber", "81112111");
+        personJsonObject.put("name", "Tester 9");
+        personJsonObject.put("address", "TesterVille Street 9");
+        personJsonObject.put("phoneNumber", "89992999");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
@@ -103,20 +127,20 @@ public class AuthIntegrationTest {
 
         assertEquals(400, result.getStatusCode().value());
         assertEquals("Error: Username is already taken!", root.path("message").asText());
-        assertEquals(false, users.existsByEmail("tester1@email.com"));
+        assertEquals(false, users.existsByEmail("tester9@email.com"));
     }
 
     @Test 
     public void registerUser_InvalidEmail_Failure() throws Exception {
         URI uri = new URI(baseUrl + port + "/api/auth/signup");
-        User user = new User("testadmin", "testadmin@email.com", encoder.encode("password"));
+        User user = new User("tester10", "tester10@email.com", encoder.encode("password"));
         users.save(user);
         JSONObject personJsonObject = new JSONObject();
-        personJsonObject.put("username", "tester1");
-        personJsonObject.put("email", "testadmin@email.com");
+        personJsonObject.put("username", "tester6");
+        personJsonObject.put("email", "tester10@email.com");
         personJsonObject.put("password", "password");
-        personJsonObject.put("name", "Tester 1");
-        personJsonObject.put("address", "TesterVille Street 1");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
         personJsonObject.put("phoneNumber", "81112111");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
