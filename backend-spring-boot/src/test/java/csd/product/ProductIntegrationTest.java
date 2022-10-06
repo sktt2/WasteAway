@@ -28,6 +28,7 @@ import csd.app.product.Product;
 import csd.app.product.ProductRepository;
 import csd.app.user.User;
 import csd.app.user.UserRepository;
+import csd.app.user.UserService;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
 
@@ -92,6 +93,7 @@ class ProductIntegrationTest {
         assertEquals(200, result.getStatusCode().value());
         assertEquals(1, productArr.length);
     }
+
 
     @Test
     public void getProduct_ValidProductId_Success() throws Exception {
@@ -219,70 +221,67 @@ class ProductIntegrationTest {
         assertEquals(400, result.getStatusCode().value());
     }
 
-    // updateProduct tests are broken
-    // @Test
-    // public void updateProduct_ValidProductId_Success() throws Exception {
-    // User user = new User("tester2", "blabla@hotmail.com",
-    // encoder.encode("password"));
-    // users.save(user);
-    // UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-    // "SINGAPORE01234567", 87231231);
-    // userInfos.save(userInfo);
+    @Test
+    public void updateProduct_ValidProductId_Success() throws Exception {
+    User user = new User("tester2", "blabla@hotmail.com",
+    encoder.encode("password"));
+    users.save(user);
+    UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+    "SINGAPORE01234567", 87231231);
+    userInfos.save(userInfo);
 
-    // Product product = new Product("PHONE", "OLD",
-    // LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-    // product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-    // product.setUser(user);
-    // products.save(product);
-    // Long id = product.getId();
+    Product product = new Product("PHONE", "OLD",
+    LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+    product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+    product.setUser(user);
+    products.save(product);
 
-    // product.setId(id);
-    // product.setProductName("WATER BOTTLE");
-    // product.setDateTime(LocalDateTime.now().toString());
-    // product.setCategory("UTILITY");
-    // product.setCondition("NEW");
-    // product.setDescription("A WATER BOTTLE");
-    // product.setImageUrl(
-    // "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
-    // products.save(product);
+    product.setProductName("WATER BOTTLE");
+    product.setDateTime(LocalDateTime.now().toString());
+    product.setCategory("UTILITY");
+    product.setCondition("NEW");
+    product.setDescription("A WATER BOTTLE");
+    product.setImageUrl(
+    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
 
-    // URI uri = new URI(baseUrl + port + "/api/products/update/" + id);
+    URI uri = new URI(baseUrl + port + "/api/products/update");
 
-    // ResponseEntity<Product> result = restTemplate.exchange(uri, HttpMethod.PUT,
-    // new HttpEntity<>(product),
-    // Product.class);
-    // // JsonNode root = objectMapper.readTree(result.getBody());
-    // assertEquals(200, result.getStatusCode().value());
-    // // assertEquals("Product detail updated successfully",
-    // // root.path("message").asText());
-    // assertEquals(product.getProductName(), result.getBody().toString());
-    // }
+    HttpEntity<Product> resp = new HttpEntity<Product>(product);
+    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+    resp, String.class);
+    JsonNode root = objectMapper.readTree(result.getBody());
+    
+    assertEquals(200, result.getStatusCode().value());
+    assertEquals("Product detail updated successfully", root.path("message").asText());
 
-    // @Test
-    // public void updateProduct_InvalidProductId_Failure() throws Exception {
-    // User user = new User("tester2", "blabla@hotmail.com",
-    // encoder.encode("password"));
-    // users.save(user);
-    // UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-    // "SINGAPORE01234567", 87231231);
-    // userInfos.save(userInfo);
+    Long updatedId = product.getId();
+    Product updatedProduct = products.findById(updatedId).get();
+    assertEquals(product.getProductName(), updatedProduct.getProductName());
+    }
 
-    // Product product = new Product("PHONE", "OLD",
-    // LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-    // product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-    // product.setUser(user);
-    // product.setId(product.getId());
-    // products.save(product);
+    @Test
+    public void updateProduct_InvalidProductId_Failure() throws Exception {
+    User user = new User("tester2", "blabla@hotmail.com",
+    encoder.encode("password"));
+    users.save(user);
+    UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+    "SINGAPORE01234567", 87231231);
+    userInfos.save(userInfo);
 
-    // URI uri = new URI(baseUrl + port + "/api/products/update/999");
+    Product product = new Product("PHONE", "OLD",
+    LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+    product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+    product.setUser(user);
+    products.save(product);
+    product.setId(999l);
 
-    // ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-    // new HttpEntity<>(product),
-    // String.class);
-    // JsonNode root = objectMapper.readTree(result.getBody());
-    // assertEquals(400, result.getStatusCode().value());
-    // assertEquals("Failed to update product detail",
-    // root.path("message").asText());
-    // assertEquals(product.getProductName(), result.getBody().toString());
-    // }
+    URI uri = new URI(baseUrl + port + "/api/products/update/");
+
+    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+    new HttpEntity<Product>(product),
+    String.class);
+    JsonNode root = objectMapper.readTree(result.getBody());
+    assertEquals(400, result.getStatusCode().value());
+    assertEquals("Product not found: 999", root.path("message").asText());
+    }
 }

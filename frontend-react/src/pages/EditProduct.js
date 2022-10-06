@@ -51,7 +51,7 @@ class EditProduct extends Component {
             description: this.state.description || this.state.data.description,
             imageUrl: this.state.image || this.state.data.imageUrl,
         }
-        ProductService.updateProductDetail(id, body)
+        ProductService.updateProductDetail(body)
         .then(() => {
             document.getElementById("successMessage").style.display = "block";
             setTimeout(function(){

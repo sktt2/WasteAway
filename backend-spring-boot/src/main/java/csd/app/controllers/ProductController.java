@@ -87,7 +87,7 @@ public class ProductController {
         return resp;
     }
 
-    @PutMapping("api/products/update/{id}")
+    @PutMapping("api/products/update")
     public ResponseEntity<?> updateProductDetail(@RequestBody Product PR) {
         Product product = productService.getProduct(PR.getId());
         if (PR.getCategory() != null && PR.getCondition() != null && PR.getDateTime() != null &&

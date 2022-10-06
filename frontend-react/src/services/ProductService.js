@@ -21,8 +21,8 @@ class ProductService {
     async getProductByOwner(id) {
         return axios.get(API_URL + "user/" + id)
     }
-    async updateProductDetail(id, body) {
-        return axios.put(API_URL + "update/" + id, body)
+    async updateProductDetail(body) {
+        return axios.put(API_URL + "update/", body)
     }
     async removeProduct(id) {
         return axios.delete(API_URL + "remove/" + id)
