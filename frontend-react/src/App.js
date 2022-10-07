@@ -1,19 +1,19 @@
-import "bootstrap/dist/css/bootstrap.min.css"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import Header from "./components/Header.js"
-import Login from "./pages/Login.js"
-import AlreadyLoggedIn from "./pages/AlreadyLoggedIn.js"
-import React, { Component } from "react"
-import { Container } from "react-bootstrap"
-import Logout from "./pages/Logout.js"
-import Error from "./components/Error.js"
-import Product from "./pages/Product.js"
-import ProductDetail from "./pages/ProductDetail"
-import Register from "./pages/Register.js"
-import AddProduct from "./pages/AddProduct.js"
-import ForgotPass from "./pages/ForgotPass.js"
-import Profile from "./pages/Profile"
-import EditProduct from "./pages/EditProduct.js"
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Header from "./components/Header.js";
+import Login from "./pages/Login.js";
+import AlreadyLoggedIn from "./pages/AlreadyLoggedIn.js";
+import React, { Component } from "react";
+import { Container } from "react-bootstrap";
+import Logout from "./pages/Logout.js";
+import Error from "./components/Error.js";
+import Product from "./pages/Product.js";
+import ProductDetail from "./pages/ProductDetail";
+import Register from "./pages/Register.js";
+import AddProduct from "./pages/AddProduct.js";
+import ForgotPass from "./pages/ForgotPass.js";
+import Profile from "./pages/Profile";
+import EditProduct from "./pages/EditProduct.js";
 
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
@@ -24,8 +24,8 @@ class App extends Component {
 
     render() {
         return (
-            <Container>
-                <Router>
+            <Container fluid>
+                <Router forceRefresh={true}>
                     <Header />
                     <Switch>
                         <Route path="/login" component={Login} />
@@ -43,8 +43,8 @@ class App extends Component {
                     </Switch>
                 </Router>
             </Container>
-        )
+        );
     }
 }
 
-export default App
+export default App;
