@@ -12,6 +12,8 @@ import ProductDetail from "./pages/ProductDetail";
 import Register from "./pages/Register.js";
 import AddProduct from "./pages/AddProduct.js";
 import ForgotPass from "./pages/ForgotPass.js";
+import Profile from "./pages/Profile";
+import EditProduct from "./pages/EditProduct.js";
 
 /**
  * app component render a router, the router is responsible to change the routes in the browser.
@@ -19,25 +21,26 @@ import ForgotPass from "./pages/ForgotPass.js";
  * component decides which component to render for that route.
  */
 class App extends Component {
+
     render() {
         return (
             <Container fluid>
                 <Router forceRefresh={true}>
                     <Header />
-                    <Container>
-                        <Switch>
-                            <Route path="/login" component={Login} />
-                            <Route path="/alreadyloggedin" component={AlreadyLoggedIn} />
-                            <Route path="/logout" component={Logout}></Route>
-                            <Route path="/error" component={Error}></Route>
-                            <Route path="/product/:id" component={ProductDetail}></Route>
-                            <Route path="/product" component={Product}></Route>
-                            <Route path="/addproduct" component={AddProduct}></Route>
-                            <Route path="/register" component={Register}></Route>
-                            <Route path="/forgotpass" component={ForgotPass}></Route>
-                            <Route path="/" component={Product} />
-                        </Switch>
-                    </Container>
+                    <Switch>
+                        <Route path="/login" component={Login} />
+                        <Route path="/alreadyloggedin" component={AlreadyLoggedIn} />
+                        <Route path="/logout" component={Logout}></Route>
+                        <Route path="/error" component={Error}></Route>
+                        <Route path="/product/edit/:id" component={EditProduct}></Route>
+                        <Route path="/product/:id" component={ProductDetail}></Route>
+                        <Route path="/profile" component={Profile}></Route>
+                        <Route path="/product" component={Product}></Route>
+                        <Route path="/addproduct" component={AddProduct}></Route>
+                        <Route path="/register" component={Register}></Route>
+                        <Route path="/forgotpass" component={ForgotPass}></Route>
+                        <Route path="/" component={Product} />
+                    </Switch>
                 </Router>
             </Container>
         );

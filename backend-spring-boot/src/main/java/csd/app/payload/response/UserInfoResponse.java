@@ -2,17 +2,22 @@ package csd.app.payload.response;
 
 import java.util.List;
 
+import csd.app.user.User;
+import csd.app.user.UserInfo;
+
 public class UserInfoResponse {
     private Long id;
     private String username;
     private String email;
     private List<String> roles;
+    private UserInfo userinfo;
 
-    public UserInfoResponse(Long id, String username, String email, List<String> roles) {
+    public UserInfoResponse(Long id, String username, String email, List<String> roles, UserInfo userinfo) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
+        this.userinfo = userinfo;
     }
 
     public Long getId() {
@@ -41,5 +46,13 @@ public class UserInfoResponse {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public void setUserInfo(UserInfo userinfo) {
+        this.userinfo = userinfo;
+    }
+
+    public UserInfo getUserInfo() {
+        return userinfo;
     }
 }

@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import AuthService from "../services/AuthService";
 
+
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -26,6 +27,7 @@ class Header extends Component {
         if (isLoggedIn) {
             nav = (
                 <>
+                    <Nav.Link href="/profile">Profile</Nav.Link>
                     <Nav.Link href="/product">Products</Nav.Link>
                     <Nav.Link href="/addproduct">Add Product</Nav.Link>
                     <Nav.Link
