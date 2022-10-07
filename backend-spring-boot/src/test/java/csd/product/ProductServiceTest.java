@@ -1,8 +1,11 @@
 package csd.product;
 
 import csd.app.product.Product;
+import csd.app.product.ProductGA;
+import csd.app.product.ProductGARepository;
 import csd.app.product.ProductNotFoundException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +26,9 @@ import csd.app.user.User;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
+
+    @Mock
+    private ProductGARepository productsGA;
 
     @Mock
     private ProductRepository products;
@@ -65,4 +71,25 @@ public class ProductServiceTest {
     }
 
     //tests if correct exception thrown ^^
+    @Test
+    void addValidGA_ReturnsCorrectUserID() {
+        // arrange ***
+        User user = new User("tester2", "blabla@hotmail.com",
+                                "password");
+        Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
+        product.setUser(user);
+        product.setId(23L);
+        User user2 = new User("tester23", "blabla2@hotmail.com",
+                                "password");
+        user2.setId(2L);
+        ProductGA prodGA= new ProductGA(23L, 2L);
+        product.setProductGA(prodGA);
+        // mock the "save" operation
+        when(productsGA.save(any(ProductGA.class))).thenReturn(prodGA);
+        // act ***
+        ProductGA savedProductGA = productService.addProductGA(prodGA);
+        // assert ***
+        Long savedID = savedProductGA.getReceiverId();
+        assertEquals(savedID, user2.getId());        
+    }
 }
