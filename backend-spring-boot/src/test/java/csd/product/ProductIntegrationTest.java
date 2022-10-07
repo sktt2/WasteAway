@@ -248,14 +248,15 @@ class ProductIntegrationTest {
         product.setImageUrl(
         "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
         Long updatedId = product.getId();
-        Product updatedProduct = products.findById(updatedId).get();
-
+        
         URI uri = new URI(baseUrl + port + "/api/products/update");
 
         HttpEntity<Product> resp = new HttpEntity<Product>(product);
         ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
         resp, String.class);
         JsonNode root = objectMapper.readTree(result.getBody());
+
+        Product updatedProduct = products.findById(updatedId).get();
         
         assertEquals(200, result.getStatusCode().value());
         assertEquals("Product detail updated successfully", root.path("message").asText());
