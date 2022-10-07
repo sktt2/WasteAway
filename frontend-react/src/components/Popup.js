@@ -10,13 +10,13 @@ export default class PopUp extends Component {
         this.state = {
             username: "",
             error: false,
-            errorMessage: "",   
+            errorMessage: "",
             title: props.title,
             label: props.label,
-            buttons: props.buttons
+            buttons: props.buttons,
         }
     }
-    
+
     handleClick = () => {
         this.props.closePopUp()
     }
@@ -51,16 +51,17 @@ export default class PopUp extends Component {
     handleDelete = async (e) => {
         e.preventDefault()
         ProductService.removeProduct(this.props.productId)
-        .then( (response)=>{
-            if (response.status === 200){
-                this.props.closePopUp(true)
-            }
-        }).catch((e) =>{
-            this.setState({
-                error: true,
-                errorMessage: e.response.data.message,
+            .then((response) => {
+                if (response.status === 200) {
+                    this.props.closePopUp(true)
+                }
             })
-        })
+            .catch((e) => {
+                this.setState({
+                    error: true,
+                    errorMessage: e.response.data.message,
+                })
+            })
     }
 
     handleUserInput = (e) => {
@@ -74,9 +75,9 @@ export default class PopUp extends Component {
                 <div className={styles.popup_content}>
                     {this.state.buttons === 2 && (
                         <div>
-                        <span className="close" onClick={this.handleClick}>
-                            &times;
-                        </span>
+                            <span className="close" onClick={this.handleClick}>
+                                &times;
+                            </span>
                             <h3>{this.state.title}</h3>
                             <button onClick={this.handleDelete}>YES</button>
                             <button onClick={this.handleClick}>NO</button>
@@ -85,24 +86,26 @@ export default class PopUp extends Component {
                     )}
                     {this.state.buttons === 1 && (
                         <div>
-                        <span className="close" onClick={this.handleClick}>
-                            &times;
-                        </span>
-                        <form onSubmit={this.handleSubmit}>
-                            <h3>{this.state.title}</h3>
-                            <label style={{ marginBottom: "5px" }}>
-                                {this.state.label}
-                                <input
-                                    style={{ marginLeft: "10px" }}
-                                    type="text"
-                                    value={this.state.username}
-                                    onChange={this.handleUserInput}
-                                />
-                            </label>
-                            <br />
-                            <input type="submit" />
-                        </form>
-                        {this.state.error && <p style={{ color: "red" }}>{this.state.errorMessage}</p>}
+                            <span className="close" onClick={this.handleClick}>
+                                &times;
+                            </span>
+                            <form onSubmit={this.handleSubmit}>
+                                <h3>{this.state.title}</h3>
+                                <label style={{ marginBottom: "5px" }}>
+                                    {this.state.label}
+                                    <input
+                                        style={{ marginLeft: "10px" }}
+                                        type="text"
+                                        value={this.state.username}
+                                        onChange={this.handleUserInput}
+                                    />
+                                </label>
+                                <br />
+                                <input type="submit" />
+                            </form>
+                            {this.state.error && (
+                                <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                            )}
                         </div>
                     )}
                 </div>
