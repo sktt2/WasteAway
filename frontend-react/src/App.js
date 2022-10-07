@@ -27,20 +27,22 @@ class App extends Component {
             <Container fluid>
                 <Router forceRefresh={true}>
                     <Header />
-                    <Switch>
-                        <Route path="/login" component={Login} />
-                        <Route path="/alreadyloggedin" component={AlreadyLoggedIn} />
-                        <Route path="/logout" component={Logout}></Route>
-                        <Route path="/error" component={Error}></Route>
-                        <Route path="/product/edit/:id" component={EditProduct}></Route>
-                        <Route path="/product/:id" component={ProductDetail}></Route>
-                        <Route path="/profile" component={Profile}></Route>
-                        <Route path="/product" component={Product}></Route>
-                        <Route path="/addproduct" component={AddProduct}></Route>
-                        <Route path="/register" component={Register}></Route>
-                        <Route path="/forgotpass" component={ForgotPass}></Route>
-                        <Route path="/" component={Product} />
-                    </Switch>
+                    <Container>
+                        <Switch>
+                            <Route path="/login" component={Login} />
+                            <Route path="/alreadyloggedin" component={AlreadyLoggedIn} />
+                            <Route path="/logout" component={Logout}></Route>
+                            <Route path="/error" component={Error}></Route>
+                            <Route path="/product/edit/:id" component={EditProduct}></Route>
+                            <Route path="/product/:id" component={ProductDetail}></Route>
+                            <Route path="/profile" component={Profile}></Route>
+                            <Route path="/product" component={Product}></Route>
+                            <Route path="/addproduct" component={AddProduct}></Route>
+                            <Route path="/register" component={Register}></Route>
+                            <Route path="/forgotpass" component={ForgotPass}></Route>
+                            <Route path="/" component={Product} />
+                        </Switch>
+                    </Container>
                 </Router>
             </Container>
         );
