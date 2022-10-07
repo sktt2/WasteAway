@@ -51,16 +51,17 @@ class EditProduct extends Component {
             description: this.state.description || this.state.data.description,
             imageUrl: this.state.image || this.state.data.imageUrl,
         }
-        ProductService.updateProductDetail(id, body)
-            .then(() => {
-                document.getElementById("successMessage").style.display = "block"
-                setTimeout(() => {
-                    this.props.history.push("/profile")
-                }, 1000)
-            })
-            .catch(() => {
-                this.props.history.push("/error")
-            })
+        
+        ProductService.updateProductDetail(body)
+        .then(() => {
+            document.getElementById("successMessage").style.display = "block";
+            setTimeout(function(){
+                window.location.reload('false')
+             }, 2000);
+        })
+        .catch(() => {
+            this.props.history.push('/error')
+        })
     }
 
     render() {

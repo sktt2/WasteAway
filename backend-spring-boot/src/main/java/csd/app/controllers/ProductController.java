@@ -5,22 +5,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.ProductResponse;
-import csd.app.payload.response.MessageResponse;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.payload.request.GiveProductRequest;
 import csd.app.product.Product;
+import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
-import csd.app.product.ProductGARepository;
-import csd.app.product.ProductNotFoundException;
-import csd.app.product.ProductRepository;
+
 import csd.app.user.SameUserException;
 import csd.app.user.User;
-import csd.app.user.UserRepository;
+import csd.app.user.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -30,20 +27,22 @@ import javax.validation.Valid;
 @RestController
 public class ProductController {
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @Autowired
-    ProductGARepository productGARepository;
+    private UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
+    public ProductController(ProductService productService, UserService userService) {
+        this.productService = productService;
+        this.userService = userService;
+    }
 
     @GetMapping("/api/products")
     public List<ProductResponse> getProducts() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productService.listProducts();
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
-            if (!productGARepository.existsById(product.getId())) {
+            if (productService.getProductGA(product.getId()) == null) {
                 ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
                         product.getCondition(), product.getDateTime(), product.getDescription(), product.getCategory(),
                         product.getImageUrl(), product.getUser());
@@ -55,8 +54,7 @@ public class ProductController {
 
     @GetMapping("/api/products/{id}")
     public ResponseEntity<?> getProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = productService.getProduct(id);
         ProductResponse resp = new ProductResponse(id, product.getProductName(), product.getCondition(),
                 product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),
                 product.getUser());
@@ -66,18 +64,19 @@ public class ProductController {
     @PostMapping("/api/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
-                                        addProductRequest.getDateTime(), addProductRequest.getCategory(), 
-                                        addProductRequest.getDescription());
-        User user = userRepository.findById(addProductRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("Error: User not found."));
+                addProductRequest.getDateTime(), addProductRequest.getCategory(),
+                addProductRequest.getDescription());
+        User user = userService.getUser(addProductRequest.getUserId());
         newProduct.setUser(user);
-        productRepository.save(newProduct);
+        if (productService.addProduct(newProduct) == null) {
+            return ResponseEntity.badRequest().body(new MessageResponse("User is not logged in."));
+        }
         return ResponseEntity.ok(new MessageResponse("Product registered successfully!"));
     }
 
     @GetMapping("api/products/user/{id}")
     public List<ProductResponse> getProductByOwner(User user) {
-        List<Product> products = productRepository.findByUser(user);
+        List<Product> products = productService.getProductsByUser(user);
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
             ProductResponse prodResp = new ProductResponse(product.getId(), product.getProductName(),
@@ -88,10 +87,9 @@ public class ProductController {
         return resp;
     }
 
-    @PutMapping("api/products/update/{id}")
+    @PutMapping("api/products/update")
     public ResponseEntity<?> updateProductDetail(@RequestBody Product PR) {
-        Product product = productRepository.findById(PR.getId())
-                .orElseThrow(() -> new ProductNotFoundException(PR.getId()));
+        Product product = productService.getProduct(PR.getId());
         if (PR.getCategory() != null && PR.getCondition() != null && PR.getDateTime() != null &&
                 PR.getImageUrl() != null && PR.getProductName() != null) {
             product.setCategory(PR.getCategory());
@@ -100,16 +98,16 @@ public class ProductController {
             product.setDescription(PR.getDescription());
             product.setImageUrl(PR.getImageUrl());
             product.setProductName(PR.getProductName());
-            productRepository.save(product);
+            productService.updateProduct(product);
             return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
         }
-        return ResponseEntity.ok(new MessageResponse("Failed to update product detail"));
+        return ResponseEntity.badRequest().body((new MessageResponse("Failed to update product detail")));
     }
 
     @DeleteMapping("api/products/remove/{id}")
     public ResponseEntity<?> removeProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-        productRepository.delete(product);
+        Product product = productService.getProduct(id);
+        productService.deleteProduct(product);
         return ResponseEntity.ok(new MessageResponse("Product has been removed"));
     }
 
@@ -119,17 +117,15 @@ public class ProductController {
         String receiverUsername = giveProductRequest.getReceiverUsername();
 
         // Check product exists
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(productId));
+        Product product = productService.getProduct(productId);
         User owner = product.getUser();
         // Check receiver exists
-        User user = userRepository.findByUsername(receiverUsername)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userService.getUserByUsername(receiverUsername);
         if (user.getId() == owner.getId()) {
             throw new SameUserException();
         }
         ProductGA productGA = new ProductGA(productId, user.getId());
-        productGARepository.save(productGA);
+        productService.addProductGA(productGA);
 
         return ResponseEntity.ok(new MessageResponse("Item given successfully"));
 
@@ -137,10 +133,10 @@ public class ProductController {
 
     @GetMapping("api/products/give/{id}")
     public List<ProductGA> getGiveAwayByOwner(@PathVariable Long id) {
-        List<ProductGA> productGAs = productGARepository.findAll();
+        List<ProductGA> productGAs = productService.listProductGAs();
         List<ProductGA> resp = new ArrayList<>();
         for (ProductGA productGA : productGAs) {
-            Product product = productRepository.getReferenceById(productGA.getId());
+            Product product = productService.getProduct(productGA.getId());
             // .orElseThrow(() -> new ProductNotFoundException(productGA.getId()));
             if (id == product.getUser().getId()) {
                 resp.add(productGA);

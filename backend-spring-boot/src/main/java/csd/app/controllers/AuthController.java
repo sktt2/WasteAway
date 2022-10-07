@@ -37,10 +37,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    UserInfoRepository userInfoRepository;
+    UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
@@ -67,7 +64,8 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        UserInfo userinfo = userInfoRepository.getReferenceById(userDetails.getId());
+        UserInfo userinfo = userService.getUserInfoById(userDetails.getId());
+        
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
@@ -77,11 +75,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userService.getUserByUsername(signUpRequest.getUsername()) != null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.getUserByEmail(signUpRequest.getEmail()) != null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
@@ -115,14 +113,14 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        userService.addUser(user);
 
         UserInfo userInfo = new UserInfo(user.getId(),
-                signUpRequest.getName(),
-                signUpRequest.getAddress(),
-                signUpRequest.getPhoneNumber());
-        userInfoRepository.save(userInfo);
-
+                            signUpRequest.getName(), 
+                            signUpRequest.getAddress(), 
+                            signUpRequest.getPhoneNumber());
+        userService.addUserInfo(userInfo);
+        
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
