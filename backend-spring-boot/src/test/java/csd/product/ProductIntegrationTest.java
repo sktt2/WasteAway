@@ -1,6 +1,7 @@
 package csd.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -28,7 +29,6 @@ import csd.app.product.Product;
 import csd.app.product.ProductRepository;
 import csd.app.user.User;
 import csd.app.user.UserRepository;
-import csd.app.user.UserService;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
 
@@ -90,6 +90,7 @@ class ProductIntegrationTest {
                 Product[].class);
         Product[] productArr = result.getBody();
 
+        assertNotNull(productArr);
         assertEquals(200, result.getStatusCode().value());
         assertEquals(1, productArr.length);
     }
@@ -110,9 +111,11 @@ class ProductIntegrationTest {
 
         ResponseEntity<Product> result = restTemplate.getForEntity(uri,
                 Product.class);
-
+        Product validProduct = result.getBody();
+        
+        assertNotNull(validProduct);
         assertEquals(200, result.getStatusCode().value());
-        assertEquals(product.getProductName(), result.getBody().getProductName());
+        assertEquals(product.getProductName(), validProduct.getProductName());
     }
 
     @Test
@@ -154,6 +157,7 @@ class ProductIntegrationTest {
                 Product[].class);
         Product[] productArr = result.getBody();
 
+        assertNotNull(productArr);
         assertEquals(200, result.getStatusCode().value());
         assertEquals(3, productArr.length);
     }
@@ -194,7 +198,7 @@ class ProductIntegrationTest {
                 encoder.encode("password"));
         users.save(user);
         UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-                "SINGAPORE01234567", 87231231);
+        "SINGAPORE01234567", 87231231);
         userInfos.save(userInfo);
         Product product = new Product("CAMERA", "OLD",
                 LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
@@ -223,65 +227,64 @@ class ProductIntegrationTest {
 
     @Test
     public void updateProduct_ValidProductId_Success() throws Exception {
-    User user = new User("tester2", "blabla@hotmail.com",
-    encoder.encode("password"));
-    users.save(user);
-    UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-    "SINGAPORE01234567", 87231231);
-    userInfos.save(userInfo);
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+                "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
 
-    Product product = new Product("PHONE", "OLD",
-    LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-    product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-    product.setUser(user);
-    products.save(product);
+        Product product = new Product("PHONE", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        product.setUser(user);
+        products.save(product);
 
-    product.setProductName("WATER BOTTLE");
-    product.setDateTime(LocalDateTime.now().toString());
-    product.setCategory("UTILITY");
-    product.setCondition("NEW");
-    product.setDescription("A WATER BOTTLE");
-    product.setImageUrl(
-    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
+        product.setProductName("WATER BOTTLE");
+        product.setDateTime(LocalDateTime.now().toString());
+        product.setCategory("UTILITY");
+        product.setCondition("NEW");
+        product.setDescription("A WATER BOTTLE");
+        product.setImageUrl(
+        "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
+        Long updatedId = product.getId();
+        Product updatedProduct = products.findById(updatedId).get();
 
-    URI uri = new URI(baseUrl + port + "/api/products/update");
+        URI uri = new URI(baseUrl + port + "/api/products/update");
 
-    HttpEntity<Product> resp = new HttpEntity<Product>(product);
-    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-    resp, String.class);
-    JsonNode root = objectMapper.readTree(result.getBody());
-    
-    assertEquals(200, result.getStatusCode().value());
-    assertEquals("Product detail updated successfully", root.path("message").asText());
-
-    Long updatedId = product.getId();
-    Product updatedProduct = products.findById(updatedId).get();
-    assertEquals(product.getProductName(), updatedProduct.getProductName());
+        HttpEntity<Product> resp = new HttpEntity<Product>(product);
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+        resp, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals("Product detail updated successfully", root.path("message").asText());
+        assertEquals(product.getProductName(), updatedProduct.getProductName());
     }
 
     @Test
-    public void updateProduct_InvalidProductId_Failure() throws Exception {
-    User user = new User("tester2", "blabla@hotmail.com",
-    encoder.encode("password"));
-    users.save(user);
-    UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-    "SINGAPORE01234567", 87231231);
-    userInfos.save(userInfo);
+        public void updateProduct_InvalidProductId_Failure() throws Exception {
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
 
-    Product product = new Product("PHONE", "OLD",
-    LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-    product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-    product.setUser(user);
-    products.save(product);
-    product.setId(999l);
+        Product product = new Product("PHONE", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        product.setUser(user);
+        products.save(product);
+        product.setId(999l);
 
-    URI uri = new URI(baseUrl + port + "/api/products/update/");
+        URI uri = new URI(baseUrl + port + "/api/products/update/");
 
-    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-    new HttpEntity<Product>(product),
-    String.class);
-    JsonNode root = objectMapper.readTree(result.getBody());
-    assertEquals(400, result.getStatusCode().value());
-    assertEquals("Product not found: 999", root.path("message").asText());
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+                new HttpEntity<Product>(product), String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product not found: 999", root.path("message").asText());
     }
 }

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserInfo addUserInfo(UserInfo userInfo) {
-        if (userInfos.findById(userInfo.getId()).orElse(null) != null) {
+        if (userInfos.existsById(userInfo.getId())) {
             return null;
         }
         return userInfos.save(userInfo);

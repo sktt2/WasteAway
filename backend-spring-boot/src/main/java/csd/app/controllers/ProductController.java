@@ -98,9 +98,7 @@ public class ProductController {
             product.setDescription(PR.getDescription());
             product.setImageUrl(PR.getImageUrl());
             product.setProductName(PR.getProductName());
-            if (productService.updateProduct(product) == null) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Product does not exist"));
-            }
+            productService.updateProduct(product);
             return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
         }
         return ResponseEntity.badRequest().body((new MessageResponse("Failed to update product detail")));

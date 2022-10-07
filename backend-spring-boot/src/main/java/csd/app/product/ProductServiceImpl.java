@@ -35,9 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product updateProduct(Product product) {
-        if (this.getProduct(product.getId()) == null) {
-            return null;
-        }
+        this.getProduct(product.getId());
         return products.save(product);
     }
 

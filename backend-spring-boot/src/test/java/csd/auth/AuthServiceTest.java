@@ -12,6 +12,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +28,9 @@ public class AuthServiceTest {
 
     @Mock
     private UserRepository users;
+
+    @Mock
+    private UserInfoRepository userInfos;
 
     @Mock
     PasswordEncoder encoder;
@@ -156,5 +161,65 @@ public class AuthServiceTest {
         assertNull(savedUser);
         verify(users).existsByUsername(user.getUsername());
         verify(users).existsByEmail(user.getEmail());
+    }
+
+    @Test
+    void getUserInfoById_ValidUserInfo_ReturnUserInfo() {
+        User user = new User("tester10", "tester10@email.com", encoder.encode("password"));
+        user.setId(10L);
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), "Tester 10", "TesterVille Street 10", 81012101);
+        userInfos.save(userInfo);
+        when(userInfos.getReferenceById(any(Long.class))).thenReturn(userInfo);
+
+        UserInfo savedUserInfo = userService.getUserInfoById(user.getId());
+
+        assertNotNull(savedUserInfo);
+        assertEquals(userInfo, savedUserInfo);
+        verify(userInfos).getReferenceById(user.getId());
+    }
+
+    @Test
+    void getUserInfoById_InvalidUserInfo_ThrowsEntityNotFoundException() {
+        User user = new User("tester11", "tester11@email.com", encoder.encode("password"));
+        user.setId(11L);
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), "Tester 11", "TesterVille Street 11", 81113111);
+        userInfos.save(userInfo);
+        when(userInfos.getReferenceById(any(Long.class))).thenThrow(new EntityNotFoundException());
+
+        assertThrows(EntityNotFoundException.class, () -> userInfos.getReferenceById(9999L));
+        verify(userInfos).getReferenceById(9999L);
+    }
+
+    @Test
+    void addUserInfo_NewUserInfo_ReturnSavedUserInfo() {
+        User user = new User("tester12", "tester12@email.com", encoder.encode("password"));
+        user.setId(12L);
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), "Tester 12", "TesterVille Street 12", 81213121);
+        when(userInfos.existsById(any(Long.class))).thenReturn(false);
+        when(userInfos.save(any(UserInfo.class))).thenReturn(userInfo);
+
+        UserInfo savedUserInfo = userService.addUserInfo(userInfo);
+
+        assertNotNull(savedUserInfo);
+        assertEquals(userInfo, savedUserInfo);
+        verify(userInfos).existsById(userInfo.getId());
+        verify(userInfos).save(userInfo);
+    }
+
+    @Test
+    void addUserInfo_ExistingUserInfo_ReturnNull() {
+        User user = new User("tester13", "tester13@email.com", encoder.encode("password"));
+        user.setId(13L);
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), "Tester 13", "TesterVille Street 13", 81213121);
+        when(userInfos.existsById(any(Long.class))).thenReturn(true);
+
+        UserInfo savedUserInfo = userService.addUserInfo(userInfo);
+
+        assertNull(savedUserInfo);
+        verify(userInfos).existsById(userInfo.getId());
     }
 }
