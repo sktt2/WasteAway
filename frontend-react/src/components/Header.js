@@ -1,6 +1,9 @@
 import { Component } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import AuthService from "../services/AuthService";
 
 class Header extends Component {
@@ -10,7 +13,7 @@ class Header extends Component {
             isLoggedIn: false,
         };
     }
-    
+
     componentDidMount() {
         if (localStorage.hasOwnProperty("user")) {
             this.setState({ isLoggedIn: true });
@@ -21,21 +24,41 @@ class Header extends Component {
         var isLoggedIn = this.state.isLoggedIn;
         var nav;
         if (isLoggedIn) {
-            nav = <Nav.Link href="/logout" onClick={() => {AuthService.logout();}}>Logout</Nav.Link>;
+            nav = (
+                <>
+                    <Nav.Link href="/product">Products</Nav.Link>
+                    <Nav.Link href="/addproduct">Add Product</Nav.Link>
+                    <Nav.Link
+                        href="/logout"
+                        onClick={() => {
+                            AuthService.logout();
+                        }}>
+                        Logout
+                    </Nav.Link>
+                </>
+            );
         } else {
-            nav = <Nav.Link href="/login">Login</Nav.Link>;
+            nav = (
+                <>
+                    <Nav.Link href="/login">Login</Nav.Link>
+                </>
+            );
         }
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="/">Waste Away</Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarScroll" />
-                <Navbar.Collapse className="me-auto" id="navbarScroll">
-                    <Nav className="mr-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
-                        <Nav.Link href="/product">Products</Nav.Link>
-                        <Nav.Link href="/addproduct">Add Product</Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
-                {nav}
+                <Container>
+                    <Navbar.Brand href="/">Waste Away</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="navbarScroll" />
+                    <Navbar.Collapse className="me-auto justify-content-end" id="navbarScroll">
+                        <Form className="d-flex">
+                            <Form.Control type="search" placeholder="Search" className="me-2" aria-label="Search" />
+                            {/* <Button variant="outline-success">Search</Button> */}
+                        </Form>
+                        <Nav className="mr-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
+                            {nav}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
             </Navbar>
         );
     }
