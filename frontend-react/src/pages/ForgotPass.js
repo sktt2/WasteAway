@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class ForgotPass extends Component {
     constructor(props) {
         super(props)
@@ -78,7 +81,7 @@ class ForgotPass extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className="card-body">
+                    <div className={styles.inputCard}>
                         <form>
                             <div>
                                 <label>Username</label>

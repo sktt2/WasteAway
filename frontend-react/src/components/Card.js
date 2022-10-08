@@ -1,7 +1,11 @@
 import { Fragment } from "react"
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
-import bulbasaur from "../bulbasaur.jpg"
+import bulbasaur from "../bulbasaur.jpg";
+
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 
 function CardComponent(props) {
     const title = props.title
@@ -16,8 +20,9 @@ function CardComponent(props) {
     const editDetailLink = props.editDetailLink
 
     return (
-        <Card style={{ minHeight: 450, maxHeight: 450 }}>
+        <Card className={styles.productCard}>
             <Card.Img
+                className={styles.images}
                 variant="top"
                 src={imgSource || bulbasaur}
                 style={{ minHeight: 225, maxHeight: 225 }}
@@ -97,4 +102,3 @@ function CardComponent(props) {
 }
 
 export default CardComponent
-

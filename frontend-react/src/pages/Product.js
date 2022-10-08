@@ -7,6 +7,9 @@ import Row from "react-bootstrap/Row";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+// Import CSS styling
+import "../features/MainStyle.css";
+
 // From components
 import CardComponent from "../components/Card";
 import CarouselComponent from "../components/Carousel";

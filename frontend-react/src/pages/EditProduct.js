@@ -5,6 +5,9 @@ import Form from "react-bootstrap/Form"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class EditProduct extends Component {
     constructor(props) {
         super(props)
@@ -69,7 +72,7 @@ class EditProduct extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className="card-body">
+                    <div className={styles.inputCard}>
                         <form
                             noValidate
                             className={this.state.validated}

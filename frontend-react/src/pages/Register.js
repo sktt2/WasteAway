@@ -6,6 +6,9 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import AuthService from "../services/AuthService";
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class Register extends Component {
     constructor(props) {
         super(props);
@@ -67,7 +70,7 @@ class Register extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className="card-body">
+                    <div className={styles.inputCard}>
                         <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
                             {/* Map each errormessage from error.response.data[i] here */}
                             {this.state.errormessage}

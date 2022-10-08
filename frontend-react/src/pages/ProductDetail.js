@@ -5,6 +5,9 @@ import Card from "react-bootstrap/Card";
 import ProductService from "../services/ProductService";
 import bulbasaur from "../bulbasaur.jpg";
 
+// Import CSS styling
+import styles from "../features/ComponentStyle.module.css";
+
 class ProductDetail extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +25,7 @@ class ProductDetail extends Component {
     render() {
         return (
             <div className="container" style={{ width: "55%" }}>
-                <Card>
+                <Card className={styles.productDetails}>
                     <Card.Img variant="top" src={this.state.data.imageUrl || bulbasaur} />
                     <Card.Body>
                         <Card.Title>{this.state.data.productName}</Card.Title>
