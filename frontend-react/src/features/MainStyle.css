@@ -1,3 +1,7 @@
 body{
-    background-color: rgb(104,122,110);
+    background-color: #C7D8C6;
+    color: black;
+}
+Form.Group{
+    padding-top: 10px;
 }

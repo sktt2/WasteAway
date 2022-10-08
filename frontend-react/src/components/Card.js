@@ -20,8 +20,9 @@ function CardComponent(props) {
     const editDetailLink = props.editDetailLink
 
     return (
-        <Card style={{ minHeight: 450, maxHeight: 450 }}>
+        <Card className={styles.productCard}>
             <Card.Img
+                className={styles.images}
                 variant="top"
                 src={imgSource || bulbasaur}
                 style={{ minHeight: 225, maxHeight: 225 }}

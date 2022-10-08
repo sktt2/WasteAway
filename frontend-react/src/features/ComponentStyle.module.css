@@ -1,21 +1,40 @@
 .productCard{
-    background-color: rgb(223,228,212);
-    border: 5px solid rgb(223,228,212);
+    background-color: #F8EEE7;
+    color:black;
     box-shadow: 2px 2px 2px;
+    min-Height: 450;
+    max-Height: 450;
+    font-family: 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .productCard:hover{
     transform:scale(1.05);
     box-shadow: 5px 5px 5px;
 }
 .inputCard{
-    background-color: rgb(223,228,212);
+    background-color: white;
     padding: 20px;
+    color:black;
+}
+.images{
+    background-color:white;
 }
 .navbar{
-    background-color: rgb(223,228,212);
+    background-color: white;
+    border: 1px solid grey;
+    box-shadow: 1px 1px 1px;
+    border-radius: 0px 0px 3px 3px;
+    padding-left: 20px;
+    padding-bottom: 10px;
 }
 .productDetails{
-    background-color: rgb(223,228,212);
+    background-color: #F8EEE7;
     border-radius: 0 0 20px 20px;
     padding: 20px;
+}
+.tabs{
+    border-radius: 5px solid black;
+    color: white;
+}
+.tabs:selected{
+    border-radius:5px solid black;
 }

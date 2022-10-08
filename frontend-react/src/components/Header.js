@@ -6,14 +6,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import AuthService from "../services/AuthService";
 
-
 // Import CSS styling
 import styles from "../features/ComponentStyle.module.css";
-
-
-// Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
-
 
 class Header extends Component {
     constructor(props) {

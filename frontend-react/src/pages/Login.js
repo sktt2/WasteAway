@@ -89,7 +89,7 @@ class Login extends Component {
             <div className="container">
                 <br></br>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className="card-body">
+                    <div className={styles.inputCard}>
                         <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
                             {this.state.errormessage}
                         </Alert>

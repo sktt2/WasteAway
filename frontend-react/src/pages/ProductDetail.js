@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-multi-carousel/lib/styles.css";
 import Card from "react-bootstrap/Card";
 import ProductService from "../services/ProductService";
-import bulbasaur from "../bulbasaur.jpg";;
+import bulbasaur from "../bulbasaur.jpg";
 
 // Import CSS styling
 import styles from "../features/ComponentStyle.module.css";
