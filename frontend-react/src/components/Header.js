@@ -12,7 +12,6 @@ import Tooltip from "@mui/material/Tooltip"
 import Badge from "@mui/material/Badge"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import MenuItem from "@mui/material/MenuItem"
-import AdbIcon from "@mui/icons-material/Adb"
 import AccountCircle from "@mui/icons-material/AccountCircle"
 import StorageHelper from "../services/StorageHelper"
 import { useHistory } from "react-router-dom"
@@ -20,7 +19,7 @@ import AuthService from "../services/AuthService"
 import styles from "../styles/ComponentStyle.module.css"
 
 const pages = ["products"]
-const settings = ["Profile", "Account", "Dashboard", "Logout"]
+const settings = ["Profile", "Logout"]
 const loggedOut = ["login", "register"]
 
 const Header = (props) => {
