@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-multi-carousel/lib/styles.css";
-import Card from "react-bootstrap/Card";
-import ProductService from "../services/ProductService";
-import bulbasaur from "../bulbasaur.jpg";
+import React, { Component } from "react"
+import "bootstrap/dist/css/bootstrap.min.css"
+import "react-multi-carousel/lib/styles.css"
+import Card from "react-bootstrap/Card"
+import ProductService from "../services/ProductService"
+import bulbasaur from "../bulbasaur.jpg"
 
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
+import styles from "../styles/ComponentStyle.module.css"
 
 class ProductDetail extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             id: this.props.match.params.id,
             data: [],
-        };
+        }
     }
 
     async componentDidMount() {
-        const res = await ProductService.getProduct(this.state.id);
-        this.setState({ data: res.data });
+        const res = await ProductService.getProduct(this.state.id)
+        this.setState({ data: res.data })
     }
 
     render() {
@@ -39,8 +39,8 @@ class ProductDetail extends Component {
                     </Card.Body>
                 </Card>
             </div>
-        );
+        )
     }
 }
 
-export default ProductDetail;
+export default ProductDetail

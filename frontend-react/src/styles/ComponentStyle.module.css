@@ -23,8 +23,7 @@
     border: 1px solid grey;
     box-shadow: 1px 1px 1px;
     border-radius: 0px 0px 3px 3px;
-    padding-left: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 .productDetails{
     background-color: #F8EEE7;
