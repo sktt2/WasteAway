@@ -26,7 +26,7 @@ class Login extends Component {
 
     componentDidMount() {
         if (localStorage.hasOwnProperty("user")) {
-            this.props.history.push("/alreadyloggedin")
+            this.props.history.push("/")
         }
         if (localStorage.hasOwnProperty("rememberme")) {
             var retrieveUsername = JSON.parse(localStorage.getItem("rememberme"))
@@ -58,7 +58,7 @@ class Login extends Component {
                 } else if (localStorage.hasOwnProperty("rememberme")) {
                     localStorage.removeItem("rememberme")
                 }
-                this.props.history.push("/product")
+                this.props.history.push("/products")
             })
             .catch((err) => {
                 this.setState({
