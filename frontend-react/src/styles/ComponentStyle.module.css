@@ -32,7 +32,7 @@
 }
 .tabs{
     border-radius: 5px solid black;
-    color: white;
+    color: #2f4858;
 }
 .tabs:selected{
     border-radius:5px solid black;

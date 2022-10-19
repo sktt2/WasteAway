@@ -17,6 +17,7 @@ import StorageHelper from "../services/StorageHelper"
 import { useHistory } from "react-router-dom"
 import AuthService from "../services/AuthService"
 import styles from "../styles/ComponentStyle.module.css"
+import { fontWeight } from "@mui/system"
 
 const pages = ["products"]
 const settings = ["Profile", "Logout"]
@@ -60,7 +61,7 @@ const Header = (props) => {
     })
     const loggedInMenu = (
         <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
-            <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+            <IconButton size="large" aria-label="show 17 new notifications" color="primary">
                 <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                 </Badge>
@@ -72,12 +73,13 @@ const Header = (props) => {
                     aria-controls="primary-search-account-menu"
                     aria-haspopup="true"
                     onClick={handleOpenUserMenu}
-                    color="inherit">
+                    color="primary">
                     <AccountCircle />
                 </IconButton>
             </Tooltip>
             <Menu
                 sx={{ mt: "45px" }}
+                MenuListProps={{ sx: { backgroundColor: "#C7D8C6" } }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -99,6 +101,7 @@ const Header = (props) => {
                     return (
                         <MenuItem
                             key={setting}
+                            sx={{ backgroundColor: "#C7D8C6" }}
                             onClick={() => {
                                 handleCloseUserMenu()
                                 clickFunction()
@@ -121,12 +124,12 @@ const Header = (props) => {
                     }}
                     sx={{
                         my: 2,
-                        color: "white",
                         display: "block",
-                        "&:hover": {
-                            backgroundColor: "#fff",
-                            color: "#3c52b2",
-                        },
+                        fontWeight: "bold",
+                        // "&:hover": {
+                        //     backgroundColor: "#fff",
+                        //     color: "#C7D8C6",
+                        // },
                     }}>
                     {page}
                 </Button>
@@ -135,7 +138,7 @@ const Header = (props) => {
     )
 
     return (
-        <AppBar position="static" className={styles.navbar}>
+        <AppBar position="static" className={styles.navbar} sx={{ backgroundColor: "#C7D8C6" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
@@ -149,8 +152,8 @@ const Header = (props) => {
                             display: { xs: "none", md: "flex" },
                             fontFamily: "monospace",
                             fontWeight: 700,
+                            color: "primary",
                             // letterSpacing: "rem",
-                            color: "inherit",
                             textDecoration: "none",
                         }}>
                         Waste Away
@@ -162,8 +165,7 @@ const Header = (props) => {
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit">
+                            onClick={handleOpenNavMenu}>
                             <MenuIcon />
                         </IconButton>
                         <Menu
@@ -209,13 +211,13 @@ const Header = (props) => {
                             flexGrow: 1,
                             fontFamily: "monospace",
                             fontWeight: 700,
-                            color: "inherit",
                             textDecoration: "none",
                             marginLeft: "auto",
                             marginRight: "auto",
                             left: "40%",
                             right: 0,
                             textAlign: "center",
+                            color: "primary",
                         }}>
                         Waste Away
                     </Typography>
@@ -224,7 +226,7 @@ const Header = (props) => {
                             <Button
                                 key={page}
                                 onClick={() => handleChangePage(page)}
-                                sx={{ my: 2, color: "white", display: "block" }}>
+                                sx={{ my: 2, display: "block", fontWeight: "bold" }}>
                                 {page}
                             </Button>
                         ))}
