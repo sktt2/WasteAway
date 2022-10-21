@@ -56,6 +56,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductGA addProductGA(ProductGA productGA) {
+        Long recevID = productGA.getReceiverId();
+        Long prodID = productGA.getProduct().getId();
         return productGAs.save(productGA);
     }
 }
