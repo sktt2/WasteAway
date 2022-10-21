@@ -65,6 +65,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
+    @ManyToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<ProductInterest> productInterest = new HashSet<>();
+
     @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
