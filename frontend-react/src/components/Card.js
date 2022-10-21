@@ -19,7 +19,8 @@ function CardComponent(props) {
     const editDetailLink = props.editDetailLink
 
     return (
-        <Card className={styles.productCard}>
+        <Card className={styles.productCard} 
+            style={{ minHeight: 420, maxHeight: 420 }}>
             <Card.Img
                 className={styles.images}
                 variant="top"

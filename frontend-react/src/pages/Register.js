@@ -99,6 +99,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Name</Form.Label>
@@ -116,6 +117,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Email</Form.Label>
@@ -134,6 +136,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Password</Form.Label>
@@ -152,6 +155,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Confirm Password</Form.Label>
@@ -170,6 +174,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Home Address</Form.Label>
@@ -187,6 +192,7 @@ class Register extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Mobile Number</Form.Label>

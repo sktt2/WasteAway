@@ -107,7 +107,7 @@ class Profile extends Component {
     render() {
         let available = this.filterProduct("available")
         let availableTab
-        if (!available) availableTab = "No Products Found"
+        if (available.length === 0) availableTab = "No Products Found"
         else {
             availableTab = (
                 <div className="row">
@@ -161,6 +161,7 @@ class Profile extends Component {
                     )}
                 </div>
                 <div>
+                    <br></br>
                     <Fragment>
                         <p>
                             <b>{StorageHelper.getName() + "\n"}</b>

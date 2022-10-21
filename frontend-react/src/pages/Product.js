@@ -40,7 +40,7 @@ class Product extends Component {
     render() {
         return (
             <div className="container">
-                <Carousel responsive={responsive}>
+                {/* <Carousel responsive={responsive}>
                     {this.state.data.map((data, i) => (
                         <CarouselComponent
                             title={data.productName}
@@ -49,7 +49,7 @@ class Product extends Component {
                             imgSource={data.imageUrl}
                             buttonLink={"hello"}></CarouselComponent>
                     ))}
-                </Carousel>
+                </Carousel> */}
                 <br></br>
                 <React.Fragment>
                     <div className="row">
@@ -68,6 +68,7 @@ class Product extends Component {
                         </Row>
                     </div>
                 </React.Fragment>
+                <br></br>
             </div>
         )
     }

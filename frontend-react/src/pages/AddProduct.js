@@ -40,7 +40,7 @@ class AddProduct extends Component {
             description: this.state.description,
             condition: this.state.conditions,
             dateTime: new Date().toISOString(),
-            imageUrl: this.state.image,
+            imageUrl: null,
             userId: JSON.parse(localStorage.getItem("user")).id,
         }
         ProductService.addProduct(newProduct)
@@ -79,6 +79,7 @@ class AddProduct extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Category</Form.Label>
@@ -91,20 +92,21 @@ class AddProduct extends Component {
                                         <option value="" hidden>
                                             Select category
                                         </option>
-                                        <option value="BOOKS">Books</option>
-                                        <option value="ELECTRONICS">Electronics</option>
-                                        <option value="FASHION">Fashion</option>
-                                        <option value="FOOD">Food</option>
-                                        <option value="TOYS">Toys</option>
-                                        <option value="UTILITY">Utility</option>
-                                        <option value="VIDEO GAMES">Video Games</option>
-                                        <option value="OTHERS">Others</option>
+                                        <option value="Books">Books</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Fashion">Fashion</option>
+                                        <option value="Food">Food</option>
+                                        <option value="Toys">Toys</option>
+                                        <option value="Utility">Utility</option>
+                                        <option value="Video Games">Video Games</option>
+                                        <option value="Others">Others</option>
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">
                                         Select a category.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Condition of Product</Form.Label>
@@ -117,19 +119,20 @@ class AddProduct extends Component {
                                         <option value="" hidden>
                                             Select condition
                                         </option>
-                                        <option value="MINT">Mint</option>
-                                        <option value="NEAR MINT">Near Mint</option>
-                                        <option value="EXCELLENT">Excellent</option>
-                                        <option value="VERY GOOD">Very Good</option>
-                                        <option value="GOOD">Good</option>
-                                        <option value="FAIR">Fair</option>
-                                        <option value="POOR">Poor</option>
+                                        <option value="Mint">Mint</option>
+                                        <option value="Near Mint">Near Mint</option>
+                                        <option value="Excellent">Excellent</option>
+                                        <option value="Very Good">Very Good</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Fair">Fair</option>
+                                        <option value="Poor">Poor</option>
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">
                                         Select the product condition.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label>Description</Form.Label>
@@ -149,6 +152,7 @@ class AddProduct extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>Product Image</Form.Label>

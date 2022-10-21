@@ -45,9 +45,9 @@ class ProductDetail extends Component {
 
     render() {
         return (
-            <div className="container" style={{ width: "55%" }}>
+            <div className="container mt-3" style={{ width: "55%" }}>
                 <Card className={styles.productDetails}>
-                    <Card.Img variant="top" src={this.state.data.imageUrl || bulbasaur} />
+                    <Card.Img variant="top" src={this.state.data.imageUrl || bulbasaur}/>
                     <Card.Body>
                         <Card.Title>{this.state.data.productName}</Card.Title>
                         <Card.Text>
@@ -56,6 +56,8 @@ class ProductDetail extends Component {
                             {this.state.data.address}
                             <br></br>
                             {this.state.data.description}
+                            <br></br>
+                            {this.state.data.ownerName}
                         </Card.Text>
                         <Button onClick={this.addChat}>GIMME</Button>
                     </Card.Body>
