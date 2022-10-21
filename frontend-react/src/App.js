@@ -13,6 +13,7 @@ import AddProduct from "./pages/AddProduct.js"
 import ForgotPass from "./pages/ForgotPass.js"
 import Profile from "./pages/Profile"
 import EditProduct from "./pages/EditProduct.js"
+import Chat from "./pages/Chat.js"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { appTheme } from "./styles/appTheme"
 
@@ -41,6 +42,7 @@ class App extends Component {
                                 <Route path="/addproduct" component={AddProduct}></Route>
                                 <Route path="/register" component={Register}></Route>
                                 <Route path="/forgotpass" component={ForgotPass}></Route>
+                                <Route path="/chat/:id" component={Chat}></Route>
                                 <Route exact path="/" component={Product} />
                                 <Redirect to="/error" />
                             </Switch>
