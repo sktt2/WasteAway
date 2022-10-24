@@ -1,27 +1,24 @@
 import React, { Component, Fragment } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
-import StorageHelper from "../services/StorageHelper"
-import Col from "react-bootstrap/Col"
-import Row from "react-bootstrap/Row"
-import { Button, Box, Tab, Tabs, Typography, Container } from "@mui/material"
+import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
+import { Grid } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
-// From components
-import CardComponent from "../components/Card"
+import StorageHelper from "../services/StorageHelper"
 import ProductService from "../services/ProductService"
+import CardComponent from "../components/Card"
 import PopUp from "../components/Popup"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props
 
     return (
-        <div
+        <Box
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}>
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
+        </Box>
     )
 }
 function a11yProps(index) {
@@ -110,10 +107,10 @@ class Profile extends Component {
         if (!available) availableTab = "No Products Found"
         else {
             availableTab = (
-                <div className="row">
-                    <Row xs={1} md={4} className="g-4">
+                <Box>
+                    <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
                         {available.map((data, i) => (
-                            <Col key={data.id}>
+                            <Grid item xs={3}>
                                 <CardComponent
                                     id={data.id}
                                     title={data.productName}
@@ -127,10 +124,10 @@ class Profile extends Component {
                                     editDetailLink={this.state.url + "edit/" + data.id}
                                     ownerName={data.ownerName}
                                     dateTime={data.dateTime}></CardComponent>
-                            </Col>
+                            </Grid>
                         ))}
-                    </Row>
-                </div>
+                    </Grid>
+                </Box>
             )
         }
         let giveaway = this.filterProduct("giveaway")
@@ -138,10 +135,10 @@ class Profile extends Component {
         if (giveaway.length === 0) giveawayTab = "No Products Found"
         else {
             giveawayTab = (
-                <div className="row">
-                    <Row xs={1} md={4} className="g-4">
+                <Box>
+                    <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
                         {giveaway.map((data, i) => (
-                            <Col key={data.id}>
+                            <Grid item xs={3}>
                                 <CardComponent
                                     title={data.productName}
                                     description={data.description}
@@ -149,16 +146,16 @@ class Profile extends Component {
                                     condition={data.condition}
                                     imgSource={data.imageUrl}
                                     buttonLink={this.state.url + data.id}
-                                    ownerName={data.ownerName}
-                                    dateTime={data.dateTime}></CardComponent>
-                            </Col>
+                                    dateTime={data.dateTime}
+                                    ownerName={data.ownerName}></CardComponent>
+                            </Grid>
                         ))}
-                    </Row>
-                </div>
+                    </Grid>
+                </Box>
             )
         }
         return (
-            <Container>
+            <Box>
                 <Box>
                     {this.state.popup && (
                         <PopUp
@@ -212,7 +209,7 @@ class Profile extends Component {
                         {giveawayTab}
                     </TabPanel>
                 </Box>
-            </Container>
+            </Box>
         )
     }
 }
