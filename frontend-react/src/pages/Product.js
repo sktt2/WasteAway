@@ -1,20 +1,13 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
-
-import Col from "react-bootstrap/Col"
-import Row from "react-bootstrap/Row"
-
-import Carousel from "react-multi-carousel"
-import "react-multi-carousel/lib/styles.css"
-
+import Grid from '@mui/material/Grid'
+import { Box } from "@mui/system"
 import { Select, MenuItem,FormControl, InputLabel } from "@mui/material"
+import Carousel from "react-multi-carousel"
 
-import "../styles/MainStyle.css"
-
-// From components
 import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
+import "../styles/MainStyle.css"
 
 const responsive = {
     desktop: {
@@ -23,7 +16,6 @@ const responsive = {
         slidesToSlide: 2, // optional, default to 1.
     },
 }
-
 
 class Product extends Component {
     constructor(props) {
@@ -45,8 +37,7 @@ class Product extends Component {
 
     render() {
         return (
-            <div className="container">
-
+            <Box className="container">
                 <input
                     type="search"
                     id="search"
@@ -65,11 +56,8 @@ class Product extends Component {
                 />
 
                 <FormControl style={{width: 200,  left: 100}}>
-                    <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                    <InputLabel>Category</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label="Category"
                         value = {this.state.filter}
                         onChange={(e) => {
                             const dataSet = []
@@ -103,31 +91,29 @@ class Product extends Component {
                             condition={data.condition}
                             address={data.address}
                             imgSource={data.imageUrl}
-                            buttonLink={"hello"}></CarouselComponent>
+                            buttonLink={this.state.url +data.id}></CarouselComponent>
                     ))}
                 </Carousel>
-
-                <React.Fragment>
-                    <div className="row">
-                        <Row xs={1} md={4} className="g-4">
-                            {this.state.data.map((data, i) => (
-                                <Col>
-                                    <CardComponent
-                                        title={data.productName}
-                                        description={data.description}
-                                        address={data.address}
-                                        condition={data.condition}
-                                        imgSource={data.imageUrl}
-                                        buttonLink={this.state.url + data.id}
-                                        dateTime={data.dateTime}
-                                        ownerName={data.ownerName}>
-                                    </CardComponent>
-                                </Col>
-                            ))}
-                        </Row>
-                    </div>
-                </React.Fragment>
-            </div>
+                <br></br>
+                <Box>
+                    <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
+                        {this.state.data.map((data, i) => (
+                            <Grid item xs={3}>
+                                <CardComponent
+                                    title={data.productName}
+                                    description={data.description}
+                                    address={data.address}
+                                    condition={data.condition}
+                                    imgSource={data.imageUrl}
+                                    buttonLink={this.state.url + data.id}
+                                    dateTime={data.dateTime}
+                                    ownerName={data.ownerName}>
+                                </CardComponent>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Box>
         )
     }
 }
