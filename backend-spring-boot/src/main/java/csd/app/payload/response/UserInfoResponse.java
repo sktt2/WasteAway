@@ -2,7 +2,6 @@ package csd.app.payload.response;
 
 import java.util.List;
 
-import csd.app.user.User;
 import csd.app.user.UserInfo;
 
 public class UserInfoResponse {
