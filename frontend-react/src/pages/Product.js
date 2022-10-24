@@ -44,33 +44,75 @@ class Product extends Component {
                     placeholder="Search for..."
                     value={this.state.searchText}
                     onChange={(e) => {
-                        const dataSet = []
-                        this.setState({searchText: e.target.value})
-                        this.state.mainData.forEach(element => {
-                            if(element.productName.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
-                                dataSet.push(element)
-                            }
-                        })
-                        this.setState({ data: dataSet })
+                        if(this.state.filter !== ""){
+                            const dataSet = []
+                            this.state.mainData.forEach(element => {    
+                                if(element.category.toLowerCase().indexOf(this.state.filter.toLowerCase())  > -1) {
+                                    dataSet.push(element)
+                                }
+                            })
+
+                            const newDataSet = []
+                            this.setState({searchText: e.target.value})
+                            dataSet.forEach(element => {
+                                if(element.productName.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                                    newDataSet.push(element)
+                                }
+                            })
+                            this.setState({ data: newDataSet })
+                        }
+                        else {
+                            const dataSet = []
+                            this.setState({searchText: e.target.value})
+                            this.state.mainData.forEach(element => {
+                                if(element.productName.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                                    dataSet.push(element)
+                                }
+                            })
+                            this.setState({ data: dataSet })
+                        }
+                        
                     }}
                 />
 
                 <FormControl style={{width: 200,  left: 100}}>
                     <InputLabel>Category</InputLabel>
                     <Select
+                        id="category"
+                        label="Category"
                         value = {this.state.filter}
                         onChange={(e) => {
-                            const dataSet = []
-                            this.setState({ filter: e.target.value})
-                            
-                            this.state.mainData.forEach(element => {    
-                                if(element.category.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
-                                    dataSet.push(element)
-                                }
-                            })
-                            this.setState({ data: dataSet })
+                            if (this.state.searchText !== ""){
+                                const dataSet = []
+                                this.state.mainData.forEach(element => {
+                                    if(element.productName.toLowerCase().indexOf(this.state.searchText.toLowerCase())  > -1) {
+                                        dataSet.push(element)
+                                    }
+                                })
+                                
+                                const newDataSet = []
+                                this.setState({ filter: e.target.value})
+                                dataSet.forEach(element => {    
+                                    if(element.category.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                                        newDataSet.push(element)
+                                    }
+                                })
+                                this.setState({ data: newDataSet })
+
+                            } else {
+                                const dataSet = []
+                                this.setState({ filter: e.target.value})
+                                
+                                this.state.mainData.forEach(element => {    
+                                    if(element.category.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                                        dataSet.push(element)
+                                    }
+                                })
+                                this.setState({ data: dataSet })
+                            }
                         }}
                     >
+                        <MenuItem value={""}>All</MenuItem>
                         <MenuItem value={"BOOKS"}>Books</MenuItem>
                         <MenuItem value={"ELECTRONICS"}>Electronics</MenuItem>
                         <MenuItem value={"FASHION"}>Fashion</MenuItem>
