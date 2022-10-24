@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import ProductService from "../services/ProductService";
+import storage from "../services/FirebaseConfig";
 
 // Import CSS styling
 import styles from "../features/ComponentStyle.module.css";
@@ -34,20 +36,39 @@ class AddProduct extends Component {
 
     addProductClicked = (event) => {
         event.preventDefault();
-        let newProduct = {
-            productName: this.state.productname,
-            category: this.state.category,
-            description: this.state.description,
-            condition: this.state.conditions,
-            dateTime: new Date().toISOString(),
-            imageUrl: this.state.image,
-            userId: JSON.parse(localStorage.getItem("user")).id,
-        };
-        ProductService.addProduct(newProduct)
-            .then(() => {
-                this.props.history.push("/products");
+
+        const file = this.state.image;
+        const imageName = JSON.parse(localStorage.getItem("user")).id + "/" + this.state.urlImage.split('/')[3];
+        const storageRef = ref(storage, imageName);
+
+        //upload new file
+        uploadBytes(storageRef, file)
+            .then((snapshot) => {
+                console.log('Uploaded a blob or file!');
+
+                //get new image URL and store all data in SQL DB
+                getDownloadURL(storageRef).then((imageURL) => {
+                    let newProduct = {
+                        productName: this.state.productname,
+                        category: this.state.category,
+                        description: this.state.description,
+                        condition: this.state.conditions,
+                        dateTime: new Date().toISOString(),
+                        imageUrl: imageURL,
+                        userId: JSON.parse(localStorage.getItem("user")).id,
+                    };
+                    
+                    ProductService.addProduct(newProduct)
+                        .then(() => {
+                            this.props.history.push("/products");
+                        })
+                        .catch((error) => {
+                            this.props.history.push("/error");
+                        });
+                });
+
             })
-            .catch(() => {
+            .catch((error) => {
                 this.props.history.push("/error");
             });
     };
@@ -121,13 +142,13 @@ class AddProduct extends Component {
                                 <Form.Group controlId="formFile" className="mb-3">
                                     <Form.Label>Product Image</Form.Label>
                                     <Form.Control type="file" accept="image/*"
-                                        onChange={(event) => this.setState({ image: URL.createObjectURL(event.target.files[0]), })} required/>
+                                        onChange={(event) => this.setState({ image: event.target.files[0], urlImage: URL.createObjectURL(event.target.files[0]), })} required/>
                                     <Form.Control.Feedback type="invalid">
                                         Upload an image of the product.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <div>
-                                    <img className="container-fluid w-100" src={this.state.image}/>
+                                    <img className="container-fluid w-100" src={ this.state.urlImage }/>
                                 </div>
                             </div>
                             <br></br>
