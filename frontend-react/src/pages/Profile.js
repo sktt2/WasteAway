@@ -33,7 +33,7 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            url: "http://localhost:3000/product/",
+            url: "product/",
             data: [],
             value: 0,
             popup: false,
@@ -124,7 +124,9 @@ class Profile extends Component {
                                     buttons={4}
                                     triggerPopUp={this.triggerPopUp}
                                     buttonLink={this.state.url + data.id}
-                                    editDetailLink = {this.state.url + "edit/" + data.id}></CardComponent>
+                                    editDetailLink = {this.state.url + "edit/" + data.id}
+                                    ownerName={data.ownerName}
+                                    dateTime={data.dateTime}></CardComponent>
                             </Col>
                         ))}
                     </Row>
@@ -146,7 +148,9 @@ class Profile extends Component {
                                     address={data.address}
                                     condition={data.condition}
                                     imgSource={data.imageUrl}
-                                    buttonLink={this.state.url + data.id}></CardComponent>
+                                    buttonLink={this.state.url + data.id}
+                                    ownerName={data.ownerName}
+                                    dateTime={data.dateTime}></CardComponent>
                             </Col>
                         ))}
                     </Row>

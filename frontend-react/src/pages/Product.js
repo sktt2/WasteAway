@@ -29,7 +29,7 @@ class Product extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            url: "http://localhost:3000/product/",
+            url: "product/",
             data: [],
             mainData:[],
             searchText: "",
@@ -56,7 +56,6 @@ class Product extends Component {
                         const dataSet = []
                         this.setState({searchText: e.target.value})
                         this.state.mainData.forEach(element => {
-                            console.log(element)
                             if(element.productName.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
                                 dataSet.push(element)
                             }
@@ -121,8 +120,7 @@ class Product extends Component {
                                         imgSource={data.imageUrl}
                                         buttonLink={this.state.url + data.id}
                                         dateTime={data.dateTime}
-                                        ownerName={data.ownerName}
-                                                                >
+                                        ownerName={data.ownerName}>
                                     </CardComponent>
                                 </Col>
                             ))}
