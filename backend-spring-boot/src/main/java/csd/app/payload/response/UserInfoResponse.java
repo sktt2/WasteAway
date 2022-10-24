@@ -19,6 +19,13 @@ public class UserInfoResponse {
         this.userinfo = userinfo;
     }
 
+    public UserInfoResponse(Long id, String username, String email, UserInfo userinfo) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.userinfo = userinfo;
+    }
+
     public Long getId() {
         return id;
     }

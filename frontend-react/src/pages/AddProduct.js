@@ -7,6 +7,7 @@ import ProductService from "../services/ProductService"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
+import StorageHelper from "../services/StorageHelper"
 
 class AddProduct extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class AddProduct extends Component {
             condition: this.state.conditions,
             dateTime: new Date().toISOString(),
             imageUrl: this.state.image,
-            userId: JSON.parse(localStorage.getItem("user")).id,
+            userId: StorageHelper.getUserId(),
         }
         ProductService.addProduct(newProduct)
             .then(() => {

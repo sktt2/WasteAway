@@ -3,7 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import StorageHelper from "../services/StorageHelper"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
-import { Box, Tab, Tabs } from "@mui/material"
+import { Button, Box, Tab, Tabs, Typography, Container } from "@mui/material"
+import SettingsIcon from "@mui/icons-material/Settings"
 // From components
 import CardComponent from "../components/Card"
 import ProductService from "../services/ProductService"
@@ -41,7 +42,7 @@ class Profile extends Component {
             give: {},
             title: "",
             label: "",
-            button: 0
+            button: 0,
         }
         this.triggerPopUp = this.triggerPopUp.bind(this)
         this.closePopUp = this.closePopUp.bind(this)
@@ -59,7 +60,7 @@ class Profile extends Component {
         this.setState({ value: newValue })
     }
     triggerPopUp = (productId, inputType) => {
-        if (inputType === "giveaway"){
+        if (inputType === "giveaway") {
             this.setState({
                 button: 1,
                 title: "Give away",
@@ -75,7 +76,6 @@ class Profile extends Component {
                 popupProduct: productId,
             })
         }
-        
     }
 
     closePopUp = async (reload, give) => {
@@ -90,7 +90,7 @@ class Profile extends Component {
             )
             this.setState({ give: object })
         } else if (reload) {
-            window.location.reload('false')
+            window.location.reload("false")
         }
     }
     giveProduct = () => {}
@@ -124,7 +124,9 @@ class Profile extends Component {
                                     buttons={4}
                                     triggerPopUp={this.triggerPopUp}
                                     buttonLink={this.state.url + data.id}
-                                    editDetailLink = {this.state.url + "edit/" + data.id}></CardComponent>
+                                    editDetailLink={
+                                        this.state.url + "edit/" + data.id
+                                    }></CardComponent>
                             </Col>
                         ))}
                     </Row>
@@ -154,19 +156,43 @@ class Profile extends Component {
             )
         }
         return (
-            <div>
-                <div>
-                    {this.state.popup && ( 
-                        <PopUp closePopUp={this.closePopUp} productId={this.state.popupProduct} title={this.state.title} label={this.state.label} buttons={this.state.button} />
+            <Container>
+                <Box>
+                    {this.state.popup && (
+                        <PopUp
+                            closePopUp={this.closePopUp}
+                            productId={this.state.popupProduct}
+                            title={this.state.title}
+                            label={this.state.label}
+                            buttons={this.state.button}
+                        />
                     )}
-                </div>
-                <div>
-                    <Fragment>
-                        <p>
-                            <b>{StorageHelper.getName() + "\n"}</b>
-                        </p>
-                        <p>{StorageHelper.getUserName() + "\n"}</p>
-                    </Fragment>
+                </Box>
+                <Box>
+                    <Box sx={{ display: "flex" }} flexDirection="row">
+                        <Box sx={{ display: "flex", flexGrow: 1 }} flexDirection="column">
+                            <Typography
+                                sx={{
+                                    fontWeight: "bold",
+                                    paddingBottom: "10px",
+                                    fontSize: "h5.fontSize",
+                                }}>
+                                {StorageHelper.getName().replace(
+                                    /(^\w|\s\w)(\S*)/g,
+                                    (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
+                                )}
+                            </Typography>
+                            <Typography>{StorageHelper.getUserName()}</Typography>
+                        </Box>
+                        <Box sx={{ alignSelf: "center" }}>
+                            <Button
+                                variant="outlined"
+                                startIcon={<SettingsIcon />}
+                                sx={{ height: "50%" }}>
+                                Settings
+                            </Button>
+                        </Box>
+                    </Box>
 
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
@@ -183,8 +209,8 @@ class Profile extends Component {
                     <TabPanel value={this.state.value} index={1}>
                         {giveawayTab}
                     </TabPanel>
-                </div>
-            </div>
+                </Box>
+            </Container>
         )
     }
 }

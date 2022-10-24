@@ -1,6 +1,7 @@
 package csd.app.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import csd.app.payload.request.UpdateUserRequest;
 import csd.app.payload.response.MessageResponse;
+import csd.app.payload.response.UserInfoResponse;
+import csd.app.roles.Role;
 import csd.app.user.*;
 
 @RestController
@@ -21,11 +24,16 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(new UserInfoResponse(user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getUserInfo()));
+
     }
 
-    @PutMapping("api/user/update")
+    @PutMapping("api/users/update")
     public ResponseEntity<?> updateUserDetail(@RequestBody UpdateUserRequest updateUser) {
 
         if (userService.getUserByEmail(updateUser.getEmail()) != null) {
