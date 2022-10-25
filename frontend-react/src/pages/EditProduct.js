@@ -24,7 +24,7 @@ class EditProduct extends Component {
     async componentDidMount() {
         const res = await ProductService.getProduct(this.state.id)
         this.setState({ data: res.data })
-        if (res.data.ownerName !== StorageHelper.getUserName()) {
+        if (res.data.ownerName !== StorageHelper.getUsername()) {
             this.props.history.push("/profile")
         }
     }

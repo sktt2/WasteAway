@@ -1,7 +1,7 @@
 import React, { Component } from "react"
-import Grid from '@mui/material/Grid'
+import Grid from "@mui/material/Grid"
 import { Box } from "@mui/system"
-import { Select, MenuItem,FormControl, InputLabel } from "@mui/material"
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material"
 import Carousel from "react-multi-carousel"
 
 import CardComponent from "../components/Card"
@@ -23,9 +23,9 @@ class Product extends Component {
         this.state = {
             url: "product/",
             data: [],
-            mainData:[],
+            mainData: [],
             searchText: "",
-            filter:""
+            filter: "",
         }
     }
 
@@ -45,9 +45,13 @@ class Product extends Component {
                     value={this.state.searchText}
                     onChange={(e) => {
                         const dataSet = []
-                        this.setState({searchText: e.target.value})
-                        this.state.mainData.forEach(element => {
-                            if(element.productName.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                        this.setState({ searchText: e.target.value })
+                        this.state.mainData.forEach((element) => {
+                            if (
+                                element.productName
+                                    .toLowerCase()
+                                    .indexOf(e.target.value.toLowerCase()) > -1
+                            ) {
                                 dataSet.push(element)
                             }
                         })
@@ -55,22 +59,26 @@ class Product extends Component {
                     }}
                 />
 
-                <FormControl style={{width: 200,  left: 100}}>
+                <FormControl style={{ width: 200, left: 100 }}>
                     <InputLabel>Category</InputLabel>
                     <Select
-                        value = {this.state.filter}
+                        label="Category"
+                        value={this.state.filter}
                         onChange={(e) => {
                             const dataSet = []
-                            this.setState({ filter: e.target.value})
-                            
-                            this.state.mainData.forEach(element => {    
-                                if(element.category.toLowerCase().indexOf(e.target.value.toLowerCase())  > -1) {
+                            this.setState({ filter: e.target.value })
+
+                            this.state.mainData.forEach((element) => {
+                                if (
+                                    element.category
+                                        .toLowerCase()
+                                        .indexOf(e.target.value.toLowerCase()) > -1
+                                ) {
                                     dataSet.push(element)
                                 }
                             })
                             this.setState({ data: dataSet })
-                        }}
-                    >
+                        }}>
                         <MenuItem value={"BOOKS"}>Books</MenuItem>
                         <MenuItem value={"ELECTRONICS"}>Electronics</MenuItem>
                         <MenuItem value={"FASHION"}>Fashion</MenuItem>
@@ -91,7 +99,7 @@ class Product extends Component {
                             condition={data.condition}
                             address={data.address}
                             imgSource={data.imageUrl}
-                            buttonLink={this.state.url +data.id}></CarouselComponent>
+                            buttonLink={this.state.url + data.id}></CarouselComponent>
                     ))}
                 </Carousel>
                 <br></br>
@@ -107,8 +115,7 @@ class Product extends Component {
                                     imgSource={data.imageUrl}
                                     buttonLink={this.state.url + data.id}
                                     dateTime={data.dateTime}
-                                    ownerName={data.ownerName}>
-                                </CardComponent>
+                                    ownerName={data.ownerName}></CardComponent>
                             </Grid>
                         ))}
                     </Grid>

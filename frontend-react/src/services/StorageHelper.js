@@ -8,7 +8,7 @@ class StorageHelper {
     static getUserId() {
         return JSON.parse(localStorage.getItem("user")).id
     }
-    static getUserName() {
+    static getUsername() {
         return JSON.parse(localStorage.getItem("user")).username
     }
     static getName() {

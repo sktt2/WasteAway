@@ -181,14 +181,17 @@ class Profile extends Component {
                                     (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
                                 )}
                             </Typography>
-                            <Typography>{StorageHelper.getUserName()}</Typography>
+                            <Typography>{StorageHelper.getUsername()}</Typography>
                         </Box>
                         <Box sx={{ alignSelf: "center" }}>
                             <Button
                                 variant="outlined"
+                                onClick={() => {
+                                    this.props.history.push("/editprofile")
+                                }}
                                 startIcon={<SettingsIcon />}
                                 sx={{ height: "50%" }}>
-                                Settings
+                                Edit Profile
                             </Button>
                         </Box>
                     </Box>

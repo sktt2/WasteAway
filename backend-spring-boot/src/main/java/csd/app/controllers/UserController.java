@@ -13,6 +13,7 @@ import csd.app.payload.response.UserInfoResponse;
 import csd.app.roles.Role;
 import csd.app.user.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class UserController {
     @Autowired
@@ -35,13 +36,12 @@ public class UserController {
 
     @PutMapping("api/users/update")
     public ResponseEntity<?> updateUserDetail(@RequestBody UpdateUserRequest updateUser) {
-
-        if (userService.getUserByEmail(updateUser.getEmail()) != null) {
+        User checkUser = userService.getUserByEmail(updateUser.getEmail());
+        User user = userService.getUserByUsername(updateUser.getUsername());
+        if (checkUser != null && checkUser != user) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
-        System.out.println(updateUser.toString());
 
-        User user = userService.getUserByUsername(updateUser.getUsername());
         UserInfo userInfo = user.getUserInfo();
 
         userInfo.setAddress(updateUser.getAddress());

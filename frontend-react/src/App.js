@@ -13,6 +13,7 @@ import AddProduct from "./pages/AddProduct.js"
 import ForgotPass from "./pages/ForgotPass.js"
 import Profile from "./pages/Profile"
 import EditProduct from "./pages/EditProduct.js"
+import EditProfile from "./pages/EditProfile.js"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { appTheme } from "./styles/appTheme"
 
@@ -36,6 +37,7 @@ class App extends Component {
                                 <Route path="/error" component={Error}></Route>
                                 <Route path="/product/edit/:id" component={EditProduct}></Route>
                                 <Route path="/product/:id" component={ProductDetail}></Route>
+                                <Route path="/editprofile" component={EditProfile}></Route>
                                 <Route path="/profile" component={Profile}></Route>
                                 <Route path="/products" component={Product}></Route>
                                 <Route path="/addproduct" component={AddProduct}></Route>
