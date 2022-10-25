@@ -72,6 +72,7 @@ class EditProduct extends Component {
                     
                     ProductService.updateProductDetail(body)
                     .then(() => {
+                        document.getElementById("errorMessage").style.display = "none";
                         document.getElementById("successMessage").style.display = "block";
                         setTimeout(function(){
                             window.location.reload('false')
@@ -88,18 +89,16 @@ class EditProduct extends Component {
                         console.log("Old image deleted from firebase");
                     })
                     .catch((error) => { //error for deleting old object
+                        console.log("Failed to delete old image");
                         console.log(error);
                     });
                 })
                 .catch((error) => { //error for failing to get URL for new image
-                    console.log("getting image url failed");
-                    console.log(error);
-                    //this.props.history.push("/error");
+                    document.getElementById("errorMessage").style.display = "block";
                 });
             })
             .catch(() => { // error for upload
-                console.log("upload failed");
-                //this.props.history.push("/error");
+                document.getElementById("errorMessage").style.display = "block";
             });
         }else {
             let body = {
@@ -248,6 +247,9 @@ class EditProduct extends Component {
                             <br></br>
                             <div id="successMessage" style={{ display: "none", color: "green" }}>
                                 SAVED SUCCESSFULLY
+                            </div>
+                            <div id="errorMessage" style={{ display: "none", color: "red" }}>
+                                ERROR! PLEASE TRY AGAIN!
                             </div>
                             <button className="btn btn-success" type="submit">
                                 SAVE
