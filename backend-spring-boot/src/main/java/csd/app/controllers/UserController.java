@@ -51,9 +51,6 @@ public class UserController {
         user.setUserInfo(userInfo);
         userService.updateUser(user);
 
-        return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
-        // }
-        // return ResponseEntity.badRequest().body((new MessageResponse("Failed to
-        // update product detail")));
+        return ResponseEntity.ok(new MessageResponse("User updated successfully"));
     }
 }
