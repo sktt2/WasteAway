@@ -56,60 +56,60 @@ public class Main {
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
             userInfos.save(userInfo);
             Product newProd = new Product("CAMERA", "OLD", LocalDateTime.now().toString(), "ELECTRONICS");
-            newProd.setImageUrl("https://c.tenor.com/Ru4rM3mFd-0AAAAj/dino-dinosaur.gif");
+            newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F4eb7ecac-272d-44bf-bc6d-153304cde503?alt=media&token=11154ee6-c06b-4d10-bea3-7e35fa378faa");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("ADIDAS", "Used", LocalDateTime.now().toString(), "FASHION",
                     "this is a description of the product");
-            newProd.setImageUrl("https://c.tenor.com/Ru4rM3mFd-0AAAAj/dino-dinosaur.gif");
+            newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F08a41caa-03e7-4653-a94c-f4d6e7127ff8?alt=media&token=bbdb601d-7f83-45f9-aaef-c0399d5876b7");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
         }
@@ -123,77 +123,78 @@ public class Main {
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 111", 12345678);
             userInfos.save(userInfo);
             Product newProd = new Product("LAPTOP", "New", LocalDateTime.now().toString(), "ELECTRONICS");
+            newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F203a9695-d69f-42fa-ba80-2f92c4a578bd?alt=media&token=d70384bb-a6a0-489c-88fc-b03ae7ea1d6e");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("IPHONE3", "Like-New", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
-            newProd.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+            newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("WATERBOTTLE", "New", LocalDateTime.now().toString(), "UTILITY",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&qlt=95&.v=1654034080576");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2Fff9415af-6fa5-4761-b9bf-5b25bb7909c7?alt=media&token=787ac4b5-a786-417f-baf1-38f60869feaf");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MV7N2?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1551489688005");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
 

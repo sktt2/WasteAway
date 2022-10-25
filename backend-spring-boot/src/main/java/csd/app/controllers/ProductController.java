@@ -65,7 +65,7 @@ public class ProductController {
     public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
                 addProductRequest.getDateTime(), addProductRequest.getCategory(),
-                addProductRequest.getDescription());
+                addProductRequest.getDescription(), addProductRequest.getImageUrl());
         User user = userService.getUser(addProductRequest.getUserId());
         newProduct.setUser(user);
         if (productService.addProduct(newProduct) == null) {

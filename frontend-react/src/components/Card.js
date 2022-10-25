@@ -1,4 +1,5 @@
-import { Fragment } from "react"
+import { Fragment } from "react";
+
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import bulbasaur from "../bulbasaur.jpg";
@@ -12,19 +13,20 @@ function CardComponent(props) {
     const id = props.id
     //   const description = props.description;
     const buttonLink = props.buttonLink
-    const imgSource = props.imgSource
     const address = props.address
     const condition = props.condition
     const triggerPopUp = props.triggerPopUp
     const { buttons = 1 } = props
     const editDetailLink = props.editDetailLink
-
-    return (
+    const imgSource = props.imgSource;
+    console.log(imgSource);
+    
+    return(
         <Card className={styles.productCard}>
             <Card.Img
                 className={styles.images}
                 variant="top"
-                src={imgSource || bulbasaur}
+                src= {imgSource || bulbasaur}
                 style={{ minHeight: 225, maxHeight: 225 }}
             />
             <Card.Body>
@@ -100,5 +102,6 @@ function CardComponent(props) {
         </Card>
     )
 }
+
 
 export default CardComponent
