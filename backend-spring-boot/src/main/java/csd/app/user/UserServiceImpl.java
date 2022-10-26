@@ -73,4 +73,13 @@ public class UserServiceImpl implements UserService {
     public ProductInterest addProductInterest(ProductInterest prodinterest) {
         return productInterests.save(prodinterest);
     }
+
+    public void deleteProductInterest(ProductInterest prodinterest) {
+        productInterests.delete(prodinterest);
+    };
+
+    public List<ProductInterest> listProductInterests() {
+        return productInterests.findAll();
+    }
+
 }

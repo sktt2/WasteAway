@@ -8,12 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.MessageResponse;
+import csd.app.payload.response.ProductInterestResponse;
 import csd.app.payload.response.ProductResponse;
+import csd.app.payload.request.AddProductInterestRequest;
+import csd.app.payload.request.DeleteProductInterestRequest;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.payload.request.GiveProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
+import csd.app.user.ProductInterest;
 
 import csd.app.user.SameUserException;
 import csd.app.user.User;
@@ -140,6 +144,58 @@ public class ProductController {
             // .orElseThrow(() -> new ProductNotFoundException(productGA.getId()));
             if (id == product.getUser().getId()) {
                 resp.add(productGA);
+            }
+        }
+        return resp;
+    }
+
+    @PostMapping("/api/products/interests")
+    public ResponseEntity<?> addProductInterest(@Valid @RequestBody AddProductInterestRequest addProductInterestRequest) {
+        String productid = addProductInterestRequest.getProductId();
+        String interestedusername = addProductInterestRequest.getInterestedUsername();
+
+        Long longProdId = Long.parseLong(productid);
+        //check product exist
+        Product product = productService.getProduct(longProdId);
+        User owner = product.getUser();
+        // make sure owner cant fav their own product
+        User interestedUser = userService.getUserByUsername(interestedusername);
+        if (interestedUser.getId() == owner.getId()) {
+            throw new SameUserException();
+        }
+
+        ProductInterest productInterest = new ProductInterest(interestedUser, product);
+        userService.addProductInterest(productInterest);
+        return ResponseEntity.ok(new MessageResponse("Interest in product added successfully!"));
+    }
+
+    @DeleteMapping("api/products/interest/delete")
+    public ResponseEntity<?> removeProductInterest(@Valid @RequestBody DeleteProductInterestRequest deleteProductInterestRequest) {
+        List<ProductInterest> prodInterests = userService.listProductInterests();
+        Long userid = Long.parseLong(deleteProductInterestRequest.getUserId());
+        Long productid = Long.parseLong(deleteProductInterestRequest.getProductId());
+        Long piid = 0L;
+        for (ProductInterest PI : prodInterests) {
+            if(PI.getUser().getId() == userid && PI.getProduct().getId() == productid) {
+                piid = PI.getProductinterestid();
+            }
+        }
+        ProductInterest productInterest = userService.getProductInterest(piid);
+        userService.deleteProductInterest(productInterest);
+        return ResponseEntity.ok(new MessageResponse("Interest in product has been removed"));
+    }
+
+    @GetMapping("api/products/interests/{id}")
+    public List<ProductInterestResponse> getProductInterestsByUser(@PathVariable Long id) {
+        Long userid = id; 
+        List<ProductInterest> prodInterests = userService.listProductInterests();
+        List<ProductInterestResponse> resp = new ArrayList<>();
+        for (ProductInterest prodInt : prodInterests) {
+            if (prodInt.getUser().getId() == userid) {
+                Long prodIntId = prodInt.getProductinterestid();
+                Long prodid = prodInt.getProduct().getId();
+                ProductInterestResponse piresp = new ProductInterestResponse(prodIntId, userid, prodid);
+                resp.add(piresp);
             }
         }
         return resp;

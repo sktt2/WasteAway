@@ -5,8 +5,8 @@ import Card from "react-bootstrap/Card";
 import ProductService from "../services/ProductService";
 import bulbasaur from "../bulbasaur.jpg";
 import StorageHelper from "../services/StorageHelper";
-import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css";
 
@@ -16,48 +16,53 @@ class ProductDetail extends Component {
     this.state = {
       id: this.props.match.params.id,
       data: [],
-      favourite: false,
+      fav: 0,
     };
-    this.favouriteButtonClicked = this.favouriteButtonClicked.bind(this);
   }
 
   async componentDidMount() {
+    const userid = StorageHelper.getUserId();
+    const allProductInterests = await ProductService.getProductInterestByUser(userid);
+    if (sessionStorage.getItem("productinterests") == null) {
+        sessionStorage.setItem("productinterests", JSON.stringify(allProductInterests));
+    }
     const res = await ProductService.getProduct(this.state.id);
     this.setState({ data: res.data });
-    var userid = StorageHelper.getUserId();
-
-    if (res.getFavList != null && res.getFavList.contains(userid)) {
-      this.setState({ favourite: true });
-    }
   }
-  favouriteButtonClicked = () => {
-    let userid = StorageHelper.getUserId()
-    let product = ProductService.getProduct(this.state.id);
-    if (this.state.favourite === true) {
-        this.setState({favourite: false})
-      
-    } else {
-        this.setState({favourite: true})
 
+  favouriteButtonClicked = () => {
+    let interestedusername = StorageHelper.getUserName();
+    let userid = StorageHelper.getUserId();
+    let productid = this.state.id;
+    let prodints = sessionStorage.getItem("productinterests");
+    this.setState({ fav: this.state.fav === 0 ? 1 : 0 })
+    if (this.state.fav === 1) {
+      let prodintid;
+      for (let i = 0; i < prodints.length; i++) {
+        let prodint = prodints[i];
+        if (prodint.hasOwnProperty('id') && prodint.id === productid) {
+          prodintid = prodint.productinterestid;
+        }
+      }
+      let req = {
+        userid,
+        productid
+      }
+      console.log(req);
+      ProductService.removeProductInterest(req);
+      console.log("meow");
+    } else {
+      let newProductInterest = {
+        interestedusername,
+        productid,
+      };
+      ProductService.addProductInterest(newProductInterest) 
+      let newid = prodints[prodints.length -1].productinterestid + 1;
+      prodints.push({"id": newid, "userid": userid, "productid": productid});
     }
   };
 
   render() {
-    let { isFavorited } = this.state.favourite;
-    let favbutton;
-    if (isFavorited) {
-      favbutton = (
-        <Button variant="contained" onClick={this.favouriteButtonClicked}>
-          <FavoriteIcon style={{ color: "red" }} />
-        </Button>
-      );
-    } else {
-      favbutton = (
-        <Button variant="outlined" onClick={this.favouriteButtonClicked}>
-          <FavoriteIcon />
-        </Button>
-      );
-    }
     return (
       <div className="container" style={{ width: "55%" }}>
         <Card className={styles.productDetails}>
@@ -71,7 +76,10 @@ class ProductDetail extends Component {
               <br></br>
               {this.state.data.description}
             </Card.Text>
-            {favbutton}
+              <FavoriteIcon
+                onClick={this.favouriteButtonClicked}
+                color={this.state.fav === 1 ? "primary" : "default"}
+              />
           </Card.Body>
         </Card>
       </div>
