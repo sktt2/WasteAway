@@ -1,26 +1,24 @@
 import React, { Component, Fragment } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
+import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
+import { Grid } from "@mui/material"
+import SettingsIcon from "@mui/icons-material/Settings"
 import StorageHelper from "../services/StorageHelper"
-import Col from "react-bootstrap/Col"
-import Row from "react-bootstrap/Row"
-import { Box, Tab, Tabs } from "@mui/material"
-// From components
-import CardComponent from "../components/Card"
 import ProductService from "../services/ProductService"
+import CardComponent from "../components/Card"
 import PopUp from "../components/Popup"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props
 
     return (
-        <div
+        <Box
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             {...other}>
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
+        </Box>
     )
 }
 function a11yProps(index) {
@@ -33,7 +31,7 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            url: "http://localhost:3000/product/",
+            url: "product/",
             data: [],
             value: 0,
             popup: false,
@@ -41,7 +39,7 @@ class Profile extends Component {
             give: {},
             title: "",
             label: "",
-            button: 0
+            button: 0,
         }
         this.triggerPopUp = this.triggerPopUp.bind(this)
         this.closePopUp = this.closePopUp.bind(this)
@@ -59,7 +57,7 @@ class Profile extends Component {
         this.setState({ value: newValue })
     }
     triggerPopUp = (productId, inputType) => {
-        if (inputType === "giveaway"){
+        if (inputType === "giveaway") {
             this.setState({
                 button: 1,
                 title: "Give away",
@@ -75,7 +73,6 @@ class Profile extends Component {
                 popupProduct: productId,
             })
         }
-        
     }
 
     closePopUp = async (reload, give) => {
@@ -90,7 +87,7 @@ class Profile extends Component {
             )
             this.setState({ give: object })
         } else if (reload) {
-            window.location.reload('false')
+            window.location.reload("false")
         }
     }
     giveProduct = () => {}
@@ -110,10 +107,10 @@ class Profile extends Component {
         if (available.length === 0) availableTab = "No Products Found"
         else {
             availableTab = (
-                <div className="row">
-                    <Row xs={1} md={4} className="g-4">
+                <Box>
+                    <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
                         {available.map((data, i) => (
-                            <Col key={data.id}>
+                            <Grid item xs={3}>
                                 <CardComponent
                                     id={data.id}
                                     title={data.productName}
@@ -124,11 +121,13 @@ class Profile extends Component {
                                     buttons={4}
                                     triggerPopUp={this.triggerPopUp}
                                     buttonLink={this.state.url + data.id}
-                                    editDetailLink = {this.state.url + "edit/" + data.id}></CardComponent>
-                            </Col>
+                                    editDetailLink={this.state.url + "edit/" + data.id}
+                                    ownerName={data.ownerName}
+                                    dateTime={data.dateTime}></CardComponent>
+                            </Grid>
                         ))}
-                    </Row>
-                </div>
+                    </Grid>
+                </Box>
             )
         }
         let giveaway = this.filterProduct("giveaway")
@@ -136,38 +135,66 @@ class Profile extends Component {
         if (giveaway.length === 0) giveawayTab = "No Products Found"
         else {
             giveawayTab = (
-                <div className="row">
-                    <Row xs={1} md={4} className="g-4">
+                <Box>
+                    <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
                         {giveaway.map((data, i) => (
-                            <Col key={data.id}>
+                            <Grid item xs={3}>
                                 <CardComponent
                                     title={data.productName}
                                     description={data.description}
                                     address={data.address}
                                     condition={data.condition}
                                     imgSource={data.imageUrl}
-                                    buttonLink={this.state.url + data.id}></CardComponent>
-                            </Col>
+                                    buttonLink={this.state.url + data.id}
+                                    dateTime={data.dateTime}
+                                    ownerName={data.ownerName}></CardComponent>
+                            </Grid>
                         ))}
-                    </Row>
-                </div>
+                    </Grid>
+                </Box>
             )
         }
         return (
-            <div>
-                <div>
-                    {this.state.popup && ( 
-                        <PopUp closePopUp={this.closePopUp} productId={this.state.popupProduct} title={this.state.title} label={this.state.label} buttons={this.state.button} />
+            <Box>
+                <Box>
+                    {this.state.popup && (
+                        <PopUp
+                            closePopUp={this.closePopUp}
+                            productId={this.state.popupProduct}
+                            title={this.state.title}
+                            label={this.state.label}
+                            buttons={this.state.button}
+                        />
                     )}
-                </div>
-                <div>
-                    <br></br>
-                    <Fragment>
-                        <p>
-                            <b>{StorageHelper.getName() + "\n"}</b>
-                        </p>
-                        <p>{StorageHelper.getUserName() + "\n"}</p>
-                    </Fragment>
+                </Box>
+                <Box>
+                    <Box sx={{ display: "flex" }} flexDirection="row">
+                        <Box sx={{ display: "flex", flexGrow: 1 }} flexDirection="column">
+                            <Typography
+                                sx={{
+                                    fontWeight: "bold",
+                                    paddingBottom: "10px",
+                                    fontSize: "h5.fontSize",
+                                }}>
+                                {StorageHelper.getName().replace(
+                                    /(^\w|\s\w)(\S*)/g,
+                                    (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
+                                )}
+                            </Typography>
+                            <Typography>{StorageHelper.getUsername()}</Typography>
+                        </Box>
+                        <Box sx={{ alignSelf: "center" }}>
+                            <Button
+                                variant="outlined"
+                                onClick={() => {
+                                    this.props.history.push("/editprofile")
+                                }}
+                                startIcon={<SettingsIcon />}
+                                sx={{ height: "50%" }}>
+                                Edit Profile
+                            </Button>
+                        </Box>
+                    </Box>
 
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
@@ -184,8 +211,8 @@ class Profile extends Component {
                     <TabPanel value={this.state.value} index={1}>
                         {giveawayTab}
                     </TabPanel>
-                </div>
-            </div>
+                </Box>
+            </Box>
         )
     }
 }

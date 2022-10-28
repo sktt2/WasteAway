@@ -3,7 +3,10 @@ package csd.app.controllers;
 import java.util.*;
 
 import csd.app.chat.*;
+import csd.app.product.*;
 import csd.app.payload.request.ChatRequest;
+import csd.app.payload.request.MessageRequest;
+import csd.app.payload.response.ChatResponse;
 import csd.app.payload.response.MessageResponse;
 
 import org.springframework.http.ResponseEntity;
@@ -18,25 +21,42 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    public ChatController(ChatService chatService) {
+    @Autowired
+    private ProductService productService;
+
+    public ChatController(ChatService chatService, ProductService productService) {
         this.chatService = chatService;
+        this.productService = productService;
+    }
+
+    @GetMapping("/api/chat/{username}")
+    public List<Chat> getChatByUsername(String username) {
+        List<Chat> chats = chatService.getChatbyUsername(username);
+        return chats;
     }
 
     @GetMapping("/api/chat/{id}")
-    public List<Message> getChat(@Valid @RequestBody ChatRequest chatRequest) {
-        Chat chat = chatService.getChat(chatRequest.getProductId(), chatRequest.getTakerId());
+    public List<Message> getMessages(@Valid @RequestBody ChatRequest chatRequest) {
+        Chat chat = chatService.getChatByProductIdAndTakerId(chatRequest.getProductId(), chatRequest.getTakerId());
         List<Message> messages = chatService.getMessagesByChat(chat);
         return messages;
     }
 
     @PostMapping("/api/chat")
-    public ResponseEntity<?> createChat(@Valid @RequestBody ChatRequest chatRequest) {
+    public ChatResponse createChat(@Valid @RequestBody ChatRequest chatRequest) {
         Chat chat = new Chat();
-        Chat savedChat = chatService.addChat(chat, chatRequest.getTakerId(), chatRequest.getProductId());
+        Long ownerId = productService.getProduct(chatRequest.getProductId()).getUser().getId();
+        Chat savedChat = chatService.addChat(chat, chatRequest.getTakerId(), ownerId, chatRequest.getProductId());
         if (savedChat == null) {
-            return ResponseEntity.badRequest()
-                .body(new MessageResponse("Owner cannot create chat with self!"));
+            throw new RuntimeException("Taker cannot be Owner!"); // handled in frontend
         }
-        return ResponseEntity.ok(new MessageResponse("Chat created successfully!"));
+        return new ChatResponse(savedChat.getId());
+    }
+
+    @PostMapping("/api/chat/{id}")
+    public Message addMessage(@Valid @RequestBody MessageRequest messageRequest) {
+        Message message = new Message(messageRequest.getContent(), messageRequest.getDateTime());
+        return chatService.addMessage(message, messageRequest.getSenderUsername(),
+                messageRequest.getReceiverUsername(), messageRequest.getChatId());
     }
 }

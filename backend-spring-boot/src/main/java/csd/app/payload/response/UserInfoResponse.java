@@ -2,7 +2,6 @@ package csd.app.payload.response;
 
 import java.util.List;
 
-import csd.app.user.User;
 import csd.app.user.UserInfo;
 
 public class UserInfoResponse {
@@ -17,6 +16,13 @@ public class UserInfoResponse {
         this.username = username;
         this.email = email;
         this.roles = roles;
+        this.userinfo = userinfo;
+    }
+
+    public UserInfoResponse(Long id, String username, String email, UserInfo userinfo) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
         this.userinfo = userinfo;
     }
 

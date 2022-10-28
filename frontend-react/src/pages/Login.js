@@ -8,6 +8,7 @@ import AuthService from "../services/AuthService"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
+import StorageHelper from "../services/StorageHelper"
 
 class Login extends Component {
     constructor(props) {
@@ -52,11 +53,13 @@ class Login extends Component {
         event.preventDefault()
         AuthService.signin(this.state.username, this.state.password)
             .then((response) => {
-                localStorage.setItem("user", JSON.stringify(response.data))
+                StorageHelper.setUser(JSON.stringify(response.data))
                 if (this.state.isrememberme) {
                     localStorage.setItem("rememberme", JSON.stringify(response.data))
-                } else if (localStorage.hasOwnProperty("rememberme")) {
-                    localStorage.removeItem("rememberme")
+                } else {
+                    if (localStorage.hasOwnProperty("rememberme")) {
+                        localStorage.removeItem("rememberme")
+                    }
                 }
                 this.props.history.push("/products")
             })

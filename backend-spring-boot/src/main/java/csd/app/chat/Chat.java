@@ -26,6 +26,11 @@ public class Chat {
 
     @ManyToOne
     @JsonBackReference
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 

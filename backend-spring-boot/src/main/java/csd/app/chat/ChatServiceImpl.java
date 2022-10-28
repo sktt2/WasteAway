@@ -23,26 +23,43 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private MessageRepository messages;
 
-    public Chat getChat(Long productId, Long takerId) {
+    public Chat getChatByProductIdAndTakerId(Long productId, Long takerId) {
         Product product = productService.getProduct(productId);
         User taker = userService.getUser(takerId);
         return chats.findByProductAndTaker(product, taker);
+    }
+
+    public List<Chat> getChatbyUsername(String username) {
+        User user = userService.getUserByUsername(username);
+        return chats.findByOwnerOrTaker(user, user);
+    }
+
+    public Chat getChatById(Long id) {
+        return chats.findById(id).get();
     }
 
     public List<Message> getMessagesByChat(Chat chat) {
         return messages.findByChat(chat);
     }
 
-    public Chat addChat(Chat chat, Long takerId, Long productId) {
-        if (getChat(productId, takerId) != null) {
-            return chat;
+    public Chat addChat(Chat chat, Long takerId, Long ownerId, Long productId) {
+        if (getChatByProductIdAndTakerId(productId, takerId) != null) {
+            return getChatByProductIdAndTakerId(productId, takerId);
         }
         // Separate this into another method
-        if (productService.getProduct(productId).getUser().getId() == takerId) {
+        if (ownerId == takerId) {
             return null;
         }
         chat.setTaker(userService.getUser(takerId));
+        chat.setOwner(userService.getUser(ownerId));
         chat.setProduct(productService.getProduct(productId));
         return chats.save(chat);
+    }
+
+    public Message addMessage(Message message, String senderUsername, String receiverUsername, Long chatId) {
+        message.setSender(userService.getUserByUsername(senderUsername));
+        message.setReceiver(userService.getUserByUsername(receiverUsername));
+        message.setChat(getChatById(chatId));
+        return messages.save(message);
     }
 }

@@ -74,6 +74,11 @@ public class User {
 
     @JsonIgnore
     @JsonManagedReference
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Chat> chatOwners;
+
+    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<Message> messageSenders;
 

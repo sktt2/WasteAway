@@ -21,7 +21,7 @@ import styles from "../styles/ComponentStyle.module.css"
 import DeleteIcon from "@mui/icons-material/Delete"
 
 const pages = ["products"]
-const settings = ["profile", "logout", "settings"]
+const settings = ["profile", "logout"]
 const loggedOut = ["login", "register"]
 
 const Header = (props) => {

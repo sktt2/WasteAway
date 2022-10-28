@@ -13,9 +13,14 @@ class EditProduct extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            data: [],
             validated: "",
             url: "/product/edit/",
+            productname: "",
+            condition:"",
+            category:"",
+            description:"",
+            image:""
+
         }
         this.validateInputs = this.validateInputs.bind(this)
         this.editDetails = this.editDetails.bind(this)
@@ -23,8 +28,12 @@ class EditProduct extends Component {
 
     async componentDidMount() {
         const res = await ProductService.getProduct(this.state.id)
-        this.setState({ data: res.data })
-        if (res.data.ownerName !== StorageHelper.getUserName()) {
+        this.setState({ productname: res.data.productName })
+        this.setState({ category: res.data.category })
+        this.setState({ condition: res.data.condition })
+        this.setState({ description: res.data.description })
+        this.setState({ image: res.data.imageUrl })
+        if (res.data.ownerName !== StorageHelper.getUsername()) {
             this.props.history.push("/profile")
         }
     }
@@ -47,12 +56,12 @@ class EditProduct extends Component {
         // String productName, String condition, String dateTime, String category, String description
         let body = {
             id: this.state.id,
-            productName: this.state.productname || this.state.data.productName,
-            condition: this.state.conditions || this.state.data.condition,
+            productName: this.state.productname,
+            condition: this.state.condition,
             dateTime: new Date().toISOString(),
-            category: this.state.category || this.state.data.category,
-            description: this.state.description || this.state.data.description,
-            imageUrl: this.state.image || this.state.data.imageUrl,
+            category: this.state.category,
+            description: this.state.description,
+            imageUrl: this.state.image
         }
 
         ProductService.updateProductDetail(body)
@@ -84,7 +93,7 @@ class EditProduct extends Component {
                                         placeholder="Product name"
                                         name="productname"
                                         value={
-                                            this.state.productname || this.state.data.productName
+                                            this.state.productname
                                         }
                                         onChange={(event) =>
                                             this.setState({ productname: event.target.value })
@@ -100,7 +109,7 @@ class EditProduct extends Component {
                                 <Form.Group>
                                     <Form.Label>Category</Form.Label>
                                     <Form.Select
-                                        value={this.state.category || this.state.data.category}
+                                        value={this.state.category }
                                         onChange={(event) =>
                                             this.setState({ category: event.target.value })
                                         }
@@ -131,7 +140,7 @@ class EditProduct extends Component {
                                         as="textarea"
                                         rows={3}
                                         value={
-                                            this.state.description || this.state.data.description
+                                            this.state.description
                                         }
                                         onChange={(event) =>
                                             this.setState({ description: event.target.value })
@@ -144,21 +153,27 @@ class EditProduct extends Component {
                                 </Form.Group>
                             </div>
                             <div>
-                                <Form.Group>
+                            <Form.Group>
                                     <Form.Label>Condition of Product</Form.Label>
-                                    <Form.Control
-                                        placeholder="Conditions"
-                                        name="conditions"
-                                        as="textarea"
-                                        rows={3}
-                                        value={this.state.condition || this.state.data.condition}
+                                    <Form.Select
+                                        value={this.state.condition}
                                         onChange={(event) =>
-                                            this.setState({ conditions: event.target.value })
+                                            this.setState({ condition: event.target.value })
                                         }
-                                        required
-                                    />
+                                        required>
+                                        <option value="" hidden>
+                                            Select condition
+                                        </option>
+                                        <option value="MINT">Mint</option>
+                                        <option value="NEAR MINT">Near Mint</option>
+                                        <option value="EXCELLENT">Excellent</option>
+                                        <option value="VERY GOOD">Very Good</option>
+                                        <option value="GOOD">Good</option>
+                                        <option value="FAIR">Fair</option>
+                                        <option value="POOR">Poor</option>
+                                    </Form.Select>
                                     <Form.Control.Feedback type="invalid">
-                                        Please provide the product condition.
+                                        Select the product condition.
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -181,7 +196,7 @@ class EditProduct extends Component {
                                 <div>
                                     <img
                                         className="container-fluid w-100"
-                                        src={this.state.image || this.state.data.imageUrl}
+                                        src={this.state.image}
                                         value={this.state.image}
                                     />
                                 </div>

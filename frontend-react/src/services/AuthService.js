@@ -1,4 +1,5 @@
 import axios from "axios"
+import StorageHelper from "./StorageHelper"
 
 const API_URL = "http://localhost:8080/api/auth/"
 
@@ -17,8 +18,7 @@ class AuthService {
     }
 
     logout() {
-        localStorage.removeItem("user")
-        localStorage.removeItem("user_id")
+        StorageHelper.removeUser()
         return axios.post(API_URL + "signout", {})
     }
 
