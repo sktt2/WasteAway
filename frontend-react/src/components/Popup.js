@@ -13,7 +13,17 @@ import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 
 import ProductService from "../services/ProductService";
+import { SliderMark } from "@mui/material";
 
+// async function getInterestedUsers(id) {
+//   const users = await ProductService.getProductInterestByProduct(id);
+//   const listUsers = users.map((user)) =>
+//   <MenuItem value={user}> {user} </MenuItem>
+//   );
+//   return {
+//     {listUsers}
+//   }
+// }
 export default class PopUp extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +34,9 @@ export default class PopUp extends Component {
       title: props.title,
       label: props.label,
       buttons: props.buttons,
+      dialogpopup: true,
+      fullwidth: true,
+      maxWidth: "sm",
     };
   }
 
@@ -79,10 +92,13 @@ export default class PopUp extends Component {
     this.setState({ username: value });
   };
 
+  handleClose = () => {
+    this.setState({ dialogpopup: false });
+  };
   render() {
     return (
-      <div className={styles.popup_container}>
-        <div className={styles.popup_content}>
+      <div>
+        <div>
           {this.state.buttons === 2 && (
             <div>
               <span className="close" onClick={this.handleClick}>
@@ -97,25 +113,35 @@ export default class PopUp extends Component {
           {/*this chunk is for giveaway */}
           {this.state.buttons === 1 && (
             <div>
-              <span className="close" onClick={this.handleClick}>
-                &times;
-              </span>
-              <Dialog>
+              <Dialog
+                open={this.state.dialogpopup}
+                onClose={this.handleClose}
+                fullWidth={this.fullwidth}
+                maxWidth={this.maxWidth}
+              >
                 <DialogTitle>{this.state.title}</DialogTitle>
                 <DialogContent>
                   <DialogContentText>{this.state.label}</DialogContentText>
                 </DialogContent>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
+                <Box style={{ marginLeft: "10px" }} sx={{ minWidth: 300 }}>
+                  <FormControl sx={{ minWidth: 200 }} fullWidth={this.fullWidth}>
                     <Select
                       id="select-username"
                       value={this.username}
                       onChange={this.handleUserInput}
-                    >
-                      <MenuItem value={"tester1"}>tester1</MenuItem>
+                    > 
+                      <MenuItem value={"tester2"}> tester2</MenuItem>
+                      <MenuItem value={"testadmin"}> testadmin </MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
+                <DialogContent>
+                  <DialogContentText>
+                  {this.state.error && (
+                <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+              )}
+                  </DialogContentText>
+                </DialogContent>
                 <DialogActions>
                   <Button onClick={this.handleSubmit}>Submit</Button>
                 </DialogActions>
@@ -135,9 +161,6 @@ export default class PopUp extends Component {
                 <br />
                 <input type="submit" />
               </form>*/}
-              {this.state.error && (
-                <p style={{ color: "red" }}>{this.state.errorMessage}</p>
-              )}
             </div>
           )}{" "}
           {/* ga chunk ends here */}

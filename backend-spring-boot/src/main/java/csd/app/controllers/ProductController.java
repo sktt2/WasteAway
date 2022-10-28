@@ -119,7 +119,6 @@ public class ProductController {
     public ResponseEntity<?> giveProduct(@Valid @RequestBody GiveProductRequest giveProductRequest) {
         Long productId = giveProductRequest.getProductId();
         String receiverUsername = giveProductRequest.getReceiverUsername();
-
         // Check product exists
         Product product = productService.getProduct(productId);
         User owner = product.getUser();
