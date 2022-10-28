@@ -1,79 +1,83 @@
-import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { Component } from "react"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
+import styles from "../styles/ComponentStyle.module.css"
 
 class ForgotPass extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: '',
-            showpassword: 'password',
+            username: "",
+            showpassword: "password",
 
             // Input Validation
-            formErrors: { password: '' },
+            formErrors: { password: "" },
             passwordValid: false,
-            formValid: false
+            formValid: false,
         }
-        this.changeUsername = this.changeUsername.bind(this);
-        this.showPasswordClicked = this.showPasswordClicked.bind(this);
+        this.changeUsername = this.changeUsername.bind(this)
+        this.showPasswordClicked = this.showPasswordClicked.bind(this)
     }
 
     changeUsername(event) {
-        this.setState({ username: event.target.value });
+        this.setState({ username: event.target.value })
     }
 
     changePassClicked = (event) => {
-        event.preventDefault();
-        let username = this.state.username;
-        let password = this.state.password;
-        let authHeader = window.btoa(username + ':' + password);
-        let user = { 'username': username, 'authHeader': authHeader };
-        localStorage.setItem('user', JSON.stringify(user));
-        this.props.history.push('/login');
+        event.preventDefault()
+        let username = this.state.username
+        let password = this.state.password
+        let authHeader = window.btoa(username + ":" + password)
+        let user = { username: username, authHeader: authHeader }
+        localStorage.setItem("user", JSON.stringify(user))
+        this.props.history.push("/login")
     }
 
     showPasswordClicked = (event) => {
-        if (this.state.showpassword === 'password') {
-            this.setState({ showpassword: 'text' });
+        if (this.state.showpassword === "password") {
+            this.setState({ showpassword: "text" })
         } else {
-            this.setState({ showpassword: 'password' });
+            this.setState({ showpassword: "password" })
         }
     }
 
     handleUserInput = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        this.setState({ [name]: value },
-            () => { this.validateField(name, value) });
+        const name = e.target.name
+        const value = e.target.value
+        this.setState({ [name]: value }, () => {
+            this.validateField(name, value)
+        })
     }
 
     validateField(fieldName, value) {
-        let fieldValidationErrors = this.state.formErrors;
-        let passwordValid = this.state.passwordValid;
+        let fieldValidationErrors = this.state.formErrors
+        let passwordValid = this.state.passwordValid
 
         switch (fieldName) {
             // Password must contain at least 8 characters
-            case 'password':
-                passwordValid = value.length >= 8;
-                fieldValidationErrors.password = passwordValid ? '' : ' is too short';
-                break;
+            case "password":
+                passwordValid = value.length >= 8
+                fieldValidationErrors.password = passwordValid ? "" : " is too short"
+                break
             default:
-                break;
+                break
         }
-        this.setState({
-            formErrors: fieldValidationErrors,
-            passwordValid: passwordValid
-        }, this.validateForm);
+        this.setState(
+            {
+                formErrors: fieldValidationErrors,
+                passwordValid: passwordValid,
+            },
+            this.validateForm
+        )
     }
 
     validateForm() {
-        this.setState({ formValid: this.state.passwordValid });
+        this.setState({ formValid: this.state.passwordValid })
     }
 
     errorClass(error) {
-        return (error.length === 0 ? '' : 'has-error');
+        return error.length === 0 ? "" : "has-error"
     }
 
     render() {
@@ -85,22 +89,46 @@ class ForgotPass extends Component {
                         <form>
                             <div>
                                 <label>Username</label>
-                                <input placeholder="username" name="username" required className="form-control" value={this.state.username} onChange={this.changeUsername} />
+                                <input
+                                    placeholder="username"
+                                    name="username"
+                                    required
+                                    className="form-control"
+                                    value={this.state.username}
+                                    onChange={this.changeUsername}
+                                />
                             </div>
-                            <div classname={`form-group ${this.errorClass(this.state.formErrors.password)}`}>
+                            <div
+                                classname={`form-group ${this.errorClass(
+                                    this.state.formErrors.password
+                                )}`}>
                                 <label>New Password</label>
-                                <input placeholder="Your new password..." name="password" required className="form-control" type={this.state.showpassword} value={this.state.password} onChange={this.handleUserInput} />
+                                <input
+                                    placeholder="Your new password..."
+                                    name="password"
+                                    required
+                                    className="form-control"
+                                    type={this.state.showpassword}
+                                    value={this.state.password}
+                                    onChange={this.handleUserInput}
+                                />
                             </div>
                             <div>
                                 <label>Show Password</label>
-                                <input type="checkbox" name="showpassword" clasName="form-control" onChange={this.showPasswordClicked}></input>
+                                <input
+                                    type="checkbox"
+                                    name="showpassword"
+                                    clasName="form-control"
+                                    onChange={this.showPasswordClicked}></input>
                             </div>
-                            <button className="btn btn-success" disabled={!this.state.formValid}>Change password</button>
+                            <button className="btn btn-success" disabled={!this.state.formValid}>
+                                Change password
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 

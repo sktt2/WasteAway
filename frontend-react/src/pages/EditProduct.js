@@ -8,7 +8,7 @@ import StorageHelper from "../services/StorageHelper"
 import storage from "../services/FirebaseConfig";
 
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
+import styles from "../styles/ComponentStyle.module.css"
 
 class EditProduct extends Component {
     constructor(props) {
@@ -46,82 +46,26 @@ class EditProduct extends Component {
     editDetails = (event) => {
         event.preventDefault()
         // String productName, String condition, String dateTime, String category, String description
-        if (this.state.image != null){
-            const file = this.state.image;
-            const imageName = JSON.parse(localStorage.getItem("user")).id + "/" + this.state.urlImage.split('/')[3];
-            const storageRef = ref(storage, imageName);
+        let body = {
+            id: this.state.id,
+            productName: this.state.productname || this.state.data.productName,
+            condition: this.state.conditions || this.state.data.condition,
+            dateTime: new Date().toISOString(),
+            category: this.state.category || this.state.data.category,
+            description: this.state.description || this.state.data.description,
+            imageUrl: this.state.image || this.state.data.imageUrl,
+        }
 
-            //upload new file
-            uploadBytes(storageRef, file)
-            .then((snapshot) => {
-                console.log('Uploaded a blob or file!');
-
-                //get new image URL and store all data in SQL DB
-                getDownloadURL(storageRef)
-                .then((imageURL) => {
-
-                    let body = {
-                        id: this.state.id,
-                        productName: this.state.productname || this.state.data.productName,
-                        condition: this.state.conditions || this.state.data.condition,
-                        dateTime: new Date().toISOString(),
-                        category: this.state.category || this.state.data.category,
-                        description: this.state.description || this.state.data.description,
-                        imageUrl: imageURL,
-                    }
-                    
-                    ProductService.updateProductDetail(body)
-                    .then(() => {
-                        document.getElementById("errorMessage").style.display = "none";
-                        document.getElementById("successMessage").style.display = "block";
-                        setTimeout(function(){
-                            window.location.reload('false')
-                        }, 2000);
-                    })
-                    .catch(() => {
-                        this.props.history.push('/error')
-                    });
-                    
-                    //find old file to delete
-                    const deleteRef = ref(storage, this.state.data.imageUrl);
-                    deleteObject(deleteRef)
-                    .then(() => {
-                        console.log("Old image deleted from firebase");
-                    })
-                    .catch((error) => { //error for deleting old object
-                        console.log("Failed to delete old image");
-                        console.log(error);
-                    });
-                })
-                .catch((error) => { //error for failing to get URL for new image
-                    document.getElementById("errorMessage").style.display = "block";
-                });
-            })
-            .catch(() => { // error for upload
-                document.getElementById("errorMessage").style.display = "block";
-            });
-        }else {
-            let body = {
-                id: this.state.id,
-                productName: this.state.productname || this.state.data.productName,
-                condition: this.state.conditions || this.state.data.condition,
-                dateTime: new Date().toISOString(),
-                category: this.state.category || this.state.data.category,
-                description: this.state.description || this.state.data.description,
-                imageUrl: this.state.data.imageUrl,
-            }
-            
-            ProductService.updateProductDetail(body)
+        ProductService.updateProductDetail(body)
             .then(() => {
-                document.getElementById("successMessage").style.display = "block";
-                setTimeout(function(){
-                    window.location.reload('false')
-                }, 2000);
+                document.getElementById("successMessage").style.display = "block"
+                setTimeout(function () {
+                    window.location.reload("false")
+                }, 2000)
             })
             .catch(() => {
-                this.props.history.push('/error')
-            });
-        }
+                this.props.history.push("/error")
+            })
     }
 
     render() {

@@ -2,11 +2,10 @@ import { Fragment } from "react";
 
 import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
-import bulbasaur from "../bulbasaur.jpg";
+import bulbasaur from "../bulbasaur.jpg"
 
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
-
+import styles from "../styles/ComponentStyle.module.css"
 
 function CardComponent(props) {
     const title = props.title
@@ -43,7 +42,7 @@ function CardComponent(props) {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                padding: "0px 10px"
+                                padding: "0px 10px",
                             }}>
                             <Button variant="primary" href={buttonLink}>
                                 More details
@@ -55,18 +54,19 @@ function CardComponent(props) {
                                 }}>
                                 Give away
                             </Button>
-                        
                         </div>
-                        <div style={{
+                        <div
+                            style={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                padding: "5px 10px"
+                                padding: "5px 10px",
                             }}>
-                            <Button href={editDetailLink}>
-                                Edit details
-                            </Button>
-                            <Button onClick={()=>{triggerPopUp(id)}}>
+                            <Button href={editDetailLink}>Edit details</Button>
+                            <Button
+                                onClick={() => {
+                                    triggerPopUp(id)
+                                }}>
                                 Delete
                             </Button>
                         </div>
@@ -97,7 +97,6 @@ function CardComponent(props) {
                         More details
                     </Button>
                 )}
-
             </Card.Body>
         </Card>
     )

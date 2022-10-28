@@ -14,6 +14,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserInfoRepository userInfos;
 
+    @Autowired
+    private ProductInterestRepository productInterests;
+
     public List<User> listUsers() {
         return users.findAll();
     }
@@ -59,4 +62,24 @@ public class UserServiceImpl implements UserService {
         }
         return userInfos.save(userInfo);
     }
+
+    public ProductInterest getProductInterest(Long id) {
+        if (productInterests.existsById(id)) {
+            return productInterests.findById(id)
+            .orElseThrow(() -> new RuntimeException("Error: Product Interest not found."));
+        }
+        return null;
+    }
+    public ProductInterest addProductInterest(ProductInterest prodinterest) {
+        return productInterests.save(prodinterest);
+    }
+
+    public void deleteProductInterest(ProductInterest prodinterest) {
+        productInterests.delete(prodinterest);
+    };
+
+    public List<ProductInterest> listProductInterests() {
+        return productInterests.findAll();
+    }
+
 }

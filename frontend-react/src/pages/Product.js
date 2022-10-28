@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { Component } from "react"
+import "bootstrap/dist/css/bootstrap.min.css"
 
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col"
+import Row from "react-bootstrap/Row"
 
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Carousel from "react-multi-carousel"
+import "react-multi-carousel/lib/styles.css"
 
 // Import CSS styling
-import "../features/MainStyle.css";
+import "../styles/MainStyle.css"
 
 // From components
-import CardComponent from "../components/Card";
-import CarouselComponent from "../components/Carousel";
-import ProductService from "../services/ProductService";
+import CardComponent from "../components/Card"
+import CarouselComponent from "../components/Carousel"
+import ProductService from "../services/ProductService"
 
 const responsive = {
     desktop: {
@@ -21,20 +21,20 @@ const responsive = {
         items: 3,
         slidesToSlide: 2, // optional, default to 1.
     },
-};
+}
 
 class Product extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             url: "http://localhost:3000/product/",
             data: [],
-        };
+        }
     }
 
     async componentDidMount() {
-        const res = await ProductService.getProducts();
-        this.setState({ data: res.data });
+        const res = await ProductService.getProducts()
+        this.setState({ data: res.data })
     }
 
     render() {
@@ -69,8 +69,8 @@ class Product extends Component {
                     </div>
                 </React.Fragment>
             </div>
-        );
+        )
     }
 }
 
-export default Product;
+export default Product

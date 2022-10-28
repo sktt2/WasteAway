@@ -10,4 +10,8 @@ public interface UserService {
     User addUser(User user);
     UserInfo getUserInfoById(Long id);
     UserInfo addUserInfo(UserInfo userInfo);
+    ProductInterest getProductInterest(Long id);
+    ProductInterest addProductInterest(ProductInterest prodinterest);
+    void deleteProductInterest(ProductInterest prodinterest);
+    List<ProductInterest> listProductInterests();
 }
