@@ -17,10 +17,11 @@ import StorageHelper from "../services/StorageHelper"
 import { useHistory } from "react-router-dom"
 import AuthService from "../services/AuthService"
 import styles from "../styles/ComponentStyle.module.css"
-import { fontWeight } from "@mui/system"
+// import { fontWeight } from "@mui/system"
+import DeleteIcon from "@mui/icons-material/Delete"
 
 const pages = ["products"]
-const settings = ["Profile", "Logout"]
+const settings = ["profile", "logout"]
 const loggedOut = ["login", "register"]
 
 const Header = (props) => {
@@ -95,7 +96,7 @@ const Header = (props) => {
                 onClose={handleCloseUserMenu}>
                 {settings.map((setting) => {
                     let clickFunction = () => handleChangePage(setting)
-                    if (setting === "Logout") {
+                    if (setting === "logout") {
                         clickFunction = () => handleLogOut()
                     }
                     return (
@@ -106,7 +107,9 @@ const Header = (props) => {
                                 handleCloseUserMenu()
                                 clickFunction()
                             }}>
-                            <Typography textAlign="center">{setting}</Typography>
+                            <Typography textAlign="center">
+                                {setting.charAt(0).toUpperCase() + setting.slice(1)}
+                            </Typography>
                         </MenuItem>
                     )
                 })}
@@ -141,7 +144,10 @@ const Header = (props) => {
         <AppBar position="static" className={styles.navbar} sx={{ backgroundColor: "#C7D8C6" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+                    <DeleteIcon
+                        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+                        color="primary"
+                    />
                     <Typography
                         variant="h6"
                         noWrap
@@ -170,6 +176,7 @@ const Header = (props) => {
                         </IconButton>
                         <Menu
                             id="menu-appbar"
+                            MenuListProps={{ sx: { backgroundColor: "#C7D8C6" } }}
                             anchorEl={anchorElNav}
                             anchorOrigin={{
                                 vertical: "bottom",
@@ -188,6 +195,7 @@ const Header = (props) => {
                             {pages.map((page) => (
                                 <MenuItem
                                     key={page}
+                                    sx={{ backgroundColor: "#C7D8C6" }}
                                     onClick={() => {
                                         handleCloseNavMenu()
                                         handleChangePage(page)
@@ -199,7 +207,10 @@ const Header = (props) => {
                             ))}
                         </Menu>
                     </Box>
-                    {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
+                    <DeleteIcon
+                        sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+                        color="primary"
+                    />
                     <Typography
                         variant="h5"
                         noWrap

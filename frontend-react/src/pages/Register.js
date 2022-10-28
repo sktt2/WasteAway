@@ -8,6 +8,7 @@ import AuthService from "../services/AuthService"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
+import StorageHelper from "../services/StorageHelper"
 
 class Register extends Component {
     constructor(props) {
@@ -49,10 +50,7 @@ class Register extends Component {
         let mobile = this.state.mobile
         AuthService.register(username, name, email, password, address, mobile)
             .then(() => {
-                AuthService.signin(username, password).then((response) => {
-                    localStorage.setItem("user", JSON.stringify(response.data))
-                    this.props.history.push("/product")
-                })
+                this.props.history.push("/login")
             })
             .catch((error) => {
                 // Read body of error response and display message get to alert

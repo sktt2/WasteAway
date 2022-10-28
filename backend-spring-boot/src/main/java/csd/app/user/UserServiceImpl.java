@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(Long id) {
         if (users.existsById(id)) {
             return users.findById(id)
-                .orElseThrow(() -> new RuntimeException("Error: User not found."));
+                    .orElseThrow(() -> new RuntimeException("Error: User not found."));
         }
         return null;
     }
@@ -82,4 +82,8 @@ public class UserServiceImpl implements UserService {
         return productInterests.findAll();
     }
 
+
+    public User updateUser(User user) {
+        return users.save(user);
+    }
 }

@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
+import StorageHelper from "../services/StorageHelper"
 
 class ForgotPass extends Component {
     constructor(props) {
@@ -28,9 +29,6 @@ class ForgotPass extends Component {
         event.preventDefault()
         let username = this.state.username
         let password = this.state.password
-        let authHeader = window.btoa(username + ":" + password)
-        let user = { username: username, authHeader: authHeader }
-        localStorage.setItem("user", JSON.stringify(user))
         this.props.history.push("/login")
     }
 
