@@ -38,7 +38,8 @@ class Product extends Component {
     render() {
         return (
             <Box className="container">
-                <input
+                <Box style={{paddingTop: '1%'}}>
+                <input style={{height: 55, width: '60%'}}
                     type="search"
                     id="search"
                     placeholder="Search for..."
@@ -74,8 +75,7 @@ class Product extends Component {
                         
                     }}
                 />
-
-                <FormControl style={{ width: 200, left: 100 }}>
+                <FormControl style={{ width: 200 , left: '1%'}}>
                     <InputLabel>Category</InputLabel>
                     <Select
                         label="Category"
@@ -122,8 +122,7 @@ class Product extends Component {
                         <MenuItem value={"OTHERS"}>Others</MenuItem>
                     </Select>
                 </FormControl>
-
-                <br></br>
+                </Box>
                 <br></br>
                 <Carousel responsive={responsive}>
                     {this.state.data.map((data, i) => (
