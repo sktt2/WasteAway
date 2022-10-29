@@ -17,6 +17,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ProductInterestRepository productInterests;
 
+    @Autowired
+    private RecommendationRepository recommendations;
+
     public List<User> getUsers() {
         return users.findAll();
     }
@@ -82,6 +85,26 @@ public class UserServiceImpl implements UserService {
         return productInterests.findAll();
     }
 
+    public Recommendation getRecommendation(Long id) {
+        if (recommendations.existsById(id)) {
+            return recommendations.findById(id)
+            .orElseThrow(() -> new RuntimeException("Error: Recommended category not found."));
+        }
+        return null;
+    }
+
+    public Recommendation addRecommendation(Recommendation recommendation) {
+        return recommendations.save(recommendation);
+    }
+
+    public Recommendation updateRecommendation(Recommendation recommendation) {
+        this.getRecommendation(recommendation.getRecommendationId());
+        return recommendations.save(recommendation);
+    }
+
+    public List<Recommendation> listRecommendations() {
+        return recommendations.findAll();
+    }
 
     public User updateUser(User user) {
         return users.save(user);

@@ -14,10 +14,12 @@ import csd.app.payload.request.AddProductInterestRequest;
 import csd.app.payload.request.DeleteProductInterestRequest;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.payload.request.GiveProductRequest;
+import csd.app.payload.request.RecommendationRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
 import csd.app.user.ProductInterest;
+import csd.app.user.Recommendation;
 
 import csd.app.user.SameUserException;
 import csd.app.user.User;
