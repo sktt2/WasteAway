@@ -58,7 +58,10 @@ public class ChatController {
         if (savedChat == null) {
             throw new RuntimeException("Taker cannot be Owner!"); // handled in frontend
         }
-        return new ChatResponse(savedChat.getId());
+        return new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(), 
+        savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), savedChat.getTaker().getUsername(),
+        savedChat.getProduct().getId(), savedChat.getProduct().getProductName(),
+        savedChat.getProduct().getImageUrl());
     }
 
     @PostMapping("/api/chat/{id}")
