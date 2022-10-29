@@ -121,6 +121,7 @@ class Login extends Component {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Group>
                                     <Form.Label htmlFor="password-input">Password</Form.Label>
@@ -172,6 +173,7 @@ class Login extends Component {
                                     </div>
                                 </Form.Group>
                             </div>
+                            <br></br>
                             <div>
                                 <Form.Check
                                     id="flexCheckDefault"

@@ -21,7 +21,6 @@ public class AddProductRequest {
     @NotBlank
     private String dateTime;
 
-    @NotBlank
     private String imageUrl;
 
     private Long userId;

@@ -53,7 +53,7 @@ public class Main {
             role.add(userRole);
             user.setRoles(role);
             System.out.println("[Add user]: " + users.save(user));
-            UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
+            UserInfo userInfo = new UserInfo(user.getId(), "Test User", "User County Street 2", 87231231);
             userInfos.save(userInfo);
             Product newProd = new Product("CAMERA", "OLD", LocalDateTime.now().toString(), "ELECTRONICS");
             newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F4eb7ecac-272d-44bf-bc6d-153304cde503?alt=media&token=11154ee6-c06b-4d10-bea3-7e35fa378faa");
@@ -64,26 +64,26 @@ public class Main {
             newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F08a41caa-03e7-4653-a94c-f4d6e7127ff8?alt=media&token=bbdb601d-7f83-45f9-aaef-c0399d5876b7");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("Apple AirPods", "Fair", LocalDateTime.now().toString(), "Electronics",
+                    "I've bought new headsets so I don't really need this anymore.");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("Genki 1 Textbook", "Very Good", LocalDateTime.now().toString(), "Books",
+                    "I'm at N2 right now so I won't be needing this anymore. No writings");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("1Q84 Trilogy by Haruki Murakami", "Excellent", LocalDateTime.now().toString(), "Books",
+                    "I want more people to read books by Murakami");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("Pokemon Sword w/ Packaging", "Excellent", LocalDateTime.now().toString(), "Video Games",
+                    "Was gifted this and enjoyed it. Hope someone will enjoy this game as well.");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F6bf585fe-3d1b-4621-9660-a31a5343ad16?alt=media&token=db45fdd0-8064-47de-9388-1b6048f21084");
             newProd.setUser(user);
@@ -120,7 +120,7 @@ public class Main {
             role.add(adminRole);
             user.setRoles(role);
             System.out.println("[Add user]: " + users.save(user));
-            UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 111", 12345678);
+            UserInfo userInfo = new UserInfo(user.getId(), "Test Admin", "TesterVille Street 1", 62626235);
             userInfos.save(userInfo);
             Product newProd = new Product("LAPTOP", "New", LocalDateTime.now().toString(), "ELECTRONICS");
             newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F203a9695-d69f-42fa-ba80-2f92c4a578bd?alt=media&token=d70384bb-a6a0-489c-88fc-b03ae7ea1d6e");
@@ -185,19 +185,18 @@ public class Main {
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("Stainless Steel Waterbottle", "Near-Mint", LocalDateTime.now().toString(), "Utility",
+                    "Bought last year but only used once.");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-            newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
-                    "this is a description of the product");
+            newProd = new Product("Blue Among Us Plushie", "Mint", LocalDateTime.now().toString(), "Toys",
+                    "Got it as a gift. Still clean, no dirt");
             newProd.setImageUrl(
                     "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
-
         }
 
     }

@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-multi-carousel/lib/styles.css";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button"
 import ProductService from "../services/ProductService";
+import ChatService from "../services/ChatService"
 import bulbasaur from "../bulbasaur.jpg";
 import StorageHelper from "../services/StorageHelper";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css";
+import StorageHelper from "../services/StorageHelper"
+import { Alert } from "bootstrap"
 
 class ProductDetail extends Component {
   constructor(props) {
