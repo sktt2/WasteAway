@@ -21,6 +21,7 @@ class ProductDetail extends Component {
       id: this.props.match.params.id,
       data: [],
       fav: 0,
+      isError: "",
     };
   }
 
@@ -66,6 +67,22 @@ class ProductDetail extends Component {
     }
   };
 
+  addChat = (event) => {
+    event.preventDefault();
+    let newChat = {
+        takerId: StorageHelper.getUserId(),
+        productId: this.state.id,
+    }
+    console.log(JSON.stringify(newChat))
+    ChatService.createChat(newChat)
+        .then((response) => {
+            this.props.history.push("/chat/" + response.data.id)
+        })
+        .catch((error) => {
+            console.log(error.response.data.message) // Owner cannot ...
+        })
+}
+
   render() {
     return (
       <div className="container" style={{ width: "55%" }}>
@@ -79,12 +96,15 @@ class ProductDetail extends Component {
               {this.state.data.address}
               <br></br>
               {this.state.data.description}
+              <br></br>
+              {this.state.data.ownerName}
             </Card.Text>
               <FavoriteIcon
                 onClick={this.favouriteButtonClicked}
                 color={this.state.fav === 1 ? "primary" : "default"}
               />
           </Card.Body>
+          <Button onClick={this.addChat}>GIMME</Button>
         </Card>
       </div>
     );
