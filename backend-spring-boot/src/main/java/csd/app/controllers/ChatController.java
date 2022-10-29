@@ -29,10 +29,18 @@ public class ChatController {
         this.productService = productService;
     }
 
-    @GetMapping("/api/chat/{username}")
-    public List<Chat> getChatByUsername(String username) {
+    @GetMapping("/api/chat")
+    public List<ChatResponse> getChatByUsername(@RequestParam("username") @PathVariable String username) {
         List<Chat> chats = chatService.getChatbyUsername(username);
-        return chats;
+        List<ChatResponse> resp = new ArrayList<>();
+        for (Chat chat : chats) {
+            ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner().getId(), 
+                    chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
+                    chat.getProduct().getId(), chat.getProduct().getProductName(),
+                    chat.getProduct().getImageUrl());
+            resp.add(chatResp);
+        }
+        return resp;
     }
 
     @GetMapping("/api/chat/{id}")

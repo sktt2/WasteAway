@@ -11,6 +11,10 @@ class ChatService {
         return axios.post(API_URL, body)
     }
 
+    async getChatByUser(username) {
+        return axios.get("http://localhost:8080/api/chat?username=" + username)
+    }
+
 }
 
 export default new ChatService()

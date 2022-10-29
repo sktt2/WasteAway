@@ -11,5 +11,6 @@ import csd.app.user.*;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     Chat findByProductAndTaker(Product product, User taker);
-    List<Chat> findByOwnerOrTaker(User owner, User taker);
+    List<Chat> findByOwner(User owner);
+    List<Chat> findByTaker(User owner);
 }

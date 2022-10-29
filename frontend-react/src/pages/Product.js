@@ -133,7 +133,7 @@ class Product extends Component {
                             imgSource={data.imageUrl}
                             buttonLink={this.state.url + data.id}></CarouselComponent>
                     ))}
-                </Carousel> */}
+                </Carousel>
                 <br></br>
                 <Box>
                     <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>

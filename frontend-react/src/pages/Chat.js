@@ -1,12 +1,9 @@
 import React, { Component } from "react"
 
-import { makeStyles } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,60 +12,41 @@ import Avatar from '@mui/material/Avatar';
 import Fab from '@mui/material/Fab';
 import SendIcon from '@mui/icons-material/Send';
 import ChatService from "../services/ChatService"
+import StorageHelper from "../services/StorageHelper"
 
 class Chat extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            message: "",
         }
+        this.addMessage = this.addMessage.bind(this)
+    }
+
+    addMessage = (event) => {
+        event.preventDefault()
+        let newMessage = {
+            content: this.state.message,
+            dateTime: new Date().toISOString(),
+            senderUsername: StorageHelper.getUsername(),
+            userId: StorageHelper.getUserId(),
+        }
+        console.log(newMessage)
+        ChatService.addMessage(newMessage)
+            .then(() => {
+                this.forceUpdate()
+            })
+            .catch(() => {
+                this.props.history.push("/error")
+            })
     }
 
     render() {
         return (
             <div>
-        <Grid container>
-            <Grid item xs={12} >
-                <Typography variant="h5" className="header-message">Chat</Typography>
-            </Grid>
-        </Grid>
+            <br/>
         <Grid container component={Paper}>
-            <Grid item xs={3}>
-                <List>
-                    <ListItem button key="RemySharp">
-                        <ListItemIcon>
-                        <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="John Wick"></ListItemText>
-                    </ListItem>
-                </List>
-                <Divider />
-                <Grid item xs={12} style={{padding: '10px'}}>
-                    <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
-                </Grid>
-                <Divider />
-                <List>
-                    <ListItem button key="RemySharp">
-                        <ListItemIcon>
-                            <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                        <ListItemText secondary="online" align="right"></ListItemText>
-                    </ListItem>
-                    <ListItem button key="Alice">
-                        <ListItemIcon>
-                            <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Alice">Alice</ListItemText>
-                    </ListItem>
-                    <ListItem button key="CindyBaker">
-                        <ListItemIcon>
-                            <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-                    </ListItem>
-                </List>
-            </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={12}>
                 <List>
                     <ListItem key="1">
                         <Grid container>
@@ -104,10 +82,14 @@ class Chat extends Component {
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
                     <Grid item xs={11}>
-                        <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                        <TextField id="outlined-basic-email" label="Type Something" 
+                            fullWidth value={this.state.message} 
+                            onChange={(event) =>
+                                this.setState({ message: event.target.value })
+                            }/>
                     </Grid>
                     <Grid xs={1} align="right">
-                        <Fab color="primary" aria-label="add"><SendIcon /></Fab>
+                        <Fab color="primary" aria-label="add" onClick={this.addMessage}><SendIcon /></Fab>
                     </Grid>
                 </Grid>
             </Grid>

@@ -31,7 +31,10 @@ public class ChatServiceImpl implements ChatService {
 
     public List<Chat> getChatbyUsername(String username) {
         User user = userService.getUserByUsername(username);
-        return chats.findByOwnerOrTaker(user, user);
+        List<Chat> chatOwner = chats.findByOwner(user);
+        List<Chat> chatTaker = chats.findByTaker(user);
+        chatOwner.addAll(chatTaker);
+        return chatOwner;
     }
 
     public Chat getChatById(Long id) {
