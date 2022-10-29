@@ -148,7 +148,7 @@ public class ProductController {
         return resp;
     }
 
-    @PostMapping("/api/products/interests")
+    @PostMapping("/api/products/interest")
     public ResponseEntity<?> addProductInterest(@Valid @RequestBody AddProductInterestRequest addProductInterestRequest) {
         String productid = addProductInterestRequest.getProductId();
         String interestedusername = addProductInterestRequest.getInterestedUsername();
@@ -195,6 +195,20 @@ public class ProductController {
                 Long prodid = prodInt.getProduct().getId();
                 ProductInterestResponse piresp = new ProductInterestResponse(prodIntId, userid, prodid);
                 resp.add(piresp);
+            }
+        }
+        return resp;
+    }
+
+    @GetMapping("api/products/product/interests/{id}")
+    public List<String> getProductInterestByProduct(@PathVariable Long id) {
+        Long productid = id; 
+        List<ProductInterest> prodInterests = userService.listProductInterests();
+        List<String> resp = new ArrayList<>();
+        for (ProductInterest prodInt : prodInterests) {
+            if (prodInt.getProduct().getId() == productid) {
+                String username = prodInt.getUser().getUsername();
+                resp.add(username);
             }
         }
         return resp;

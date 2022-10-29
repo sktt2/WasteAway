@@ -1,5 +1,7 @@
 package csd.app.payload.request;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Delete;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +17,10 @@ public class DeleteProductInterestRequest {
 
 	public String getProductId() {
 		return productid;
+	}
+
+	public DeleteProductInterestRequest() {
+		
 	}
 
 	public DeleteProductInterestRequest(String userid, String productid) {

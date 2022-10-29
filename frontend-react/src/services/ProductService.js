@@ -35,7 +35,7 @@ class ProductService {
     }
 
     async addProductInterest(body) {
-        return axios.post(API_URL + "interests", body)
+        return axios.post(API_URL + "interest", body)
     }
     async removeProductInterest(body) {
         return axios.delete(API_URL + "interest/delete", body)
@@ -43,7 +43,9 @@ class ProductService {
     async getProductInterestByUser(id) {
         return axios.get(API_URL + "interests/" + id)
     }
-
+    async getProductInterestByProduct(id) {
+        return axios.get(API_URL + "product/interests/" + id )
+    }
 }
 
 export default new ProductService()

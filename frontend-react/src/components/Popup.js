@@ -15,15 +15,6 @@ import Box from "@mui/material/Box";
 import ProductService from "../services/ProductService";
 import { SliderMark } from "@mui/material";
 
-// async function getInterestedUsers(id) {
-//   const users = await ProductService.getProductInterestByProduct(id);
-//   const listUsers = users.map((user)) =>
-//   <MenuItem value={user}> {user} </MenuItem>
-//   );
-//   return {
-//     {listUsers}
-//   }
-// }
 export default class PopUp extends Component {
   constructor(props) {
     super(props);
@@ -37,9 +28,16 @@ export default class PopUp extends Component {
       dialogpopup: true,
       fullwidth: true,
       maxWidth: "sm",
+      listusers: [],
     };
   }
 
+  async componentDidMount() {
+    const interesteduser = await ProductService.getProductInterestByProduct(
+      this.props.productId
+    );
+    this.setState({ listusers: interesteduser.data });
+  }
   handleClick = () => {
     this.props.closePopUp();
   };
@@ -124,22 +122,26 @@ export default class PopUp extends Component {
                   <DialogContentText>{this.state.label}</DialogContentText>
                 </DialogContent>
                 <Box style={{ marginLeft: "10px" }} sx={{ minWidth: 300 }}>
-                  <FormControl sx={{ minWidth: 200 }} fullWidth={this.fullWidth}>
+                  <FormControl
+                    sx={{ minWidth: 200 }}
+                    fullWidth={this.fullWidth}
+                  >
                     <Select
                       id="select-username"
                       value={this.username}
                       onChange={this.handleUserInput}
-                    > 
-                      <MenuItem value={"tester2"}> tester2</MenuItem>
-                      <MenuItem value={"testadmin"}> testadmin </MenuItem>
+                    >
+                      {this.state.listusers.map((user) =>
+                      <MenuItem value={user}> {user} </MenuItem>
+                      )}
                     </Select>
                   </FormControl>
                 </Box>
                 <DialogContent>
                   <DialogContentText>
-                  {this.state.error && (
-                <p style={{ color: "red" }}>{this.state.errorMessage}</p>
-              )}
+                    {this.state.error && (
+                      <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+                    )}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

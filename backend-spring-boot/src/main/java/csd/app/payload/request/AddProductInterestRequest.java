@@ -17,6 +17,9 @@ public class AddProductInterestRequest {
 		return productid;
 	}
 
+	public AddProductInterestRequest() {
+		
+	}
 	public AddProductInterestRequest(String interestedusername, String productid) {
 		this.interestedusername = interestedusername;
 		this.productid = productid;
