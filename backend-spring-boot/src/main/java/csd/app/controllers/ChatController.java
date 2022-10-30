@@ -7,9 +7,8 @@ import csd.app.product.*;
 import csd.app.payload.request.ChatRequest;
 import csd.app.payload.request.MessageRequest;
 import csd.app.payload.response.ChatResponse;
-import csd.app.payload.response.MessageResponse;
+import csd.app.payload.response.ChatMessageResponse;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import javax.validation.Valid;
@@ -44,10 +43,29 @@ public class ChatController {
     }
 
     @GetMapping("/api/chat/{id}")
-    public List<Message> getMessages(@Valid @RequestBody ChatRequest chatRequest) {
-        Chat chat = chatService.getChatByProductIdAndTakerId(chatRequest.getProductId(), chatRequest.getTakerId());
+    public ChatResponse getChatById(@PathVariable Long id) {
+        Chat chat = chatService.getChatById(id);
+        ChatResponse resp = new ChatResponse(chat.getId(), chat.getOwner().getId(), 
+                chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
+                chat.getProduct().getId(), chat.getProduct().getProductName(),
+                chat.getProduct().getImageUrl());
+        return resp;
+    }
+
+    @GetMapping("/api/chat/{id}/messages")
+    public List<ChatMessageResponse> getMessages(@PathVariable Long id) {
+        Chat chat = chatService.getChatById(id);
+        // make a chatMessageResponse that returns content datetime chatid and usernames
         List<Message> messages = chatService.getMessagesByChat(chat);
-        return messages;
+        List<ChatMessageResponse> resp = new ArrayList<>();
+        for (Message message : messages) {
+            ChatMessageResponse chatMessageResp = new ChatMessageResponse(message.getContent(),
+                    message.getDateTime(), message.getSender().getId(),
+                    message.getSender().getUsername(), message.getReceiver().getId(),
+                    message.getReceiver().getUsername(), message.getChat().getId());
+            resp.add(chatMessageResp);
+        }
+        return resp;
     }
 
     @PostMapping("/api/chat")
@@ -64,10 +82,15 @@ public class ChatController {
         savedChat.getProduct().getImageUrl());
     }
 
-    @PostMapping("/api/chat/{id}")
-    public Message addMessage(@Valid @RequestBody MessageRequest messageRequest) {
+    @PostMapping("/api/chat/{id}/messages")
+    public ChatMessageResponse addMessage(@Valid @RequestBody MessageRequest messageRequest) {
         Message message = new Message(messageRequest.getContent(), messageRequest.getDateTime());
-        return chatService.addMessage(message, messageRequest.getSenderUsername(),
+        Message savedMessage = chatService.addMessage(message, messageRequest.getSenderUsername(),
                 messageRequest.getReceiverUsername(), messageRequest.getChatId());
+        ChatMessageResponse resp = new ChatMessageResponse(savedMessage.getContent(),
+                savedMessage.getDateTime(), savedMessage.getSender().getId(),
+                savedMessage.getSender().getUsername(), savedMessage.getReceiver().getId(),
+                savedMessage.getReceiver().getUsername(), savedMessage.getChat().getId());
+        return resp;
     }
 }
