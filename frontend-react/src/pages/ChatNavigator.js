@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ChatService from "../services/ChatService"
 import StorageHelper from "../services/StorageHelper"
 
@@ -50,7 +51,14 @@ class ChatNavigator extends Component {
                 </Grid>
                 <Divider />
                 <List>
-                    {this.state.data.map((data, i) => (
+                    {this.state.data.length === 0 ?
+                        <ListItem>
+                            <SentimentVeryDissatisfiedIcon/>
+                            <ListItemText>No Chat Available</ListItemText>
+                        </ListItem>
+
+                    :
+                    this.state.data.map((data, i) => (
                         <ListItem button onClick={() => this.goToChat(data)}>
                             <ListItemIcon>
                                 <Avatar alt={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername} 

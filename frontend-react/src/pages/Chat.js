@@ -97,7 +97,7 @@ class Chat extends Component {
                     </ListItem>
                 </List>
                 <Divider />
-                <List style={{maxHeight: 500, overflow: 'auto'}}>
+                <List style={{maxHeight: 500, minHeight: 500, overflow: 'auto'}}>
                     {this.state.messages.map((data, i) => (StorageHelper.getUsername() === data.senderUsername ?
                         <ListItem>
                             <Grid container>

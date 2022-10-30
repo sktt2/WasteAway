@@ -36,7 +36,7 @@ class ProductDetail extends Component {
         console.log(JSON.stringify(newChat))
         ChatService.createChat(newChat)
             .then((response) => {
-                this.props.history.push("/chat/" + response.data.id)
+                this.props.history.push("/chat/" + response.data.chatId)
             })
             .catch((error) => {
                 console.log(error.response.data.message) // Owner cannot ...
