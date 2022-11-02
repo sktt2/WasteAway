@@ -25,6 +25,8 @@ public class Notification {
     @JoinColumn(name = "id")
     private Chat chat;
     
+    private String messageContent;
+
     private boolean read;
 
     public Notification(Chat chat, boolean read) {

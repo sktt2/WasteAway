@@ -3,6 +3,8 @@ package csd.app.controllers;
 import java.util.*;
 
 import csd.app.chat.*;
+import csd.app.notification.Notification;
+import csd.app.notification.NotificationService;
 import csd.app.product.*;
 import csd.app.payload.request.ChatRequest;
 import csd.app.payload.request.MessageRequest;
@@ -22,6 +24,9 @@ public class ChatController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public ChatController(ChatService chatService, ProductService productService) {
         this.chatService = chatService;
@@ -76,6 +81,7 @@ public class ChatController {
         if (savedChat == null) {
             throw new RuntimeException("Taker cannot be Owner!"); // handled in frontend
         }
+        notificationService.addNotification((new Notification(savedChat, false)));
         return new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(), 
         savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), savedChat.getTaker().getUsername(),
         savedChat.getProduct().getId(), savedChat.getProduct().getProductName(),
@@ -87,6 +93,11 @@ public class ChatController {
         Message message = new Message(messageRequest.getContent(), messageRequest.getDateTime());
         Message savedMessage = chatService.addMessage(message, messageRequest.getSenderUsername(),
                 messageRequest.getReceiverUsername(), messageRequest.getChatId());
+                
+        Notification chatNotification = new Notification(savedMessage.getChat(), false);
+        chatNotification.setMessageContent(savedMessage.getContent());
+        notificationService.addNotification(chatNotification);
+
         ChatMessageResponse resp = new ChatMessageResponse(savedMessage.getContent(),
                 savedMessage.getDateTime(), savedMessage.getSender().getId(),
                 savedMessage.getSender().getUsername(), savedMessage.getReceiver().getId(),
