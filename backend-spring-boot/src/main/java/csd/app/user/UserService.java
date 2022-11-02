@@ -20,6 +20,5 @@ public interface UserService {
     ProductInterest addProductInterest(ProductInterest prodinterest);
     void deleteProductInterest(ProductInterest prodinterest);
     List<ProductInterest> listProductInterests();
-
     User updateUser(User user);
 }

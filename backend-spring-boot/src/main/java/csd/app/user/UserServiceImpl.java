@@ -1,9 +1,12 @@
 package csd.app.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import csd.app.notification.NotificationRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,6 +19,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ProductInterestRepository productInterests;
+
+    @Autowired NotificationRepository notifications;
 
     public List<User> getUsers() {
         return users.findAll();

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import csd.app.user.ProductInterest;
 import csd.app.user.User;
 import csd.app.chat.*;
+import csd.app.notification.Notification;
 import lombok.*;
 
 @Entity

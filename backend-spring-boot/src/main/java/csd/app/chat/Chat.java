@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import csd.app.notification.Notification;
 import csd.app.product.*;
 import csd.app.user.*;
 import lombok.*;
@@ -39,6 +40,8 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<Message> messages;
 
+    @OneToOne(mappedBy="chat", cascade = CascadeType.ALL) 
+    private Notification notification;
     public Chat() {
     }
 }
