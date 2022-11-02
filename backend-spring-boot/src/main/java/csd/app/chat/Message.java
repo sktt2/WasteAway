@@ -16,6 +16,7 @@ public class Message {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
     @NotNull(message = "Message cannot be empty")
+    @Size(min = 1, message = "Message cannot be empty")
     private String content;
 
     @NotNull(message = "Date and time should not be empty")
@@ -35,6 +36,9 @@ public class Message {
     @JsonBackReference
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
+
+    public Message() {
+    }
 
     public Message(String content, String dateTime) {
         this.content = content;

@@ -9,6 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ChatService from "../services/ChatService"
 import StorageHelper from "../services/StorageHelper"
 
@@ -17,21 +18,17 @@ class ChatNavigator extends Component {
         super(props)
         this.state = {
             data: [],
-            mainData: [],
         }
         this.goToChat = this.goToChat.bind(this)
     }
 
     async componentDidMount() {
         const res = await ChatService.getChatByUser(StorageHelper.getUsername())
-        this.setState({ mainData: res.data })
         this.setState({ data: res.data })
-        console.log(this.state.data)
-        console.log(this.state.mainData)
     }
 
-    goToChat = (chatId) => {
-        this.props.history.push("/chat/" + chatId)
+    goToChat = (chat) => {
+        this.props.history.push("/chat/" + chat.chatId)
     }
 
     render() {
@@ -41,7 +38,7 @@ class ChatNavigator extends Component {
         <Grid container component={Paper}>
             <Grid item xs={12}>
                 <List>
-                    <ListItem button key={StorageHelper.getUsername()}>
+                    <ListItem button>
                         <ListItemIcon>
                         <Avatar alt={StorageHelper.getUsername()} src="https://material-ui.com/static/images/avatar/6.jpg" />
                         </ListItemIcon>
@@ -54,9 +51,15 @@ class ChatNavigator extends Component {
                 </Grid>
                 <Divider />
                 <List>
-                    {this.state.data.map((data, i) => (
-                        <ListItem button key={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername} 
-                        onClick={() => this.goToChat(data.chatId)}>
+                    {this.state.data.length === 0 ?
+                        <ListItem>
+                            <SentimentVeryDissatisfiedIcon/>
+                            <ListItemText>No Chat Available</ListItemText>
+                        </ListItem>
+
+                    :
+                    this.state.data.map((data, i) => (
+                        <ListItem button onClick={() => this.goToChat(data)}>
                             <ListItemIcon>
                                 <Avatar alt={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername} 
                                 src={"https://material-ui.com/static/images/avatar/" + (i + 1) + ".jpg"}/>
@@ -68,7 +71,7 @@ class ChatNavigator extends Component {
                                 {data.productName}
                             </ListItemText>
                             <ListItemIcon>
-                                <Avatar alt={data.takerUsername} src={data.productImageUrl}/>
+                                <Avatar alt={data.productName} src={data.productImageUrl}/>
                             </ListItemIcon>
                         </ListItem>
                     ))}

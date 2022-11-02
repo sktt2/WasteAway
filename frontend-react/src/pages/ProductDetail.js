@@ -67,21 +67,21 @@ class ProductDetail extends Component {
     }
   };
 
-  addChat = (event) => {
-    event.preventDefault();
-    let newChat = {
-        takerId: StorageHelper.getUserId(),
-        productId: this.state.id,
+    addChat = (event) => {
+        event.preventDefault();
+        let newChat = {
+            takerId: StorageHelper.getUserId(),
+            productId: this.state.id,
+        }
+        console.log(JSON.stringify(newChat))
+        ChatService.createChat(newChat)
+            .then((response) => {
+                this.props.history.push("/chat/" + response.data.chatId)
+            })
+            .catch((error) => {
+                console.log(error.response.data.message) // Owner cannot ...
+            })
     }
-    console.log(JSON.stringify(newChat))
-    ChatService.createChat(newChat)
-        .then((response) => {
-            this.props.history.push("/chat/" + response.data.id)
-        })
-        .catch((error) => {
-            console.log(error.response.data.message) // Owner cannot ...
-        })
-}
 
   render() {
     return (
