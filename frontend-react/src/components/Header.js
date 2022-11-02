@@ -18,6 +18,8 @@ import { useHistory } from "react-router-dom"
 import AuthService from "../services/AuthService"
 import styles from "../styles/ComponentStyle.module.css"
 // import { fontWeight } from "@mui/system"
+import Popper from "@mui/material/Popper"
+import Paper from '@mui/material/Paper'
 import DeleteIcon from "@mui/icons-material/Delete"
 
 const pages = ["products"]
@@ -27,9 +29,17 @@ const loggedOut = ["login", "register"]
 const Header = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null)
     const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const [anchorElNotif, setAnchorElNotif] = React.useState(null)
     const [isLoggedIn, setLoggedIn] = React.useState(false)
     const history = useHistory()
 
+    const handleOpenNotifMenu = (event) => {
+        setAnchorElNotif(anchorElNotif ? null : event.currentTarget);
+    }
+
+    const openNotif = Boolean(anchorElNotif)
+    const popperid = openNotif ? 'notif-popper' : undefined
+    
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget)
     }
@@ -62,11 +72,14 @@ const Header = (props) => {
     })
     const loggedInMenu = (
         <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
-            <IconButton size="large" aria-label="show 17 new notifications" color="primary">
-                <Badge badgeContent={17} color="error">
+            <IconButton size="large" aria-haspopup="true" aria-label="show 17 new notifications" onClick={handleOpenNotifMenu} color="primary">
+                <Badge badgeContent={17} color="error" >
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
+            <Popper id={popperid} open={openNotif} anchorEl = {anchorElNotif}>
+                <Paper elevation={1} />
+            </Popper>
             <Tooltip title="Open settings">
                 <IconButton
                     size="large"

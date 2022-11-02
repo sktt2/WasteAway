@@ -11,7 +11,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css";
-import StorageHelper from "../services/StorageHelper"
 import { Alert } from "bootstrap"
 
 class ProductDetail extends Component {
@@ -36,7 +35,7 @@ class ProductDetail extends Component {
   }
 
   favouriteButtonClicked = () => {
-    let interestedusername = StorageHelper.getUserName();
+    let interestedusername = StorageHelper.getUsername();
     let userid = StorageHelper.getUserId();
     let productid = this.state.id;
     let prodints = sessionStorage.getItem("productinterests");
