@@ -42,9 +42,7 @@ class EditProfile extends Component {
         if (form.checkValidity() === false) {
             event.preventDefault()
             event.stopPropagation()
-        } else {
-            this.editDetails(event)
-        }
+        } 
         this.setState({ validated: "was-validated" })
     }
 
@@ -91,7 +89,10 @@ class EditProfile extends Component {
                                         name="Name"
                                         value={this.state.name}
                                         onChange={(event) =>
-                                            this.setState({ name: event.target.value })
+                                            {
+                                                this.setState({ name: event.target.value })
+                                                this.validateInputs(event)
+                                            }
                                         }
                                         required
                                     />
@@ -104,16 +105,21 @@ class EditProfile extends Component {
                                 <Form.Group>
                                     <Form.Label>email</Form.Label>
                                     <Form.Control
+                                        type="email"
                                         placeholder="Email"
                                         name="Email"
                                         value={this.state.email}
                                         onChange={(event) =>
-                                            this.setState({ email: event.target.value })
+                                            {
+                                                this.setState({ email: event.target.value })
+                                                this.validateInputs(event)
+                                            }
                                         }
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Email cannot be blank
+                                        Invalid email address
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -125,12 +131,16 @@ class EditProfile extends Component {
                                         name="Address"
                                         value={this.state.address}
                                         onChange={(event) =>
-                                            this.setState({ address: event.target.value })
+                                            {
+                                                this.setState({ address: event.target.value })
+                                                this.validateInputs(event)
+                                            }
                                         }
+                                        pattern= "^.+?(?<!\d)\d{6}$"
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Address cannot be blank.
+                                        Please input address in this format:  11 TOA PAYOH S111111
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -142,12 +152,16 @@ class EditProfile extends Component {
                                         name="Phone"
                                         value={this.state.phoneNumber}
                                         onChange={(event) =>
-                                            this.setState({ phoneNumber: event.target.value })
+                                            {
+                                                this.setState({ phoneNumber: event.target.value })
+                                                this.validateInputs(event)
+                                            }
                                         }
+                                        pattern="([8-9]{1})([0-9]{7})$"
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Phone Number cannot be blank.
+                                        Invalid phone number
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -157,7 +171,8 @@ class EditProfile extends Component {
                             <button
                                 className="btn btn-success"
                                 type="submit"
-                                style={{ margin: "20px 0px 0px 0px" }}>
+                                style={{ margin: "20px 0px 0px 0px" }}
+                                onClick={(event) => { this.editDetails(event) }}>
                                 SAVE
                             </button>
                         </form>
