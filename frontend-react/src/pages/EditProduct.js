@@ -44,16 +44,14 @@ class EditProduct extends Component {
         if (form.checkValidity() === false) {
             event.preventDefault()
             event.stopPropagation()
-        } else {
-            this.editDetails(event)
-        }
+        } 
         this.setState({ validated: "was-validated" })
+        
     }
 
     editDetails = (event) => {
         event.preventDefault()
-        let id = this.state.id
-        // String productName, String condition, String dateTime, String category, String description
+
         let body = {
             id: this.state.id,
             productName: this.state.productname,
@@ -96,12 +94,18 @@ class EditProduct extends Component {
                                             this.state.productname
                                         }
                                         onChange={(event) =>
-                                            this.setState({ productname: event.target.value })
+                                            {
+                                                this.setState({ productname: event.target.value })
+                                                this.validateInputs(event)
+                                            }
+                                            
                                         }
+                                        minLength="1"
+                                        maxLength="100"
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please provide a product name.
+                                        Product name should be 1-100 characters long
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -138,17 +142,22 @@ class EditProduct extends Component {
                                         placeholder="Description"
                                         name="description"
                                         as="textarea"
+                                        minLength="5"
+                                        maxLength="200"
                                         rows={3}
                                         value={
                                             this.state.description
                                         }
                                         onChange={(event) =>
-                                            this.setState({ description: event.target.value })
+                                            {
+                                                this.setState({ description: event.target.value })
+                                                this.validateInputs(event)
+                                            }
                                         }
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please provide the product description.
+                                        Description should be 5-200 characters long
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
@@ -205,7 +214,7 @@ class EditProduct extends Component {
                             <div id="successMessage" style={{ display: "none", color: "green" }}>
                                 SAVED SUCCESSFULLY
                             </div>
-                            <button className="btn btn-success" type="submit">
+                            <button className="btn btn-success" type="submit" onClick={(event) =>{ this.editDetails(event) }}>
                                 SAVE
                             </button>
                         </form>
