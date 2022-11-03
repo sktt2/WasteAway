@@ -1,7 +1,7 @@
 import * as React from "react";
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,11 +13,11 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Badge from "@mui/material/Badge";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -80,64 +80,69 @@ const Header = (props) => {
   });
   const loggedInMenu = (
     <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
-        <IconButton
-          id = {popperid}
-          size="large"
-          aria-haspopup="true"
-          aria-label="show 17 new notifications"
-          onClick={handleOpenNotifMenu}
-          color="primary"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+      <IconButton
+        id={popperid}
+        size="large"
+        aria-haspopup="true"
+        aria-label="show 17 new notifications"
+        onClick={handleOpenNotifMenu}
+        color="primary"
+      >
+        <Badge badgeContent={17} color="error">
+          <NotificationsIcon />
+        </Badge>
+      </IconButton>
 
       <Popper id={popperid} open={openNotif} anchorEl={anchorElNotif}>
         <Paper variant="outlined" elevation={1}>
-        <List sx={{ width: '100%', maxWidth: 480, bgcolor: 'background.paper' }}>
-          <ListItem>
-            <ListItemButton>
-              <ListItemText primary="Notifications" />
+          <List
+            sx={{ width: "100%", maxWidth: 480, bgcolor: "background.paper" }}
+          >
+            <ListItem>
+              <ListItem>
+                <ListItemText primary="Notifications" />
+              </ListItem>
+            </ListItem>
+            <Divider variant="inset" />
+            <ListItemButton alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="https://material-ui.com/static/images/avatar/1.jpg"
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary="tester2"
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      tester2
+                    </Typography>
+                    {" - Why does your item not match the description?"}
+                  </React.Fragment>
+                }
+              />
+              <Box
+                component="img"
+                sx={{
+                  height: 100,
+                  width: 100,
+                  maxHeight: { xs: 100, md: 78 },
+                  maxWidth: { xs: 100, md: 78 },
+                }}
+                alt="The house from the offer."
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+              />
             </ListItemButton>
-          </ListItem>
-          <Divider variant="inset"/>
-          <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="tester2"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                tester2
-              </Typography>
-              {" - Why does your item not match the description?"}
-            </React.Fragment>
-          }
-        />
-        <Box
-        component="img"
-        sx={{
-          height: 100,
-          width: 100,
-          maxHeight: { xs: 100, md: 78 },
-          maxWidth: { xs: 100, md: 78 },
-        }}
-        alt="The house from the offer."
-        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-      />
-      </ListItem>
-        </List>
+          </List>
         </Paper>
       </Popper>
-      
+
       <Tooltip title="Open settings">
         <IconButton
           size="large"
