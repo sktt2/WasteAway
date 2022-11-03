@@ -28,8 +28,7 @@ import csd.app.security.jwt.*;
 import csd.app.payload.request.*;
 import csd.app.payload.response.*;
 
-// change origins to ur react server 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -65,7 +64,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         UserInfo userinfo = userService.getUserInfoById(userDetails.getId());
-        
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
@@ -116,11 +115,11 @@ public class AuthController {
         userService.addUser(user);
 
         UserInfo userInfo = new UserInfo(user.getId(),
-                            signUpRequest.getName(), 
-                            signUpRequest.getAddress(), 
-                            signUpRequest.getPhoneNumber());
+                signUpRequest.getName(),
+                signUpRequest.getAddress(),
+                signUpRequest.getPhoneNumber());
         userService.addUserInfo(userInfo);
-        
+
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 

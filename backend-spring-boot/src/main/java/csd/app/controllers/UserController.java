@@ -1,7 +1,6 @@
 package csd.app.controllers;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import csd.app.payload.request.UpdateUserRequest;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.UserInfoResponse;
-import csd.app.roles.Role;
 import csd.app.user.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

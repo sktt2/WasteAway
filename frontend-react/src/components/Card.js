@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useState } from 'react';
+import { useState } from "react"
 import Card from "@mui/material/Card"
 import CardHeader from "@mui/material/CardHeader"
 import CardMedia from "@mui/material/CardMedia"
@@ -17,13 +17,12 @@ import MenuItem from "@mui/material/MenuItem"
 import { useHistory } from "react-router-dom"
 import { Box } from "@mui/system"
 
-
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
 import bulbasaur from "../bulbasaur.jpg"
 
 export default function CardComponent(props) {
-    const [fav, setFav] = useState(0);
+    const [fav, setFav] = useState(0)
     const title = props.title
     const id = props.id
     //   const description = props.description;
@@ -38,7 +37,6 @@ export default function CardComponent(props) {
     const ownerName = props.ownerName
     const [year, month, day] = dateTime.split("-")
     const date = new Date(+year, month - 1, +day.slice(0, 2))
-
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -111,7 +109,11 @@ export default function CardComponent(props) {
                 />
             )}
 
-            <CardMedia component="img" style={{ minHeight: 300, maxHeight: 300 }} image={imgSource || bulbasaur} />
+            <CardMedia
+                component="img"
+                style={{ minHeight: 300, maxHeight: 300 }}
+                image={imgSource || bulbasaur}
+            />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
                     {title}
@@ -142,8 +144,13 @@ export default function CardComponent(props) {
             )}
             {buttons === 1 && (
                 <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites" >
-                        <FavoriteIcon onClick={() => { (fav === 0 ) ? setFav(fav+1) : setFav (fav - 1)}} color={fav === 0 ? "primary" : "default" }/>
+                    <IconButton aria-label="add to favorites">
+                        <FavoriteIcon
+                            onClick={() => {
+                                fav === 0 ? setFav(fav + 1) : setFav(fav - 1)
+                            }}
+                            color={fav === 0 ? "primary" : "default"}
+                        />
                     </IconButton>
                     <Button variant="contained" style={{ marginLeft: "auto" }} href={buttonLink}>
                         details
