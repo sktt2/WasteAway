@@ -36,14 +36,26 @@ class Chat extends Component {
             this.state.chat.takerUsername : this.state.chat.ownerUsername)})
         const res1 = await ChatService.getMessagesByChat(this.state.id)
         this.setState({ messages: res1.data })
-        this.scrollToBottom();
-        setTimeout(() => {
-            window.location.reload(false)
-        }, 100000)
+        this.scrollToBottom()
+        this.refreshChat()
     }
     
     scrollToBottom() {
         this.el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async refreshChat() {
+        const res1 = await ChatService.getMessagesByChat(this.state.id)
+        this.setState({ messages: res1.data })
+        setTimeout(() => {
+            this.refreshChat()
+        }, 1000)
+    }
+
+    convertDateTime = (dateTime) => {
+        let newDateTime = (new Date(dateTime)).toString()
+        let dateTimeWithoutTimezone = newDateTime.split(" G")[0]
+        return dateTimeWithoutTimezone
     }
 
     keyPress = (event) => {
@@ -88,7 +100,7 @@ class Chat extends Component {
                             src="https://material-ui.com/static/images/avatar/6.jpg" />
                         </ListItemIcon>
                         <ListItemText primary={this.state.chatter}></ListItemText>
-                        <ListItemText secondary={this.state.chatter === this.state.chat.ownerUsername ? "owner" : ""} align="right">
+                        <ListItemText secondary={StorageHelper.getUsername() === this.state.chat.ownerUsername ? "You're the owner" : ""} align="right">
                             {this.state.chat.productName}
                         </ListItemText>
                         <ListItemIcon>
@@ -98,25 +110,14 @@ class Chat extends Component {
                 </List>
                 <Divider />
                 <List style={{maxHeight: 500, minHeight: 500, overflow: 'auto'}}>
-                    {this.state.messages.map((data, i) => (StorageHelper.getUsername() === data.senderUsername ?
+                    {this.state.messages.map((data, i) => (
                         <ListItem>
                             <Grid container>
                                 <Grid item xs={12}>
-                                    <ListItemText align="right" primary={data.content}></ListItemText>
+                                    <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} primary={data.content}></ListItemText>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ListItemText align="right" secondary={data.dateTime}></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                        :
-                        <ListItem>
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText align="left" primary={data.content}></ListItemText>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText align="left" secondary={data.dateTime}></ListItemText>
+                                    <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} secondary={this.convertDateTime(data.dateTime)}></ListItemText>
                                 </Grid>
                             </Grid>
                         </ListItem>

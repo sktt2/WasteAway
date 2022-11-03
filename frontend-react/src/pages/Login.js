@@ -26,7 +26,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if (localStorage.hasOwnProperty("user")) {
+        if (sessionStorage.hasOwnProperty("user")) {
             this.props.history.push("/")
         }
         if (localStorage.hasOwnProperty("rememberme")) {

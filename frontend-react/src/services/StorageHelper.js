@@ -1,21 +1,21 @@
 class StorageHelper {
     static setUser(user) {
-        localStorage.setItem("user", user)
+        sessionStorage.setItem("user", user)
     }
     static getUser() {
-        return JSON.parse(localStorage.getItem("user"))
+        return JSON.parse(sessionStorage.getItem("user"))
     }
     static getUserId() {
-        return JSON.parse(localStorage.getItem("user")).id
+        return JSON.parse(sessionStorage.getItem("user")).id
     }
     static getUsername() {
-        return JSON.parse(localStorage.getItem("user")).username
+        return JSON.parse(sessionStorage.getItem("user")).username
     }
     static getName() {
-        return JSON.parse(localStorage.getItem("user")).userInfo.name
+        return JSON.parse(sessionStorage.getItem("user")).userInfo.name
     }
     static removeUser() {
-        localStorage.removeItem("user")
+        sessionStorage.removeItem("user")
     }
 }
 export default StorageHelper
