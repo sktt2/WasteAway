@@ -140,61 +140,61 @@ public class Main {
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
             newProd = new Product("AIRPODS", "Spoilt", LocalDateTime.now().toString(), "ELECTRONICS",
                     "this is a description of the product");
             newProd.setImageUrl(
-                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F525ccafd-2be0-4cf4-8739-671582b3651d?alt=media&token=008cd12d-f3ec-4be3-8e1c-44e6f63d2132");
+                    "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F6979f3ce-e830-4094-aea9-196d8be987fd?alt=media&token=460668bb-bbf7-4cbf-888c-1c478c4ec396");
             newProd.setUser(user);
             System.out.println("[Add product]:" + products.save(newProd));
 
