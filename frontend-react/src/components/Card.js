@@ -27,7 +27,6 @@ export default function CardComponent(props) {
     const id = props.id
     //   const description = props.description;
     const buttonLink = props.buttonLink
-    const imgSource = props.imgSource
     const address = props.address
     const condition = props.condition
     const triggerPopUp = props.triggerPopUp

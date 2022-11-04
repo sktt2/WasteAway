@@ -70,4 +70,9 @@ public class Product {
         this(productName, condition, dateTime, category);
         this.description = description;
     }
+
+    public Product(String productName, String condition, String dateTime, String category, String description, String imageUrl) {
+        this(productName, condition, dateTime, category, description);
+        this.imageUrl = imageUrl;
+    }
 }

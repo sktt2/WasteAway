@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 
 import Form from "react-bootstrap/Form"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
+import storage from "../services/FirebaseConfig"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
@@ -16,11 +18,10 @@ class EditProduct extends Component {
             validated: "",
             url: "/product/edit/",
             productname: "",
-            condition:"",
-            category:"",
-            description:"",
-            image:""
-
+            condition: "",
+            category: "",
+            description: "",
+            image: "",
         }
         this.validateInputs = this.validateInputs.bind(this)
         this.editDetails = this.editDetails.bind(this)
@@ -44,34 +45,95 @@ class EditProduct extends Component {
         if (form.checkValidity() === false) {
             event.preventDefault()
             event.stopPropagation()
-        } 
+        }
         this.setState({ validated: "was-validated" })
-        
     }
 
     editDetails = (event) => {
         event.preventDefault()
+        // String productName, String condition, String dateTime, String category, String description
+        if (this.state.image != null) {
+            const file = this.state.image
+            const imageName =
+                JSON.parse(localStorage.getItem("user")).id +
+                "/" +
+                this.state.urlImage.split("/")[3]
+            const storageRef = ref(storage, imageName)
 
-        let body = {
-            id: this.state.id,
-            productName: this.state.productname,
-            condition: this.state.condition,
-            dateTime: new Date().toISOString(),
-            category: this.state.category,
-            description: this.state.description,
-            imageUrl: this.state.image
+            //upload new file
+            uploadBytes(storageRef, file)
+                .then((snapshot) => {
+                    console.log("Uploaded a blob or file!")
+
+                    //get new image URL and store all data in SQL DB
+                    getDownloadURL(storageRef)
+                        .then((imageURL) => {
+                            let body = {
+                                id: this.state.id,
+                                productName: this.state.productname || this.state.data.productName,
+                                condition: this.state.conditions || this.state.data.condition,
+                                dateTime: new Date().toISOString(),
+                                category: this.state.category || this.state.data.category,
+                                description: this.state.description || this.state.data.description,
+                                imageUrl: imageURL,
+                            }
+
+                            ProductService.updateProductDetail(body)
+                                .then(() => {
+                                    document.getElementById("errorMessage").style.display = "none"
+                                    document.getElementById("successMessage").style.display =
+                                        "block"
+                                    setTimeout(function () {
+                                        window.location.reload("false")
+                                    }, 2000)
+                                })
+                                .catch(() => {
+                                    this.props.history.push("/error")
+                                })
+
+                            //find old file to delete
+                            const deleteRef = ref(storage, this.state.data.imageUrl)
+                            deleteObject(deleteRef)
+                                .then(() => {
+                                    console.log("Old image deleted from firebase")
+                                })
+                                .catch((error) => {
+                                    //error for deleting old object
+                                    console.log("Failed to delete old image")
+                                    console.log(error)
+                                })
+                        })
+                        .catch((error) => {
+                            //error for failing to get URL for new image
+                            document.getElementById("errorMessage").style.display = "block"
+                        })
+                })
+                .catch(() => {
+                    // error for upload
+                    document.getElementById("errorMessage").style.display = "block"
+                })
+        } else {
+            let body = {
+                id: this.state.id,
+                productName: this.state.productname || this.state.data.productName,
+                condition: this.state.conditions || this.state.data.condition,
+                dateTime: new Date().toISOString(),
+                category: this.state.category || this.state.data.category,
+                description: this.state.description || this.state.data.description,
+                imageUrl: this.state.data.imageUrl,
+            }
+
+            ProductService.updateProductDetail(body)
+                .then(() => {
+                    document.getElementById("successMessage").style.display = "block"
+                    setTimeout(function () {
+                        window.location.reload("false")
+                    }, 2000)
+                })
+                .catch(() => {
+                    this.props.history.push("/error")
+                })
         }
-
-        ProductService.updateProductDetail(body)
-            .then(() => {
-                document.getElementById("successMessage").style.display = "block"
-                setTimeout(function () {
-                    window.location.reload("false")
-                }, 2000)
-            })
-            .catch(() => {
-                this.props.history.push("/error")
-            })
     }
 
     render() {
@@ -90,16 +152,11 @@ class EditProduct extends Component {
                                     <Form.Control
                                         placeholder="Product name"
                                         name="productname"
-                                        value={
-                                            this.state.productname
-                                        }
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ productname: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                            
-                                        }
+                                        value={this.state.productname}
+                                        onChange={(event) => {
+                                            this.setState({ productname: event.target.value })
+                                            this.validateInputs(event)
+                                        }}
                                         minLength="1"
                                         maxLength="100"
                                         required
@@ -113,7 +170,7 @@ class EditProduct extends Component {
                                 <Form.Group>
                                     <Form.Label>Category</Form.Label>
                                     <Form.Select
-                                        value={this.state.category }
+                                        value={this.state.category}
                                         onChange={(event) =>
                                             this.setState({ category: event.target.value })
                                         }
@@ -145,15 +202,11 @@ class EditProduct extends Component {
                                         minLength="5"
                                         maxLength="200"
                                         rows={3}
-                                        value={
-                                            this.state.description
-                                        }
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ description: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                        }
+                                        value={this.state.description}
+                                        onChange={(event) => {
+                                            this.setState({ description: event.target.value })
+                                            this.validateInputs(event)
+                                        }}
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
@@ -162,7 +215,7 @@ class EditProduct extends Component {
                                 </Form.Group>
                             </div>
                             <div>
-                            <Form.Group>
+                                <Form.Group>
                                     <Form.Label>Condition of Product</Form.Label>
                                     <Form.Select
                                         value={this.state.condition}
@@ -194,7 +247,10 @@ class EditProduct extends Component {
                                         accept="image/*"
                                         onChange={(event) =>
                                             this.setState({
-                                                image: URL.createObjectURL(event.target.files[0]),
+                                                image: event.target.files[0],
+                                                urlImage: URL.createObjectURL(
+                                                    event.target.files[0]
+                                                ),
                                             })
                                         }
                                     />
@@ -205,8 +261,8 @@ class EditProduct extends Component {
                                 <div>
                                     <img
                                         className="container-fluid w-100"
-                                        src={this.state.image}
-                                        value={this.state.image}
+                                        src={this.state.urlImage || this.state.data.imageUrl}
+                                        value={this.state.urlImage}
                                     />
                                 </div>
                             </div>
@@ -214,7 +270,10 @@ class EditProduct extends Component {
                             <div id="successMessage" style={{ display: "none", color: "green" }}>
                                 SAVED SUCCESSFULLY
                             </div>
-                            <button className="btn btn-success" type="submit" onClick={(event) =>{ this.editDetails(event) }}>
+                            <div id="errorMessage" style={{ display: "none", color: "red" }}>
+                                ERROR! PLEASE TRY AGAIN!
+                            </div>
+                            <button className="btn btn-success" type="submit">
                                 SAVE
                             </button>
                         </form>
