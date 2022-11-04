@@ -40,8 +40,10 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<Message> messages;
 
-    @OneToOne(mappedBy="chat", cascade = CascadeType.ALL) 
-    private Notification notification;
+    @JsonIgnore
+    @OneToMany(mappedBy="chat", cascade = CascadeType.ALL) 
+    private List<Notification> notification;
+
     public Chat() {
     }
 }

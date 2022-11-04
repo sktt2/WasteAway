@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-multi-carousel/lib/styles.css";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button"
+import Button from "react-bootstrap/Button";
 import ProductService from "../services/ProductService";
-import ChatService from "../services/ChatService"
+import ChatService from "../services/ChatService";
 import bulbasaur from "../bulbasaur.jpg";
 import StorageHelper from "../services/StorageHelper";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css";
-import { Alert } from "bootstrap"
+import { Alert } from "bootstrap";
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -26,9 +26,14 @@ class ProductDetail extends Component {
 
   async componentDidMount() {
     const userid = StorageHelper.getUserId();
-    const allProductInterests = await ProductService.getProductInterestByUser(userid);
+    const allProductInterests = await ProductService.getProductInterestByUser(
+      userid
+    );
     if (sessionStorage.getItem("productinterests") == null) {
-        sessionStorage.setItem("productinterests", JSON.stringify(allProductInterests));
+      sessionStorage.setItem(
+        "productinterests",
+        JSON.stringify(allProductInterests)
+      );
     }
     const res = await ProductService.getProduct(this.state.id);
     this.setState({ data: res.data });
@@ -39,19 +44,19 @@ class ProductDetail extends Component {
     let userid = StorageHelper.getUserId();
     let productid = this.state.id;
     let prodints = sessionStorage.getItem("productinterests");
-    this.setState({ fav: this.state.fav === 0 ? 1 : 0 })
+    this.setState({ fav: this.state.fav === 0 ? 1 : 0 });
     if (this.state.fav === 1) {
       let prodintid;
       for (let i = 0; i < prodints.length; i++) {
         let prodint = prodints[i];
-        if (prodint.hasOwnProperty('id') && prodint.id === productid) {
+        if (prodint.hasOwnProperty("id") && prodint.id === productid) {
           prodintid = prodint.productinterestid;
         }
       }
       let req = {
         userid,
-        productid
-      }
+        productid,
+      };
       console.log(req);
       ProductService.removeProductInterest(req);
       console.log("meow");
@@ -60,27 +65,39 @@ class ProductDetail extends Component {
         interestedusername,
         productid,
       };
-      ProductService.addProductInterest(newProductInterest) 
-      let newid = prodints[prodints.length -1].productinterestid + 1;
-      prodints.push({"id": newid, "userid": userid, "productid": productid});
+      let newChat = {
+        takerId: StorageHelper.getUserId(),
+        productId: this.state.id,
+      };
+      ProductService.addProductInterest(newProductInterest);
+      console.log(JSON.stringify(newChat));
+      ChatService.createChat(newChat)
+        .then((response) => {
+          this.props.history.push("/chat/" + response.data.chatId);
+        })
+        .catch((error) => {
+          console.log(error.response.data.message); // Owner cannot ...
+        });
+      let newid = prodints[prodints.length - 1].productinterestid + 1;
+      prodints.push({ id: newid, userid: userid, productid: productid });
     }
   };
 
-    addChat = (event) => {
-        event.preventDefault();
-        let newChat = {
-            takerId: StorageHelper.getUserId(),
-            productId: this.state.id,
-        }
-        console.log(JSON.stringify(newChat))
-        ChatService.createChat(newChat)
-            .then((response) => {
-                this.props.history.push("/chat/" + response.data.chatId)
-            })
-            .catch((error) => {
-                console.log(error.response.data.message) // Owner cannot ...
-            })
-    }
+  addChat = (event) => {
+    event.preventDefault();
+    let newChat = {
+      takerId: StorageHelper.getUserId(),
+      productId: this.state.id,
+    };
+    console.log(JSON.stringify(newChat));
+    ChatService.createChat(newChat)
+      .then((response) => {
+        this.props.history.push("/chat/" + response.data.chatId);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message); // Owner cannot ...
+      });
+  };
 
   render() {
     return (
@@ -98,10 +115,10 @@ class ProductDetail extends Component {
               <br></br>
               {this.state.data.ownerName}
             </Card.Text>
-              <FavoriteIcon
-                onClick={this.favouriteButtonClicked}
-                color={this.state.fav === 1 ? "primary" : "default"}
-              />
+            <FavoriteIcon
+              onClick={this.favouriteButtonClicked}
+              color={this.state.fav === 1 ? "primary" : "default"}
+            />
           </Card.Body>
           <Button onClick={this.addChat}>GIMME</Button>
         </Card>

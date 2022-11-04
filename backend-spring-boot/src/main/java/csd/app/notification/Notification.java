@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,18 +21,22 @@ public class Notification {
     @Id @GeneratedValue
     private Long notifid;
 
-    @OneToOne
+    @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "chat_id")
     private Chat chat;
     
     private String messageContent;
 
-    private boolean read;
+    private boolean isRead;
 
-    public Notification(Chat chat, boolean read) {
+    public Notification() {
+
+    }
+    
+    public Notification(Chat chat, boolean isRead) {
         this.chat = chat;
-        this.read = read;
+        this.isRead = isRead;
     }
     
 
