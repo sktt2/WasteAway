@@ -121,7 +121,6 @@ class Register extends Component {
         event.preventDefault()
         let messageDisplay = this.state.messageDisplay
         for (let field in messageDisplay) {
-            console.log(field, this.state[field].length)
             if (this.state[field].length === 0 || messageDisplay[field]) {
                 this.setState({
                     errorMessage: "There are invalid fields",
@@ -165,7 +164,7 @@ class Register extends Component {
                     sx={{
                         border: "1px solid",
                         flexDirection: "column",
-                        paddingBottom: "1vw ",
+                        padding: "1vw 0",
                         margin: "0vw 15vw",
                         borderRadius: 2,
                     }}
