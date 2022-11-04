@@ -17,14 +17,8 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 
-/*
- * Implementations of UserDetails to provide user information to Spring
- * Security,
- * e.g., what authorities (roles) are granted to the user and whether the
- * account is enabled or not
- */
 public class UserInfo implements Serializable {
-    // private static final long serialVersionUID = 1L;
+
     @JsonIgnore
     private @Id Long id;
 
@@ -35,15 +29,8 @@ public class UserInfo implements Serializable {
     @Column
     private String address;
 
-    // @NotNull(message = "address should not be null")
-    // private String address;
-
     @Column(length = 8)
     private int phoneNumber;
-
-    // @NotNull(message = "phone number should not be null")
-    // @Column(unique = true, length = 8)
-    // private int phoneNumber;
 
     @OneToOne
     @JsonBackReference
@@ -56,9 +43,5 @@ public class UserInfo implements Serializable {
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
-
-    // // @OneToOne(cascade = CascadeType.ALL)
-    // // @JoinColumn(name = "userinfo_id", referencedColumnName = "id")
-    // // private UserInfo userInfo;
 
 }

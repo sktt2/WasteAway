@@ -11,10 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import csd.app.user.User;
 import lombok.*;
 
@@ -29,6 +27,7 @@ public class Product {
     @Size(min = 1, max = 100, message = "Product name should be at least 1 character long")
     private String productName;
 
+    @NotNull(message = "Product description should not be empty")
     @Size(min = 5, max = 200, message = "Product description should be at least 5 characters long")
     private String description;
 
@@ -43,8 +42,7 @@ public class Product {
     @NotNull(message = "Category should not be empty")
     private String category;
 
-    // To be done
-    // @NotNull(message = "Image url should not be empty")
+    @NotNull(message = "Image url should not be empty")
     private String imageUrl;
 
     @ManyToOne
@@ -59,15 +57,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String productName, String condition, String dateTime, String category) {
+    public Product(String productName, String condition, String dateTime, String category, String description) {
         this.productName = productName;
         this.condition = condition;
         this.dateTime = dateTime;
         this.category = category;
-    }
-
-    public Product(String productName, String condition, String dateTime, String category, String description) {
-        this(productName, condition, dateTime, category);
         this.description = description;
     }
 
