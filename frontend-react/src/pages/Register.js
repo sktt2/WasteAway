@@ -125,7 +125,7 @@ class Register extends Component {
             if (this.state[field].length === 0 || messageDisplay[field]) {
                 this.setState({
                     errorMessage: "There are invalid fields",
-                    displayError: "true",
+                    displayError: true,
                 })
                 return
             }

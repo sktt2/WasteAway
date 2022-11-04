@@ -1,12 +1,17 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
+import { Box } from "@mui/system"
 
-import Form from "react-bootstrap/Form"
+import {
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    OutlinedInput,
+    Button,
+    Alert,
+} from "@mui/material"
 import UserService from "../services/UserService"
 import StorageHelper from "../services/StorageHelper"
-
-// Import CSS styling
-import styles from "../styles/ComponentStyle.module.css"
 
 class EditProfile extends Component {
     constructor(props) {
@@ -15,13 +20,23 @@ class EditProfile extends Component {
             user: {},
             validated: "",
             url: "/editprofile",
+            displaySuccess: false,
+            displayError: false,
+            errorMessage: "",
+            messageDisplay: {
+                name: false,
+                email: false,
+                address: false,
+                mobile: false,
+            },
             name: "",
             email: "",
             address: "",
-            phoneNumber: 0,
+            mobile: "",
         }
         this.validateInputs = this.validateInputs.bind(this)
         this.editDetails = this.editDetails.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
 
     async componentDidMount() {
@@ -32,153 +47,220 @@ class EditProfile extends Component {
         this.setState({ name: user.userInfo.name })
         this.setState({ email: user.email })
         this.setState({ address: user.userInfo.address })
-        this.setState({ phoneNumber: user.userInfo.phoneNumber })
+        console.log(typeof user.userInfo.phoneNumber, user.userInfo.phoneNumber)
+        this.setState({ mobile: "" + user.userInfo.phoneNumber })
         await this.setState({ user: StorageHelper.getUser() })
     }
 
-    // Return proper error modal on invalid input
     validateInputs = (event) => {
-        const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } 
-        this.setState({ validated: "was-validated" })
+        switch (event) {
+            case "name":
+                if (this.state.name.length === 0)
+                    this.setState({ messageDisplay: { ...this.state.messageDisplay, name: true } })
+                else
+                    this.setState({ messageDisplay: { ...this.state.messageDisplay, name: false } })
+                break
+            case "email":
+                if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, email: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, email: false },
+                    })
+                break
+            case "address":
+                if (this.state.address.length === 0)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, address: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, address: false },
+                    })
+                break
+            case "mobile":
+                if (!/([8-9]{1})([0-9]{7})$/.test(this.state.mobile))
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, mobile: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, mobile: false },
+                    })
+                break
+            default:
+                return null
+        }
+    }
+    handleChange = (field) => {
+        this.setState(field)
     }
 
     editDetails = (event) => {
         event.preventDefault()
+        let messageDisplay = this.state.messageDisplay
+        this.setState({ displayError: false })
+        for (let field in messageDisplay) {
+            console.log(field, this.state[field].length)
+            if (this.state[field].length === 0 || messageDisplay[field]) {
+                this.setState({
+                    errorMessage: "There are invalid fields",
+                    displayError: true,
+                })
+                return
+            }
+        }
+
         let body = {
             username: StorageHelper.getUsername(),
             name: this.state.name,
             email: this.state.email,
             address: this.state.address,
-            phoneNumber: parseInt(this.state.phoneNumber),
+            phoneNumber: parseInt(this.state.mobile),
         }
-        console.log(typeof body.phone)
         UserService.updateUser(body)
             .then(async () => {
-                document.getElementById("successMessage").style.display = "block"
+                this.setState({ displaySuccess: true })
                 const newUser = await UserService.getUser(StorageHelper.getUsername())
-                console.log(newUser)
                 StorageHelper.setUser(JSON.stringify(newUser.data))
-                setTimeout(function () {
-                    window.location.reload("false")
+                setTimeout(() => {
+                    this.props.history.push("/profile")
                 }, 1000)
             })
-            .catch(() => {
-                this.props.history.push("/error")
+            .catch((error) => {
+                console.log(error)
+                const { message } = error.response.data
+                if (message.includes("Email is already"))
+                    this.setState({
+                        errorMessage: "Email is already taken",
+                        displayError: true,
+                    })
             })
     }
 
     render() {
         return (
-            <div className="container">
-                <br></br>
-                <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className={styles.inputCard}>
-                        <form
-                            noValidate
-                            className={this.state.validated}
-                            onSubmit={this.validateInputs}>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control
-                                        placeholder="Name"
-                                        name="Name"
-                                        value={this.state.name}
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ name: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                        }
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Name cannot be blank.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>email</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        placeholder="Email"
-                                        name="Email"
-                                        value={this.state.email}
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ email: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                        }
-                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Invalid email address
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Address</Form.Label>
-                                    <Form.Control
-                                        placeholder="Address"
-                                        name="Address"
-                                        value={this.state.address}
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ address: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                        }
-                                        pattern= "^.+?(?<!\d)\d{6}$"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please input address in this format:  11 TOA PAYOH S111111
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Phone</Form.Label>
-                                    <Form.Control
-                                        placeholder="Phone number"
-                                        name="Phone"
-                                        value={this.state.phoneNumber}
-                                        onChange={(event) =>
-                                            {
-                                                this.setState({ phoneNumber: event.target.value })
-                                                this.validateInputs(event)
-                                            }
-                                        }
-                                        pattern="([8-9]{1})([0-9]{7})$"
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Invalid phone number
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div id="successMessage" style={{ display: "none", color: "green" }}>
-                                SAVED SUCCESSFULLY
-                            </div>
-                            <button
-                                className="btn btn-success"
+            <Box>
+                <Box
+                    component="form"
+                    display="flex"
+                    sx={{
+                        border: "1px solid",
+                        flexDirection: "column",
+                        padding: "2vw ",
+                        margin: "0vw 15vw",
+                        borderRadius: 2,
+                    }}
+                    alignItems="center"
+                    autoComplete="off">
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{ width: "100%" }}
+                        rowSpacing={1}>
+                        <Grid item>
+                            {this.state.displayError ? (
+                                <Alert severity="error">{this.state.errorMessage}</Alert>
+                            ) : (
+                                <Box />
+                            )}
+                            {this.state.displaySuccess ? (
+                                <Alert severity="success">Updated Successfully </Alert>
+                            ) : (
+                                <Box />
+                            )}
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Name</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.name}
+                                    onChange={(event) =>
+                                        this.handleChange({ name: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("name")}
+                                    label="Name"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="name-error-text">
+                                    {this.state.messageDisplay.name ? "Name cannot be blank" : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Email</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.email}
+                                    onChange={(event) =>
+                                        this.handleChange({ email: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("email")}
+                                    label="Email"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="email-error-text">
+                                    {this.state.messageDisplay.email
+                                        ? "Invalid email address"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Address</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.address}
+                                    onChange={(event) =>
+                                        this.handleChange({ address: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("address")}
+                                    label="Address"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="address-error-text">
+                                    {this.state.messageDisplay.address
+                                        ? "Address cannot be blank"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Mobile Number</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.mobile}
+                                    onChange={(event) =>
+                                        this.handleChange({ mobile: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("mobile")}
+                                    label="Mobile Number"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="name-error-text">
+                                    {this.state.messageDisplay.mobile
+                                        ? "Mobile number must be 8 characters starting with 8 or 9"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <Button
+                                color="success"
                                 type="submit"
-                                style={{ margin: "20px 0px 0px 0px" }}
-                                onClick={(event) => { this.editDetails(event) }}>
-                                SAVE
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                                sx={{ marginRight: "2vh" }}
+                                variant="contained"
+                                onClick={this.editDetails}>
+                                Save
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
         )
     }
 }
