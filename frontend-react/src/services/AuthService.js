@@ -1,7 +1,7 @@
 import axios from "axios"
 import StorageHelper from "./StorageHelper"
 
-const API_URL = "http://localhost:8080/api/auth/"
+const API_URL = process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/auth/"
 
 class AuthService {
     signin(username, password) {
@@ -12,7 +12,7 @@ class AuthService {
                 password,
             },
             {
-                withCredentials: true,
+                "Access-Control-Allow-Origin": "*",
             }
         )
     }

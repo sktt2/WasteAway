@@ -1,10 +1,7 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:8080/api/products/"
-const config = {
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-}
+const API_URL =
+    process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/products/"
 
 class ProductService {
     async getProducts() {
@@ -49,4 +46,3 @@ class ProductService {
 }
 
 export default new ProductService()
-
