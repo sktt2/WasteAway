@@ -2,6 +2,8 @@ package csd.app.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
 import csd.app.user.ProductInterest;
-import csd.app.user.Recommendation;
+import csd.app.user.UserRecommendation;
 
 import csd.app.user.SameUserException;
 import csd.app.user.User;

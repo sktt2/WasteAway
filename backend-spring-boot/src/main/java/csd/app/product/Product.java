@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import csd.app.user.ProductInterest;
 import csd.app.user.User;
-import csd.app.user.Recommendation;
+import csd.app.user.UserRecommendation;
 import lombok.*;
 
 @Entity
@@ -65,9 +65,9 @@ public class Product {
     @JsonManagedReference
     private Set<ProductInterest> productInterest;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Recommendation recommendation;
+    @ManyToOne
+    @JoinColumn(name="product")
+    private UserRecommendation recommendation;
 
     public Product() {
     }

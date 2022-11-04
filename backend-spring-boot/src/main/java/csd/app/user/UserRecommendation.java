@@ -1,6 +1,7 @@
 package csd.app.user;
 
 import java.util.Set;
+import java.util.HashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,13 +11,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import csd.app.product.Product;
 import lombok.*;
 
 @Entity
 @Getter
 @Setter
-public class Recommendation {
+public class UserRecommendation {
     
     @Id @GeneratedValue
     private Long recommendationId;
@@ -25,15 +28,16 @@ public class Recommendation {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany(mappedBy="product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Product product;
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Product> product = new HashSet<>();
 
-    private Recommendation(){
+    private UserRecommendation(){
 
     }
 
-    private Recommendation(User user, Product product) {
+    private UserRecommendation(User user, Set<Product> product) {
         this.user = user;
         this.product = product;
-    } 
+    }
 }
