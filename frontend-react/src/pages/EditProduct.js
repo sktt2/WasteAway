@@ -132,8 +132,8 @@ class EditProduct extends Component {
 
             //upload new file
             const newImageUrl = await uploadBytes(storageRef, file)
-                .then(() => {
-                    getDownloadURL(storageRef).catch((error) => {
+                .then(async () => {
+                    return await getDownloadURL(storageRef).catch((error) => {
                         this.setState({
                             displayError: true,
                             errorMessage:
