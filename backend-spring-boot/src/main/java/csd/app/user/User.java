@@ -68,8 +68,11 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ProductInterest> productInterest = new HashSet<>();
 
-    @OneToMany(mappedBy = "recommendationId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserRecommendation> recommendation;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private FirstTimeUser firstTimeUser;
 
     @JsonIgnore
     @JsonManagedReference

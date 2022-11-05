@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import csd.app.payload.request.UpdateUserRequest;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.UserInfoResponse;
-import csd.app.payload.request.UpdateRecommendationRequest;
 import csd.app.user.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

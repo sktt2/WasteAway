@@ -1,28 +1,41 @@
 package csd.app.payload.request;
 
+import java.util.Set;
+import javax.validation.constraints.*;
+
+import csd.app.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class RecommendationRequest {
+    @NotNull
+    private String recommendation;
+
     private String username;
-    private String productId;
+
+    private Set<Product> products;
+
+    public String getRecommendation() {
+        return recommendation;
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public String getProductId() {
-        return productId;
+    public Set<Product> getProducts() {
+        return products;
     }
-
+ 
     public RecommendationRequest() {
 
     }
 
-    public RecommendationRequest(String username, String productId) {
+    public RecommendationRequest(String recommendation, String username, Set<Product> products) {
+        this.recommendation = recommendation;
         this.username = username;
-        this.productId = productId;
+        this.products = products;
     }
 }

@@ -24,7 +24,6 @@ public interface UserService {
     UserRecommendation getRecommendation(Long id);
     UserRecommendation addRecommendation(UserRecommendation recommendation);
     UserRecommendation updateRecommendation(UserRecommendation recommendation);
-    List<UserRecommendation> listRecommendations();
 
     User updateUser(User user);
 }

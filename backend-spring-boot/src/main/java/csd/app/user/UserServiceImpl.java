@@ -102,10 +102,6 @@ public class UserServiceImpl implements UserService {
         return userRecommendations.save(recommendation);
     }
 
-    public List<UserRecommendation> listRecommendations() {
-        return userRecommendations.findAll();
-    }
-
     public User updateUser(User user) {
         return users.save(user);
     }

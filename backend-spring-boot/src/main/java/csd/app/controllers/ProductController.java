@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.ProductInterestResponse;
 import csd.app.payload.response.ProductResponse;
+import csd.app.payload.response.UserRecommendationResponse;
 import csd.app.payload.request.AddProductInterestRequest;
 import csd.app.payload.request.DeleteProductInterestRequest;
 import csd.app.payload.request.AddProductRequest;
@@ -213,6 +214,39 @@ public class ProductController {
             if (prodInt.getProduct().getId() == productid) {
                 String username = prodInt.getUser().getUsername();
                 resp.add(username);
+            }
+        }
+        return resp;
+    }
+
+    @PostMapping("/api/products/recommendation")
+    public ResponseEntity<?> addRecommendation(@Valid @RequestBody RecommendationRequest addRecommendationRequest) {
+        String category = addRecommendationRequest.getRecommendation();
+        String username = addRecommendationRequest.getUsername();
+        User user = userService.getUserByUsername(username);
+        UserRecommendation recommendation = new UserRecommendation(category, user);
+        userService.addRecommendation(recommendation);
+        return ResponseEntity.ok(new MessageResponse("User recommendation added successfully"));
+    }
+
+    @PutMapping("/api/products/recommendation/update")
+    public ResponseEntity<?> updateRecommendation(@RequestBody UserRecommendation UR) {
+        UserRecommendation userRecommendation = userService.getRecommendation(UR.getRecommendationId());
+        if (UR.getRecommendation() != null && UR.getUser() != null) {
+            userRecommendation.setRecommendation(UR.getRecommendation());
+            userService.updateRecommendation(userRecommendation);
+            return ResponseEntity.ok(new MessageResponse("User recommendation updated successfully"));
+        }
+        return ResponseEntity.badRequest().body((new MessageResponse("Failed to update user recommendation")));
+    }
+
+    @GetMapping("api/products/recommendation/{id}")
+    public List<Product> getProductsByUserRecommendation(@PathVariable String category) {
+        List<Product> products = productService.listProducts();
+        List<Product> resp = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getCategory() == category) {
+                resp.add(product);
             }
         }
         return resp;
