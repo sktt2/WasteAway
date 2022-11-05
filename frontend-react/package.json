@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy":"sudo serve --ssl-key ./reactcert/key.pem  --ssl-cert ./reactcert/cert.pem  -l 443 -s build "
+    "deploy":"sudo serve --ssl-key ./reactcert/privatekey.pem  --ssl-cert ./reactcert/domain.cert.pem  -l 443 -s build "
   },
   "eslintConfig": {
     "extends": [
