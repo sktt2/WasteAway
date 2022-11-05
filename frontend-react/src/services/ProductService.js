@@ -33,6 +33,9 @@ class ProductService {
     async getGAProductByOwner(id) {
         return axios.get(API_URL + "give/" + id)
     }
+    async getBooleanIfProductGA(productId) {
+        return axios.get(API_URL + "give?productId=" + productId)
+    }
 }
 
 export default new ProductService()

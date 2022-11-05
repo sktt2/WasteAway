@@ -11,8 +11,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Fab from '@mui/material/Fab';
+import PanToolIcon from '@mui/icons-material/PanTool';
 import SendIcon from '@mui/icons-material/Send';
 import ChatService from "../services/ChatService"
+import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 import { red } from "@mui/material/colors"
 
@@ -25,6 +27,7 @@ class Chat extends Component {
             messages: [],
             message: "",
             chatter: "",
+            givenAway: false,
         }
         this.keyPress = this.keyPress.bind(this)
         this.addMessage = this.addMessage.bind(this)
@@ -37,6 +40,8 @@ class Chat extends Component {
             this.state.chat.takerUsername : this.state.chat.ownerUsername)})
         const res1 = await ChatService.getMessagesByChat(this.state.id)
         this.setState({ messages: res1.data })
+        const res2 = await ProductService.getBooleanIfProductGA(this.state.chat.productId)
+        this.setState({ givenAway: res2.data })
         this.scrollToBottom()
         this.refreshChat()
     }
@@ -88,6 +93,16 @@ class Chat extends Component {
             })
     }
 
+    giveProduct = (event) => {
+        event.preventDefault()
+        ProductService.giveProduct({
+            receiverUsername: this.state.chat.takerUsername,
+            productId: this.state.chat.productId,
+        }).then(() => {
+            this.setState({ givenAway: true })
+        })
+    }
+
     render() {
         return (
             <Box>
@@ -128,7 +143,15 @@ class Chat extends Component {
                 </List>
                 <Divider />
                 <Grid container style={{padding: '20px'}}>
-                    <Grid item xs={11}>
+                    {StorageHelper.getUsername() === this.state.chat.takerUsername ? "" : 
+                        <Grid xs={2} align="left">
+                            <Fab color="secondary" variant="extended" onClick={(event) => this.giveProduct(event)} sx={{ ml: '20px' }} disabled={this.state.givenAway}>
+                                <PanToolIcon sx={{ mr: 1 }} />
+                                Give Away
+                            </Fab>
+                        </Grid>
+                    }
+                    <Grid item xs={StorageHelper.getUsername() === this.state.chat.takerUsername ? "11" : "9"}>
                         <TextField id="outlined-basic-email" label="Type Something" 
                             fullWidth value={this.state.message} 
                             onChange={(event) =>
