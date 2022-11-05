@@ -157,10 +157,20 @@ public class ProductController {
         //check product exist
         Product product = productService.getProduct(longProdId);
         User owner = product.getUser();
+
+        //get list of PIs
+        List<ProductInterest> pilist = userService.listProductInterests();
         // make sure owner cant fav their own product
         User interestedUser = userService.getUserByUsername(interestedusername);
-        if (interestedUser.getId() == owner.getId()) {
-            throw new SameUserException();
+        if (interestedUser.getId().equals(owner.getId())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("User cannot be interested in own product"));
+        };
+        
+        //check for duplicate PI
+        for (ProductInterest PI: pilist) {
+            if (PI.getUser().getUsername().equals(interestedusername) && PI.getProduct().equals(product)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("Product interest made is duplicate of existing one"));
+            }
         }
 
         ProductInterest productInterest = new ProductInterest(interestedUser, product);
