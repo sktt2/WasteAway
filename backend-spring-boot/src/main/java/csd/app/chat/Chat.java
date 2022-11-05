@@ -41,6 +41,7 @@ public class Chat {
     private List<Message> messages;
 
     @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy="chat", cascade = CascadeType.ALL) 
     private List<Notification> notification;
 
