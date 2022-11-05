@@ -1,8 +1,10 @@
 import React, { Fragment, Component } from "react"
 import styles from "../styles/popup.module.css"
 import "bootstrap/dist/css/bootstrap.min.css"
-
 import ProductService from "../services/ProductService"
+import CloseIcon from "@mui/icons-material/Close"
+import { Button, Grid, IconButton } from "@mui/material"
+import { Box } from "@mui/system"
 
 export default class PopUp extends Component {
     constructor(props) {
@@ -74,15 +76,42 @@ export default class PopUp extends Component {
             <div className={styles.popup_container}>
                 <div className={styles.popup_content}>
                     {this.state.buttons === 2 && (
-                        <div>
-                            <span className="close" onClick={this.handleClick}>
-                                &times;
-                            </span>
-                            <h3>{this.state.title}</h3>
-                            <button onClick={this.handleDelete}>YES</button>
-                            <button onClick={this.handleClick}>NO</button>
+                        <Box>
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={this.handleClick}
+                                edge="end">
+                                <CloseIcon />
+                            </IconButton>
+                            <Box
+                                display="flex"
+                                sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <h4>{this.state.title}</h4>
+                            </Box>
+                            <Grid
+                                container
+                                spacing={2}
+                                display="flex"
+                                sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={this.handleDelete}>
+                                        Yes
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={this.handleClick}>
+                                        No
+                                    </Button>
+                                </Grid>
+                            </Grid>
                             <br />
-                        </div>
+                        </Box>
                     )}
                     {this.state.buttons === 1 && (
                         <div>
