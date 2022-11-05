@@ -54,7 +54,6 @@ class Register extends Component {
             })
             .catch((error) => {
                 // Read body of error response and display message get to alert
-                console.log(error.response.data)
                 this.setState({
                     errormessage: "Username/Email has already been used!",
                     messageDisplay: true,

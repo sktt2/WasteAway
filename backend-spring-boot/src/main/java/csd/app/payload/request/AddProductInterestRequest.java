@@ -6,22 +6,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddProductInterestRequest {
-	private String interestedusername;
-	private String productid;
+	private Long interestedUserId;
+	private Long productId;
 
-	public String getInterestedUsername() {
-		return interestedusername;
-	}
-
-	public String getProductId() {
-		return productid;
-	}
 
 	public AddProductInterestRequest() {
-		
 	}
-	public AddProductInterestRequest(String interestedusername, String productid) {
-		this.interestedusername = interestedusername;
-		this.productid = productid;
+
+	public AddProductInterestRequest(Long interestedUserId, Long productId) {
+		this.interestedUserId = interestedUserId;
+		this.productId = productId;
 	}
 }

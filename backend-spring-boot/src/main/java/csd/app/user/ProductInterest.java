@@ -15,7 +15,7 @@ import lombok.*;
 public class ProductInterest {
 
     @Id @GeneratedValue
-    private Long productinterestid;
+    private Long productInterestId;
     
     @ManyToOne
     @JoinColumn(name="user_id")

@@ -57,12 +57,10 @@ class EditProfile extends Component {
             address: this.state.address,
             phoneNumber: parseInt(this.state.phoneNumber),
         }
-        console.log(typeof body.phone)
         UserService.updateUser(body)
             .then(async () => {
                 document.getElementById("successMessage").style.display = "block"
                 const newUser = await UserService.getUser(StorageHelper.getUsername())
-                console.log(newUser)
                 StorageHelper.setUser(JSON.stringify(newUser.data))
                 setTimeout(function () {
                     window.location.reload("false")

@@ -38,7 +38,7 @@ class ProductService {
         return axios.post(API_URL + "interest", body)
     }
     async removeProductInterest(body) {
-        return axios.delete(API_URL + "interest/delete", body)
+        return axios.delete(API_URL + "interest/delete", { data: body })
     }
     async getProductInterestByUser(id) {
         return axios.get(API_URL + "interests/" + id)

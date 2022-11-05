@@ -6,14 +6,17 @@ import lombok.*;
 @Setter
 
 public class ProductInterestResponse {
-    private Long id;
-    private Long userid;
-    private Long productid;
 
-    public ProductInterestResponse(Long id, Long userid, Long productid) {
+    private Long id;
+    private Long ownerId;
+    private Long interestedUserId;
+    private Long productId;
+
+    public ProductInterestResponse(Long id,  Long productId, Long ownerId, Long interestedUserId) {
         this.id = id;
-        this.userid = userid;
-        this.productid = productid;
+        this.ownerId = ownerId;
+        this.productId = productId;
+        this.interestedUserId =  interestedUserId;
     }
 
 
