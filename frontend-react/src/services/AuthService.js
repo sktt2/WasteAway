@@ -2,10 +2,11 @@ import axios from "axios"
 import StorageHelper from "./StorageHelper"
 import { API_URL, header } from "./AxiosConfig"
 
+const url = API_URL + "/api/auth/"
 class AuthService {
     signin(username, password) {
         return axios.post(
-            API_URL + "signin",
+            url + "signin",
             {
                 username,
                 password,
@@ -16,12 +17,12 @@ class AuthService {
 
     logout() {
         StorageHelper.removeUser()
-        return axios.post(API_URL + "signout", {}, header)
+        return axios.post(url + "signout", {}, header)
     }
 
     register(username, name, email, password, address, phoneNumber) {
         return (
-            axios.post(API_URL + "signup", {
+            axios.post(url + "signup", {
                 username,
                 email,
                 password,
@@ -34,7 +35,7 @@ class AuthService {
     }
 
     async changePassword(body) {
-        return axios.post(API_URL + "changepassword", body, header)
+        return axios.post(url + "changepassword", body, header)
     }
 }
 
