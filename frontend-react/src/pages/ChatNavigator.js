@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ChatService from "../services/ChatService"
 import StorageHelper from "../services/StorageHelper"
+import { green, red } from "@mui/material/colors"
 
 class ChatNavigator extends Component {
     constructor(props) {
@@ -64,7 +65,9 @@ class ChatNavigator extends Component {
                         <List>
                             <ListItem button>
                                 <ListItemIcon>
-                                <Avatar alt={StorageHelper.getUsername()} src="https://material-ui.com/static/images/avatar/6.jpg" />
+                                <Avatar alt={StorageHelper.getUsername()} sx={{ bgcolor: green[500] }}>
+                                    {StorageHelper.getUsername().charAt(0).toUpperCase()}
+                                </Avatar>
                                 </ListItemIcon>
                                 <ListItemText primary={StorageHelper.getUsername()}></ListItemText>
                             </ListItem>
@@ -86,8 +89,9 @@ class ChatNavigator extends Component {
                             this.state.data.map((data, i) => (
                                 <ListItem button onClick={() => this.goToChat(data)}>
                                     <ListItemIcon>
-                                        <Avatar alt={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername} 
-                                        src={"https://material-ui.com/static/images/avatar/" + (i + 1) + ".jpg"}/>
+                                        <Avatar alt={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername} sx={{ bgcolor: red[500] }}>
+                                            {(StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername).charAt(0).toUpperCase()}
+                                        </Avatar>
                                     </ListItemIcon>
                                     <ListItemText primary={StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername}>
                                         {StorageHelper.getUsername() === data.takerUsername ? data.ownerUsername : data.takerUsername}

@@ -14,6 +14,7 @@ import Fab from '@mui/material/Fab';
 import SendIcon from '@mui/icons-material/Send';
 import ChatService from "../services/ChatService"
 import StorageHelper from "../services/StorageHelper"
+import { red } from "@mui/material/colors"
 
 class Chat extends Component {
     constructor(props) {
@@ -96,8 +97,9 @@ class Chat extends Component {
                 <List>
                     <ListItem button /* Push to person's profile */>
                         <ListItemIcon>
-                        <Avatar alt={this.state.chatter} 
-                            src="https://material-ui.com/static/images/avatar/6.jpg" />
+                        <Avatar alt={this.state.chatter} sx={{ bgcolor: red[500] }}>
+                            {this.state.chatter.charAt(0).toUpperCase()}
+                        </Avatar>
                         </ListItemIcon>
                         <ListItemText primary={this.state.chatter}></ListItemText>
                         <ListItemText secondary={StorageHelper.getUsername() === this.state.chat.ownerUsername ? "You're the owner" : ""} align="right">
