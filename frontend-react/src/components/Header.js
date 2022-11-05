@@ -29,6 +29,7 @@ import styles from "../styles/ComponentStyle.module.css";
 import Popper from "@mui/material/Popper";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
+import NotificationService from "../services/NotificationService";
 
 const pages = ["products"];
 const settings = ["profile", "ChatNavigator", "logout"];
@@ -38,12 +39,16 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElNotif, setAnchorElNotif] = React.useState(null);
+  const [notifs, setNotifs] = React.useState([]);
   const [isLoggedIn, setLoggedIn] = React.useState(false);
   const history = useHistory();
 
   const handleOpenNotifMenu = (event) => {
     setAnchorElNotif(anchorElNotif ? null : event.currentTarget);
   };
+  const handleNotifClick = (chat) => {
+    history.push("/chat/" + chat.chatid)
+  }
 
   const openNotif = Boolean(anchorElNotif);
   const popperid = openNotif ? "notif-popper" : undefined;
@@ -77,7 +82,18 @@ const Header = (props) => {
   };
   React.useEffect(() => {
     handleStatusChange();
+    console.log(notifs)
   });
+
+  React.useEffect(() => {
+    (async () => {
+      const username = StorageHelper.getUsername();
+      console.log(username);
+      const notifications = await NotificationService.getNotificationsByUsername(username);
+      setNotifs(notifications.data);
+    })()
+  }, [])
+
   const loggedInMenu = (
     <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
       <IconButton
@@ -88,7 +104,7 @@ const Header = (props) => {
         onClick={handleOpenNotifMenu}
         color="primary"
       >
-        <Badge badgeContent={17} color="error">
+        <Badge badgeContent={notifs.length} color="error">
           <NotificationsIcon />
         </Badge>
       </IconButton>
@@ -104,7 +120,7 @@ const Header = (props) => {
               </ListItem>
             </ListItem>
             <Divider variant="inset" />
-            <ListItemButton alignItems="flex-start">
+            {/* <ListItemButton alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar
                   alt="Remy Sharp"
@@ -138,7 +154,51 @@ const Header = (props) => {
                 alt="The house from the offer."
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
               />
-            </ListItemButton>
+            </ListItemButton> */}
+            {notifs.map((data, i) => (
+              <ListItemButton alignItems="flex-start" onClick={() => handleNotifClick(data)}>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={data.takerName}
+                    src={
+                      "https://material-ui.com/static/images/avatar/" +
+                      (i + 1) +
+                      ".jpg"
+                    }
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={data.takeruserame}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {data.takerusername}
+                        <br></br>
+                        {data.productName}
+                      </Typography>
+                      <br></br>
+                      {data.chatMessage}
+                    </React.Fragment>
+                  }
+                />
+                <Box
+                  component="img"
+                  sx={{
+                    height: 100,
+                    width: 100,
+                    maxHeight: { xs: 100, md: 78 },
+                    maxWidth: { xs: 100, md: 78 },
+                  }}
+                  alt="Product image"
+                  src={data.imageUrl}
+                />
+              </ListItemButton>
+            ))}
           </List>
         </Paper>
       </Popper>

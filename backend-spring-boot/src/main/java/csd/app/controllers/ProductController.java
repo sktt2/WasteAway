@@ -175,7 +175,7 @@ public class ProductController {
         Long productid = Long.parseLong(deleteProductInterestRequest.getProductId());
         Long piid = 0L;
         for (ProductInterest PI : prodInterests) {
-            if(PI.getUser().getId() == userid && PI.getProduct().getId() == productid) {
+            if(PI.getUser().getId().equals(userid) && PI.getProduct().getId().equals(productid)) {
                 piid = PI.getProductinterestid();
             }
         }
