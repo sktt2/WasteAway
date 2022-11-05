@@ -56,7 +56,7 @@ class EditProduct extends Component {
         this.setState({ condition: res.data.condition })
         this.setState({ description: res.data.description })
         this.setState({ imageUrl: res.data.imageUrl })
-        this.setState({ oldImage: res.data.image })
+        this.setState({ oldImage: res.data.imageUrl })
         if (res.data.ownerName !== StorageHelper.getUsername()) {
             this.props.history.push("/profile")
         }
@@ -151,13 +151,12 @@ class EditProduct extends Component {
                 imageUrl = newImageUrl
             }
             //find old file to delete
-            // TO FIX
-            // const deleteRef = ref(storage, this.state.oldImage)
-            // deleteObject(deleteRef).catch((error) => {
-            //     //error for deleting old object
-            //     console.log("Failed to delete old image")
-            //     console.log(error)
-            // })
+            const deleteRef = ref(storage, this.state.oldImage)
+            deleteObject(deleteRef).catch((error) => {
+                //error for deleting old object
+                console.log("Failed to delete old image")
+                console.log(error)
+            })
         }
         let body = {
             id: this.state.id,
