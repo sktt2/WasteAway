@@ -11,7 +11,7 @@ class AuthService {
                 username,
                 password,
             },
-            header
+            { ...header }
         )
     }
 
