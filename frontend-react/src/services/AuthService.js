@@ -17,25 +17,22 @@ class AuthService {
 
     logout() {
         StorageHelper.removeUser()
-        return axios.post(url + "signout", {}, header)
+        return axios.post(url + "signout", {})
     }
 
     register(username, name, email, password, address, phoneNumber) {
-        return (
-            axios.post(url + "signup", {
-                username,
-                email,
-                password,
-                name,
-                address,
-                phoneNumber,
-            }),
-            header
-        )
+        return axios.post(url + "signup", {
+            username,
+            email,
+            password,
+            name,
+            address,
+            phoneNumber,
+        })
     }
 
     async changePassword(body) {
-        return axios.post(url + "changepassword", body, header)
+        return axios.post(url + "changepassword", body)
     }
 }
 
