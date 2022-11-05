@@ -186,7 +186,7 @@ const Header = (props) => {
                     </React.Fragment>
                   }
                 />
-                <Box
+                {/* <Box
                   component="img"
                   sx={{
                     height: 100,
@@ -195,8 +195,8 @@ const Header = (props) => {
                     maxWidth: { xs: 100, md: 78 },
                   }}
                   alt="Product image"
-                  src={data.imageUrl}
-                />
+                  src={data.productImageUrl}
+                /> */}
               </ListItemButton>
             ))}
           </List>
