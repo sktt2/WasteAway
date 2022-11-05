@@ -7,11 +7,9 @@ class ProductService {
     async getProducts() {
         return axios.get(API_URL)
     }
-
     async getProduct(id) {
         return axios.get(API_URL + id)
     }
-
     async addProduct(body) {
         return axios.post(API_URL, body)
     }
@@ -30,7 +28,6 @@ class ProductService {
     async getGAProductByOwner(id) {
         return axios.get(API_URL + "give/" + id)
     }
-
     async addProductInterest(body) {
         return axios.post(API_URL + "interest", body)
     }
@@ -43,6 +40,16 @@ class ProductService {
     async getProductInterestByProduct(id) {
         return axios.get(API_URL + "product/interests/" + id )
     }
+    async addRecommendation(body) {
+        return axios.post(API_URL + "recommendation", body)
+    }
+    async updateRecommendation(body) {
+        return axios.post(API_URL + "recommendation/update", body);
+    }
+    async getProductsByUserRecommendation(id) {
+        return axios.get(API_URL + "recommendation/" + id)
+    }
+
 }
 
 export default new ProductService()

@@ -1,24 +1,22 @@
 import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import Alert from "react-bootstrap/Alert"
-import AuthService from "../services/AuthService"
+import ProductService from "../services/ProductService"
+import StorageHelper from "../services/StorageHelper"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
-import StorageHelper from "../services/StorageHelper"
 
 class Recommendation extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            validated: ""
+            validated: "",
+            recommend: ""
         }
         this.validateInputs = this.validateInputs.bind(this)
-        this.registerClicked = this.registerClicked.bind(this)
-
+        this.formSubmit = this.formSubmit.bind(this)
     }
 
     validateInputs = (event) => {
@@ -27,23 +25,24 @@ class Recommendation extends Component {
             event.preventDefault()
             event.stopPropagation()
         } else {
-            this.registerClicked(event)
+            this.formSubmit(event)
         }
         this.setState( {validated: "was-validated" })
     }
 
-    registerClicked = (event) => {
+    formSubmit = (event) => {
         event.preventDefault()
-        let recommend = this.state.recommendation;
-        /*
-        UserService.addRecommendation(Username, recommend)
+        let newRecommendation = {
+            username: StorageHelper.getUsername(),
+            recommend: this.state.recommendation
+        }
+        ProductService.addRecommendation(newRecommendation)
             .then(() => {
                 this.props.history.push("/products")
             })
             .catch(() => {
                 this.props.history.push("/error")
             })
-        */
     }
 
     render() {
@@ -76,13 +75,13 @@ class Recommendation extends Component {
                                         <option value="VIDEO GAMES">Video Games</option>
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">
-                                        Select a category.
+                                        Select a category
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
                             <br></br>
                             <Button className="btn btn-success" type="submit">
-                                Finish Registration
+                                Continue
                             </Button> 
                         </Form>
                     </div>

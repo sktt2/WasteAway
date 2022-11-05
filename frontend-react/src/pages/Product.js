@@ -7,7 +7,6 @@ import Carousel from "react-multi-carousel"
 import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
-import UserService from ".../services/UserService"
 import "../styles/MainStyle.css"
 
 const responsive = {
@@ -26,7 +25,7 @@ class Product extends Component {
             data: [],
             mainData: [],
             searchText: "",
-            filter: "",
+            filter: ""
         }
     }
 
