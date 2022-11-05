@@ -5,8 +5,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import ProductService from "../services/ProductService"
 import storage from "../services/FirebaseConfig"
 
-// Import CSS styling
-import styles from "../styles/ComponentStyle.module.css"
 import StorageHelper from "../services/StorageHelper"
 import { Box } from "@mui/system"
 import {
@@ -269,13 +267,11 @@ class AddProduct extends Component {
                                     }
                                     onBlur={() => this.validateInputs("condition")}
                                     label="Condition">
-                                    <MenuItem value="MINT">Mint</MenuItem>
-                                    <MenuItem value="NEAR MINT">Near Mint</MenuItem>
-                                    <MenuItem value="EXCELLENT">Excellent</MenuItem>
-                                    <MenuItem value="VERY GOOD">Very Good</MenuItem>
-                                    <MenuItem value="GOOD">Good</MenuItem>
-                                    <MenuItem value="FAIR">Fair</MenuItem>
-                                    <MenuItem value="POOR">Poor</MenuItem>
+                                    <MenuItem value="BRAND NEW">Brand New</MenuItem>
+                                    <MenuItem value="LIKE MINT">Like New</MenuItem>
+                                    <MenuItem value="LIGHTLY Used">Lightly Used</MenuItem>
+                                    <MenuItem value="WELL USED">Well Used</MenuItem>
+                                    <MenuItem value="HEAVILY USED">Heavily Used</MenuItem>
                                 </Select>
                                 <FormHelperText sx={{ color: "red" }} id="condition-error-text">
                                     {this.state.messageDisplay.condition
