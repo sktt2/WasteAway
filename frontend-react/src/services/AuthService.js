@@ -2,7 +2,7 @@ import axios from "axios"
 import StorageHelper from "./StorageHelper"
 import { API_URL, header } from "./AxiosConfig"
 
-const url = API_URL + "/api/auth/"
+const url = API_URL + "auth/"
 class AuthService {
     signin(username, password) {
         return axios.post(

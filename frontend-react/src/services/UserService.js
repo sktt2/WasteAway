@@ -1,6 +1,6 @@
 import axios from "axios"
 import { API_URL } from "./AxiosConfig"
-const url = API_URL + "/users/"
+const url = API_URL + "users/"
 class UserService {
     async getUser(username) {
         return axios.get(url + username)

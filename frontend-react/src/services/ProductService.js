@@ -1,6 +1,6 @@
 import axios from "axios"
 import { API_URL } from "./AxiosConfig"
-const url = API_URL + "/products/"
+const url = API_URL + "products/"
 class ProductService {
     async getProducts() {
         return axios.get(url)
