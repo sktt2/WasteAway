@@ -1,19 +1,10 @@
-import React, { Fragment, Component } from "react";
-import styles from "../styles/popup.module.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import Box from "@mui/material/Box";
-
-import ProductService from "../services/ProductService";
-import { SliderMark } from "@mui/material";
+import React, { Fragment, Component } from "react"
+import styles from "../styles/popup.module.css"
+import "bootstrap/dist/css/bootstrap.min.css"
+import ProductService from "../services/ProductService"
+import CloseIcon from "@mui/icons-material/Close"
+import { Button, Grid, IconButton } from "@mui/material"
+import { Box } from "@mui/system"
 
 export default class PopUp extends Component {
   constructor(props) {
@@ -90,57 +81,47 @@ export default class PopUp extends Component {
     this.setState({ username: value });
   };
 
-  handleClose = () => {
-    this.setState({ dialogpopup: false });
-  };
-  render() {
-    return (
-      <div>
-        <div>
-          {this.state.buttons === 2 && (
-            <div>
-              <span className="close" onClick={this.handleClick}>
-                &times;
-              </span>
-              <h3>{this.state.title}</h3>
-              <button onClick={this.handleDelete}>YES</button>
-              <button onClick={this.handleClick}>NO</button>
-              <br />
-            </div>
-          )}
-          {/*this chunk is for giveaway */}
-          {this.state.buttons === 1 && (
-            <div>
-              <Dialog
-                open={this.state.dialogpopup}
-                onClose={this.handleClose}
-                fullWidth={this.fullwidth}
-                maxWidth={this.maxWidth}
-              >
-                <DialogTitle>{this.state.title}</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>{this.state.label}</DialogContentText>
-                </DialogContent>
-                <Box style={{ marginLeft: "10px" }} sx={{ minWidth: 300 }}>
-                  <FormControl
-                    sx={{ minWidth: 200 }}
-                    fullWidth={this.fullWidth}
-                  >
-                    <Select
-                      id="select-username"
-                      value={this.username}
-                      onChange={this.handleUserInput}
-                    >
-                      {this.state.listusers.map((user) =>
-                      <MenuItem value={user}> {user} </MenuItem>
-                      )}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <DialogContent>
-                  <DialogContentText>
-                    {this.state.error && (
-                      <p style={{ color: "red" }}>{this.state.errorMessage}</p>
+    render() {
+        return (
+            <div className={styles.popup_container}>
+                <div className={styles.popup_content}>
+                    {this.state.buttons === 2 && (
+                        <Box>
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={this.handleClick}
+                                edge="end">
+                                <CloseIcon />
+                            </IconButton>
+                            <Box
+                                display="flex"
+                                sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <h4>{this.state.title}</h4>
+                            </Box>
+                            <Grid
+                                container
+                                spacing={2}
+                                display="flex"
+                                sx={{ justifyContent: "center", alignItems: "center" }}>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={this.handleDelete}>
+                                        Yes
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={this.handleClick}>
+                                        No
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            <br />
+                        </Box>
                     )}
                   </DialogContentText>
                 </DialogContent>

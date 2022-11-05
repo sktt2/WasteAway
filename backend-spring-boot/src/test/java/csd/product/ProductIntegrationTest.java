@@ -81,8 +81,7 @@ class ProductIntegrationTest {
         users.save(user);
         UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 11111", 87231231);
         userInfos.save(userInfo);
-        Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
-                "ELECTRONICS");
+        Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(), "ELECTRONICS" , "This is the description");
         product.setUser(user);
         products.save(product);
 
@@ -136,13 +135,13 @@ class ProductIntegrationTest {
                 "SINGAPORE1234567", 87231231);
         userInfos.save(userInfo);
         Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
-                "ELECTRONICS");
+                "ELECTRONICS", "this is a description");
         Product product2 = new Product("LAPTOP", "OLD",
                 LocalDateTime.now().toString(),
-                "ELECTRONICS");
+                "ELECTRONICS", "this is a description");
         Product product3 = new Product("TABLET", "NEW",
                 LocalDateTime.now().toString(),
-                "ELECTRONICS");
+                "ELECTRONICS", "this is a description");
         product.setUser(user);
         product2.setUser(user);
         product3.setUser(user);

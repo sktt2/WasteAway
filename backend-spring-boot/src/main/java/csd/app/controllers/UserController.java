@@ -42,14 +42,18 @@ public class UserController {
 
         UserInfo userInfo = user.getUserInfo();
 
-        userInfo.setAddress(updateUser.getAddress());
-        userInfo.setName(updateUser.getName());
-        userInfo.setPhoneNumber(updateUser.getPhoneNumber());
-        user.setEmail(updateUser.getEmail());
-        user.setUserInfo(userInfo);
-        userService.updateUser(user);
-
-        return ResponseEntity.ok(new MessageResponse("User updated successfully"));
+        // Validation check for updating user details 
+        try {
+            userInfo.setAddress(updateUser.getAddress());
+            userInfo.setName(updateUser.getName());
+            userInfo.setPhoneNumber(updateUser.getPhoneNumber());
+            user.setEmail(updateUser.getEmail());
+            user.setUserInfo(userInfo);
+            userService.updateUser(user);
+            return ResponseEntity.ok(new MessageResponse("User updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Invalid Details"));
+        }
     }
 
     

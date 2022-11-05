@@ -26,6 +26,7 @@ export default function CardComponent(props) {
     const title = props.title
     const id = props.id
     //   const description = props.description;
+    const imgSource = props.imgSource
     const buttonLink = props.buttonLink
     const imgSource = props.imgSource
     const address = props.address

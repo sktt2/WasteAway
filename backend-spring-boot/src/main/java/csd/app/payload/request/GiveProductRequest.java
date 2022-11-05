@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class GiveProductRequest {
 	private String receiverUsername;
 	private Long productId;

@@ -99,8 +99,9 @@ public class ProductController {
     @PutMapping("api/products/update")
     public ResponseEntity<?> updateProductDetail(@RequestBody Product PR) {
         Product product = productService.getProduct(PR.getId());
-        if (PR.getCategory() != null && PR.getCondition() != null && PR.getDateTime() != null &&
-                PR.getImageUrl() != null && PR.getProductName() != null) {
+
+        // Validation check for updating user details
+        try {
             product.setCategory(PR.getCategory());
             product.setCondition(PR.getCondition());
             product.setDateTime(PR.getDateTime());
@@ -109,8 +110,9 @@ public class ProductController {
             product.setProductName(PR.getProductName());
             productService.updateProduct(product);
             return ResponseEntity.ok(new MessageResponse("Product detail updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body((new MessageResponse("Error: Invalid Details")));
         }
-        return ResponseEntity.badRequest().body((new MessageResponse("Failed to update product detail")));
     }
 
     @DeleteMapping("api/products/remove/{id}")
