@@ -1,13 +1,12 @@
 import axios from "axios"
-
-const API_URL = process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/users/"
+import { API_URL, header } from "./AxiosConfig"
 
 class UserService {
     async getUser(username) {
-        return axios.get(API_URL + username)
+        return axios.get(API_URL + username, header)
     }
     async updateUser(body) {
-        return axios.put(API_URL + "update/", body)
+        return axios.put(API_URL + "update/", body, header)
     }
 }
 

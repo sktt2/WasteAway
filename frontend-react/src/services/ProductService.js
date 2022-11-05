@@ -1,34 +1,32 @@
 import axios from "axios"
-
-const API_URL =
-    process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/products/"
+import { API_URL, header } from "./AxiosConfig"
 
 class ProductService {
     async getProducts() {
-        return axios.get(API_URL)
+        return axios.get(API_URL, header)
     }
 
     async getProduct(id) {
-        return axios.get(API_URL + id)
+        return axios.get(API_URL + id, header)
     }
 
     async addProduct(body) {
-        return axios.post(API_URL, body)
+        return axios.post(API_URL, body, header)
     }
     async getProductByOwner(id) {
-        return axios.get(API_URL + "user/" + id)
+        return axios.get(API_URL + "user/" + id, header)
     }
     async updateProductDetail(body) {
-        return axios.put(API_URL + "update/", body)
+        return axios.put(API_URL + "update/", body, header)
     }
     async removeProduct(id) {
-        return axios.delete(API_URL + "remove/" + id)
+        return axios.delete(API_URL + "remove/" + id, header)
     }
     async giveProduct(body) {
-        return axios.post(API_URL + "give", body)
+        return axios.post(API_URL + "give", body, header)
     }
     async getGAProductByOwner(id) {
-        return axios.get(API_URL + "give/" + id)
+        return axios.get(API_URL + "give/" + id, header)
     }
 }
 

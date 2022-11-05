@@ -111,3 +111,6 @@ data/
 
 #properties file
 resources/
+
+#build files
+build/
