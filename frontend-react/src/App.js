@@ -11,6 +11,7 @@ import ProductDetail from "./pages/ProductDetail"
 import Register from "./pages/Register.js"
 import AddProduct from "./pages/AddProduct.js"
 import ForgotPass from "./pages/ForgotPass.js"
+import ChangePass from "./pages/ChangePass.js"
 import Profile from "./pages/Profile"
 import EditProduct from "./pages/EditProduct.js"
 import EditProfile from "./pages/EditProfile.js"
@@ -38,6 +39,7 @@ class App extends Component {
                                 <Route path="/product/edit/:id" component={EditProduct}></Route>
                                 <Route path="/product/:id" component={ProductDetail}></Route>
                                 <Route path="/editprofile" component={EditProfile}></Route>
+                                <Route path="/changepass" component={ChangePass}></Route>
                                 <Route path="/profile" component={Profile}></Route>
                                 <Route path="/products" component={Product}></Route>
                                 <Route path="/addproduct" component={AddProduct}></Route>

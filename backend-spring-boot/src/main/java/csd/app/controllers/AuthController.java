@@ -134,17 +134,17 @@ public class AuthController {
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
 
         String username = changePasswordRequest.getUsername();
-        String currentPassword = changePasswordRequest.getOldPassword();
+        String currentPassword = changePasswordRequest.getCurrentPassword();
         String newPassword = changePasswordRequest.getNewPassword();
 
         User user = userService.getUserByUsername(username);
 
         if (user == null) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: User not found"));
+            return ResponseEntity.badRequest().body(new MessageResponse("User not found"));
         } else if (authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, currentPassword)).isAuthenticated() != true) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect Password"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Incorrect Password"));
         } else if (currentPassword.equals(newPassword)) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Do not reuse the same password"));
+            return ResponseEntity.badRequest().body(new MessageResponse("Do not reuse the same password"));
         } else {
             try {
                 String encodeNewPassword = encoder.encode(newPassword);
@@ -152,7 +152,7 @@ public class AuthController {
                 userService.updateUser(user);
                 return ResponseEntity.ok(new MessageResponse("Password changed successfully"));
             } catch (Exception e) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Invalid Password format"));
+                return ResponseEntity.badRequest().body(new MessageResponse("Invalid Password format"));
             }
            
         }

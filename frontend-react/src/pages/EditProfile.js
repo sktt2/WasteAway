@@ -257,6 +257,12 @@ class EditProfile extends Component {
                                 onClick={this.editDetails}>
                                 Save
                             </Button>
+                            <Button
+                                sx={{ float: "right" }}
+                                variant="contained"
+                                onClick={()=>{this.props.history.push("/changepass")}}>
+                                Change Password
+                            </Button>
                         </Grid>
                     </Grid>
                 </Box>

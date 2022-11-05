@@ -32,6 +32,10 @@ class AuthService {
             phoneNumber,
         })
     }
+
+    async changePassword(body) {
+        return axios.post(API_URL + "changepassword", body)
+    }
 }
 
 export default new AuthService()

@@ -12,7 +12,12 @@ import {
     OutlinedInput,
     Button,
     Alert,
+    InputAdornment
 } from "@mui/material"
+
+import VisibilityIcon from "@mui/icons-material/Visibility"
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
+import IconButton from "@mui/material/IconButton"
 
 class Register extends Component {
     constructor(props) {
@@ -36,10 +41,26 @@ class Register extends Component {
             confirmpassword: "",
             address: "",
             mobile: "",
+            showpassword: false,
+            showconfirmpassword: false,
         }
         this.validateInputs = this.validateInputs.bind(this)
+        this.toggleShowPassword = this.toggleShowPassword.bind(this)
         this.registerClicked = this.registerClicked.bind(this)
         this.handleChange = this.handleChange.bind(this)
+    }
+
+    toggleShowPassword = (index) => {
+        switch (index) {
+            case "password":
+                this.setState({ showpassword: !this.state.showpassword })
+                break
+            case "confirmpassword":
+                this.setState({ showconfirmpassword: !this.state.showconfirmpassword })
+                break
+            default:
+                return null
+        }
     }
 
     validateInputs = (event) => {
@@ -245,9 +266,24 @@ class Register extends Component {
                                 <InputLabel htmlFor="component-outlined">Password</InputLabel>
                                 <OutlinedInput
                                     id="component-outlined"
+                                    type={this.state.showpassword ? "text" : "password"}
                                     value={this.state.password}
                                     onChange={(event) =>
                                         this.handleChange({ password: event.target.value })
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={ () => this.toggleShowPassword("password")}
+                                                edge="end">
+                                                {this.state.showpassword ? (
+                                                    <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
                                     }
                                     onBlur={(event) => this.validateInputs("password")}
                                     label="Password"
@@ -266,9 +302,24 @@ class Register extends Component {
                                 </InputLabel>
                                 <OutlinedInput
                                     id="component-outlined"
+                                    type={this.state.showconfirmpassword ? "text" : "password"}
                                     value={this.state.confirmpassword}
                                     onChange={(event) =>
                                         this.handleChange({ confirmpassword: event.target.value })
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={ () => this.toggleShowPassword("confirmpassword")}
+                                                edge="end">
+                                                {this.state.showconfirmpassword ? (
+                                                    <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
                                     }
                                     onBlur={(event) => this.validateInputs("confirmpassword")}
                                     label="Confirm Password"
