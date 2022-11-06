@@ -28,7 +28,7 @@ import csd.app.security.jwt.*;
 import csd.app.payload.request.*;
 import csd.app.payload.response.*;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -55,7 +55,7 @@ public class AuthController {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                         loginRequest.getPassword()));
-        
+
         // Set authentication of user
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -152,7 +152,9 @@ public class AuthController {
         // Error checking for change password
         if (user == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("User not found"));
-        } else if (authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, currentPassword)).isAuthenticated() != true) {
+        } else if (authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, currentPassword))
+                .isAuthenticated() != true) {
             return ResponseEntity.badRequest().body(new MessageResponse("Incorrect Password"));
         } else if (currentPassword.equals(newPassword)) {
             return ResponseEntity.badRequest().body(new MessageResponse("Do not reuse the same password"));
@@ -167,7 +169,7 @@ public class AuthController {
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(new MessageResponse("Invalid Password format"));
             }
-           
+
         }
     }
 

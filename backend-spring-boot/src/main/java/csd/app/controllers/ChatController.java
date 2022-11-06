@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class ChatController {
-    
+
     @Autowired
     private ChatService chatService;
 
@@ -38,7 +38,7 @@ public class ChatController {
         List<Chat> chats = chatService.getChatbyUsername(username);
         List<ChatResponse> resp = new ArrayList<>();
         for (Chat chat : chats) {
-            ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner().getId(), 
+            ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner().getId(),
                     chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
                     chat.getProduct().getId(), chat.getProduct().getProductName(),
                     chat.getProduct().getImageUrl());
@@ -50,7 +50,7 @@ public class ChatController {
     @GetMapping("/api/chat/{id}")
     public ChatResponse getChatById(@PathVariable Long id) {
         Chat chat = chatService.getChatById(id);
-        ChatResponse resp = new ChatResponse(chat.getId(), chat.getOwner().getId(), 
+        ChatResponse resp = new ChatResponse(chat.getId(), chat.getOwner().getId(),
                 chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
                 chat.getProduct().getId(), chat.getProduct().getProductName(),
                 chat.getProduct().getImageUrl());
@@ -82,10 +82,10 @@ public class ChatController {
             throw new RuntimeException("Taker cannot be Owner!"); // handled in frontend
         }
         notificationService.addNotification((new Notification(savedChat, false)));
-        return new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(), 
-        savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), savedChat.getTaker().getUsername(),
-        savedChat.getProduct().getId(), savedChat.getProduct().getProductName(),
-        savedChat.getProduct().getImageUrl());
+        return new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(),
+                savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), savedChat.getTaker().getUsername(),
+                savedChat.getProduct().getId(), savedChat.getProduct().getProductName(),
+                savedChat.getProduct().getImageUrl());
     }
 
     @PostMapping("/api/chat/{id}/messages")
@@ -93,7 +93,7 @@ public class ChatController {
         Message message = new Message(messageRequest.getContent(), messageRequest.getDateTime());
         Message savedMessage = chatService.addMessage(message, messageRequest.getSenderUsername(),
                 messageRequest.getReceiverUsername(), messageRequest.getChatId());
-                
+
         Notification chatNotification = new Notification(savedMessage.getChat(), false);
         chatNotification.setMessageContent(savedMessage.getContent());
         notificationService.addNotification(chatNotification);

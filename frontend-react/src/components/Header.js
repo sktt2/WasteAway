@@ -97,12 +97,10 @@ const Header = (props) => {
         const messages = await NotificationService.getNotificationsByUsername(username).catch(
             () => {}
         )
-        console.log(messages.data)
         return filterChat(messages.data)
     }
     const filterChat = (messages) => {
         const chats = [...new Map(messages.map((item) => [item["chatid"], item])).values()]
-        console.log(chats)
         chats.sort((a, b) => {
             return b.notifid - a.notifid
         })
@@ -113,7 +111,6 @@ const Header = (props) => {
         if (isLoggedIn) {
             const setNotifications = async () => {
                 const notifications = await getNotifications()
-                console.log(notifications)
                 setNotifs(notifications)
             }
             setNotifications()
