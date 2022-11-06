@@ -30,6 +30,23 @@ class ProductService {
     async getGAProductByOwner(id) {
         return axios.get(API_URL + "give/" + id)
     }
+
+    async addProductInterest(body) {
+        return axios.post(API_URL + "interest", body)
+    }
+    async removeProductInterest(body) {
+        return axios.delete(API_URL + "interest/delete", { data: body })
+    }
+    async getProductInterestByUser(id) {
+        return axios.get(API_URL + "interests/" + id)
+    }
+    async getProductInterestByProduct(id) {
+        return axios.get(API_URL + "product/interests/" + id )
+    }
+
+    async getBooleanIfProductGAExist(productId) {
+        return axios.get(API_URL + "give?productId=" + productId)
+    }
 }
 
 export default new ProductService()

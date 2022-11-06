@@ -14,6 +14,8 @@ import ForgotPass from "./pages/ForgotPass.js"
 import ChangePass from "./pages/ChangePass.js"
 import Profile from "./pages/Profile"
 import EditProduct from "./pages/EditProduct.js"
+import Chat from "./pages/Chat.js"
+import ChatNavigator from "./pages/ChatNavigator.js"
 import EditProfile from "./pages/EditProfile.js"
 import { ThemeProvider, CssBaseline } from "@mui/material"
 import { appTheme } from "./styles/appTheme"
@@ -45,6 +47,8 @@ class App extends Component {
                                 <Route path="/addproduct" component={AddProduct}></Route>
                                 <Route path="/register" component={Register}></Route>
                                 <Route path="/forgotpass" component={ForgotPass}></Route>
+                                <Route path="/chat/:id" component={Chat}></Route>
+                                <Route path="/chatnavigator" component={ChatNavigator}></Route>
                                 <Route exact path="/" component={Product} />
                                 <Redirect to="/error" />
                             </Switch>

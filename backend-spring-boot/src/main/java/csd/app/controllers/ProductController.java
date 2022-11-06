@@ -8,12 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import csd.app.payload.response.MessageResponse;
+import csd.app.payload.response.ProductInterestResponse;
 import csd.app.payload.response.ProductResponse;
+import csd.app.payload.request.AddProductInterestRequest;
+import csd.app.payload.request.DeleteProductInterestRequest;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.payload.request.GiveProductRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
+import csd.app.user.ProductInterest;
 
 import csd.app.user.SameUserException;
 import csd.app.user.User;
@@ -123,7 +127,6 @@ public class ProductController {
     public ResponseEntity<?> giveProduct(@Valid @RequestBody GiveProductRequest giveProductRequest) {
         Long productId = giveProductRequest.getProductId();
         String receiverUsername = giveProductRequest.getReceiverUsername();
-
         // Check product exists
         Product product = productService.getProduct(productId);
         User owner = product.getUser();
@@ -152,4 +155,100 @@ public class ProductController {
         }
         return resp;
     }
+
+    @PostMapping("/api/products/interest")
+    public ResponseEntity<?> addProductInterest(@Valid @RequestBody AddProductInterestRequest addProductInterestRequest) {
+
+        Long productId = addProductInterestRequest.getProductId();
+        Long interestedUserId = addProductInterestRequest.getInterestedUserId();
+
+        //check product exist
+        Product product = productService.getProduct(productId);
+        User owner = product.getUser();
+
+        // make sure owner cant fav their own product
+        User interestedUser = userService.getUser(interestedUserId);
+
+        if (interestedUserId == owner.getId()) {
+            return ResponseEntity.badRequest().body(new MessageResponse("User cannot be interested in own product"));
+        }
+
+        //get list of Product Interest
+        List<ProductInterest> productInterestList = userService.listProductInterests();
+
+        //check for duplicate Product Interest
+        for (ProductInterest productInterest: productInterestList) {
+            if (productInterest.getUser().getUsername().equals(interestedUser.getUsername()) && productInterest.getProduct().equals(product)) {
+                return ResponseEntity.badRequest().body(new MessageResponse("Product interest made is duplicate of existing one"));
+            }
+        }
+
+        ProductInterest productInterest = new ProductInterest(interestedUser, product);
+        userService.addProductInterest(productInterest);
+        return ResponseEntity.ok(new MessageResponse("Interest in product added successfully!"));
+
+    }
+
+    @DeleteMapping("api/products/interest/delete")
+    public ResponseEntity<?> removeProductInterest(@Valid @RequestBody DeleteProductInterestRequest deleteProductInterestRequest) {
+        List<ProductInterest> prodInterests = userService.listProductInterests();
+        Long userid = deleteProductInterestRequest.getInterestedUserId();
+        Long productid = deleteProductInterestRequest.getProductId();
+        Long piid = 0L;
+
+        for (ProductInterest PI : prodInterests) {
+            if(PI.getUser().getId().equals(userid) && PI.getProduct().getId().equals(productid)) {
+                piid = PI.getProductInterestId();
+            }
+        }
+        ProductInterest productInterest = userService.getProductInterest(piid);
+        userService.deleteProductInterest(productInterest);
+        return ResponseEntity.ok(new MessageResponse("Interest in product has been removed"));
+    }
+
+    @GetMapping("api/products/interests/{id}")
+    public List<ProductInterestResponse> getProductInterestsByUser(@PathVariable Long id) {
+        Long interestUserId = id; 
+        List<ProductInterest> productInterests = userService.listProductInterests();
+        List<ProductInterestResponse> resp = new ArrayList<>();
+        for (ProductInterest productInterest : productInterests) {
+            if (productInterest.getUser().getId() == interestUserId) {
+                Long productInterestId = productInterest.getProductInterestId();
+                Long productId = productInterest.getProduct().getId();
+                Long ownerId = productInterest.getProduct().getUser().getId();
+                String interestedUsername  = productInterest.getUser().getUsername();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
+                resp.add(piresp);
+            }
+        }
+        return resp;
+    }
+
+    @GetMapping("api/products/product/interests/{id}")
+    public List<ProductInterestResponse> getProductInterestByProduct(@PathVariable Long id) {
+        Long productId = id; 
+        List<ProductInterest> productInterests = userService.listProductInterests();
+        List<ProductInterestResponse> resp = new ArrayList<>();
+        for (ProductInterest productInterest : productInterests) {
+            if (productInterest.getProduct().getId() == productId) {
+                Long interestUserId = productInterest.getUser().getId();
+                Long productInterestId = productInterest.getProductInterestId();
+                Long ownerId = productInterest.getProduct().getUser().getId();
+                String interestedUsername  = productInterest.getUser().getUsername();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
+                resp.add(piresp);
+            }
+        }
+        return resp;
+    }
+
+    @GetMapping("api/products/give")
+    public Boolean getBooleanIfProductGAExist(@RequestParam("productId") @PathVariable Long productId) {
+        ProductGA productGA = productService.getProductGA(productId);
+        if (productGA == null) {
+            return false;
+        }
+        return true;
+    }
+
 }

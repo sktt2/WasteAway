@@ -7,7 +7,9 @@ import Carousel from "react-multi-carousel"
 import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
+import StorageHelper from "../services/StorageHelper"
 import "../styles/MainStyle.css"
+
 
 const responsive = {
     desktop: {
@@ -31,8 +33,28 @@ class Product extends Component {
 
     async componentDidMount() {
         const res = await ProductService.getProducts()
-        this.setState({ mainData: res.data })
-        this.setState({ data: res.data })
+
+        if (StorageHelper.getUser()){
+
+            const allProductInterests = await ProductService.getProductInterestByUser(StorageHelper.getUserId())
+
+            res.data.forEach(element => {
+                if (allProductInterests.data.find(product => product.productId === element.id)){
+                    element.favourite = true;
+                }
+                else {
+                    element.favourite = false;
+                }
+            })
+    
+            this.setState({ mainData: res.data })
+            this.setState({ data: res.data })
+        } else {
+            this.setState({ mainData: res.data })
+            this.setState({ data: res.data })
+        }
+       
+
     }
 
     render() {
@@ -140,6 +162,7 @@ class Product extends Component {
                         {this.state.data.map((data, i) => (
                             <Grid item xs={3}>
                                 <CardComponent
+                                    id={data.id}
                                     title={data.productName}
                                     description={data.description}
                                     address={data.address}
@@ -147,7 +170,10 @@ class Product extends Component {
                                     imgSource={data.imageUrl}
                                     buttonLink={this.state.url + data.id}
                                     dateTime={data.dateTime}
-                                    ownerName={data.ownerName}></CardComponent>
+                                    ownerName={data.ownerName}
+                                    favourite={data.favourite ?  data.favourite : false}
+                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }>
+                                    </CardComponent>
                             </Grid>
                         ))}
                     </Grid>
