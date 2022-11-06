@@ -32,7 +32,7 @@ public class AuthIntegrationTest {
     @LocalServerPort
     private int port;
 
-    private final String baseUrl = "http://localhost:";
+    private final String baseUrl = "https://wasteaway.gay:";
 
     @Autowired
     /**
@@ -100,7 +100,7 @@ public class AuthIntegrationTest {
         ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
         JsonNode root = objectMapper.readTree(result.getBody());
 
-        //assertEquals(200, result.getStatusCode().value());
+        // assertEquals(200, result.getStatusCode().value());
         assertEquals("User registered successfully!", root.path("message").asText());
         assertEquals(true, users.existsByUsername("tester1"));
         assertEquals(200, result.getStatusCode().value());
@@ -130,7 +130,7 @@ public class AuthIntegrationTest {
         assertEquals(false, users.existsByEmail("tester9@email.com"));
     }
 
-    @Test 
+    @Test
     public void registerUser_InvalidEmail_Failure() throws Exception {
         URI uri = new URI(baseUrl + port + "/api/auth/signup");
         User user = new User("tester10", "tester10@email.com", encoder.encode("password"));
@@ -154,7 +154,7 @@ public class AuthIntegrationTest {
         assertEquals(false, users.existsByUsername("tester1"));
     }
 
-    @Test 
+    @Test
     public void authenticateUser_Success() throws Exception {
         URI uri = new URI(baseUrl + port + "/api/auth/signin");
         User user = new User("tester2", "tester2@email.com", encoder.encode("password"));
