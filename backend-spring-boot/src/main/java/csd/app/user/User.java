@@ -32,7 +32,7 @@ public class User {
     @NotNull(message = "Password should not be null")
     private String password;
 
-    private String attempt;
+    private boolean firstTime = true;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "interested_user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

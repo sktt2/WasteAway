@@ -9,6 +9,7 @@ import Error from "./components/Error.js"
 import Product from "./pages/Product.js"
 import ProductDetail from "./pages/ProductDetail"
 import Register from "./pages/Register.js"
+import Recommendation from "./pages/Recommendation.js"
 import AddProduct from "./pages/AddProduct.js"
 import ForgotPass from "./pages/ForgotPass.js"
 import ChangePass from "./pages/ChangePass.js"
@@ -46,6 +47,7 @@ class App extends Component {
                                 <Route path="/products" component={Product}></Route>
                                 <Route path="/addproduct" component={AddProduct}></Route>
                                 <Route path="/register" component={Register}></Route>
+                                <Route path="/recommendation" component={Recommendation}></Route>
                                 <Route path="/forgotpass" component={ForgotPass}></Route>
                                 <Route path="/chat/:id" component={Chat}></Route>
                                 <Route path="/chatnavigator" component={ChatNavigator}></Route>

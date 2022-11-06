@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired NotificationRepository notifications;
 
+    @Autowired
+    private UserRecommendationRepository userRecommendations;
+
     public List<User> getUsers() {
         return users.findAll();
     }
@@ -86,6 +89,19 @@ public class UserServiceImpl implements UserService {
 
     public List<ProductInterest> listProductInterests() {
         return productInterests.findAll();
+    }
+
+    public UserRecommendation getRecommendation(Long id) {
+        if (userRecommendations.existsById(id)) {
+            return userRecommendations.findById(id)
+            .orElseThrow(() -> new RuntimeException("Error: Recommended category not found."));
+        }
+        return null;
+    }
+
+    public UserRecommendation updateRecommendation(UserRecommendation recommendation) {
+        return userRecommendations.save(recommendation);
+        
     }
 
 

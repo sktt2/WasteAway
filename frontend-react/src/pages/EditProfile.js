@@ -47,7 +47,6 @@ class EditProfile extends Component {
         this.setState({ name: user.userInfo.name })
         this.setState({ email: user.email })
         this.setState({ address: user.userInfo.address })
-        console.log(typeof user.userInfo.phoneNumber, user.userInfo.phoneNumber)
         this.setState({ mobile: "" + user.userInfo.phoneNumber })
         await this.setState({ user: StorageHelper.getUser() })
     }
@@ -258,7 +257,14 @@ class EditProfile extends Component {
                                 Save
                             </Button>
                             <Button
-                                sx={{ float: "right" }}
+                                variant="contained"
+                                onClick={() => {
+                                    this.props.history.push("/recommendation")
+                                }}
+                                sx = {{ bgcolor: "#333333", marginRight: "2vh" }}>
+                                Change Interest
+                            </Button>
+                            <Button
                                 variant="contained"
                                 onClick={() => {
                                     this.props.history.push("/changepass")

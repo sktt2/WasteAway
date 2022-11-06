@@ -20,5 +20,8 @@ public interface UserService {
     ProductInterest addProductInterest(ProductInterest prodinterest);
     void deleteProductInterest(ProductInterest prodinterest);
     List<ProductInterest> listProductInterests();
+    UserRecommendation getRecommendation(Long id);
+    UserRecommendation updateRecommendation(UserRecommendation recommendation);
+
     User updateUser(User user);
 }

@@ -68,12 +68,14 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         UserInfo userinfo = userService.getUserInfoById(userDetails.getId());
+        User user = userService.getUser(userDetails.getId());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles, userinfo));
+                        user.getEmail(),
+                        roles, userinfo,
+                        user.isFirstTime()));
     }
 
     // API for user registration

@@ -23,6 +23,7 @@ import csd.app.user.ProductInterest;
 import csd.app.user.User;
 import csd.app.chat.*;
 
+import csd.app.user.UserRecommendation;
 import lombok.*;
 
 @Entity
@@ -67,10 +68,6 @@ public class Product {
     @JsonManagedReference
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Chat> chats;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<ProductInterest> productInterest;
 
     public Product() {
     }
