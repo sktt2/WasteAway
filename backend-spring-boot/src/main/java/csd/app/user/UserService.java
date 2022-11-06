@@ -22,7 +22,6 @@ public interface UserService {
     List<ProductInterest> listProductInterests();
 
     UserRecommendation getRecommendation(Long id);
-    UserRecommendation addRecommendation(UserRecommendation recommendation);
     UserRecommendation updateRecommendation(UserRecommendation recommendation);
 
     User updateUser(User user);

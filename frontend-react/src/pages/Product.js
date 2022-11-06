@@ -8,6 +8,7 @@ import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
 import UserService from "../services/UserService"
+import StorageHelper from "../services/StorageHelper"
 import "../styles/MainStyle.css"
 
 const responsive = {
@@ -32,6 +33,7 @@ class Product extends Component {
 
     async componentDidMount() {
         const res = await ProductService.getProducts()
+        const recommend = ProductService.get
         this.setState({ mainData: res.data })
         this.setState({ data: res.data })
     }

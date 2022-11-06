@@ -46,9 +46,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserRecommendation> recommendation;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private FirstTimeUser firstTimeUser;
-
     @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "user")

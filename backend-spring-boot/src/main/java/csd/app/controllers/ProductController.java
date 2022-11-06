@@ -221,17 +221,8 @@ public class ProductController {
         return resp;
     }
 
-    @PostMapping("/api/products/recommendation")
-    public ResponseEntity<?> addRecommendation(@Valid @RequestBody RecommendationRequest addRecommendationRequest) {
-        String category = addRecommendationRequest.getRecommendation();
-        String username = addRecommendationRequest.getUsername();
-        User user = userService.getUserByUsername(username);
-        UserRecommendation recommendation = new UserRecommendation(category, user);
-        userService.addRecommendation(recommendation);
-        return ResponseEntity.ok(new MessageResponse("User recommendation added successfully"));
-    }
-
-    @PutMapping("/api/products/recommendation/update")
+    // Updates user recommendation setting
+    @PostMapping("/api/products/recommendation/update")
     public ResponseEntity<?> updateRecommendation(@RequestBody UserRecommendation UR) {
         UserRecommendation userRecommendation = userService.getRecommendation(UR.getRecommendationId());
         if (UR.getRecommendation() != null && UR.getUser() != null) {
@@ -242,13 +233,34 @@ public class ProductController {
         return ResponseEntity.badRequest().body((new MessageResponse("Failed to update user recommendation")));
     }
 
-    @GetMapping("api/products/recommendation/{id}")
+    /*Implementation for this a bit wonky:
+     * If user has no recommendation, will add first 12 products
+     * Carousel will show the products that correspond to user recommended category first
+     * Will show up to maximum 12 products
+     */
+    @GetMapping("api/products/product/recommendation/{id}")
     public List<Product> getProductsByUserRecommendation(@PathVariable String category) {
         List<Product> products = productService.listProducts();
         List<Product> resp = new ArrayList<>();
+        int countCarouselItems = 0;
         for (Product product : products) {
-            if (product.getCategory() == category) {
+            if (category.equals("NONE")) {
                 resp.add(product);
+            } else {
+                if (product.getCategory() == category) {
+                    resp.add(product);
+                }
+            }
+            ++countCarouselItems;
+            if (countCarouselItems > 12) break;
+        }
+        if (!(category.equals("NONE")) && countCarouselItems < 6) {
+            for (Product product : products) {
+                if (!(resp.contains(product))) {
+                    resp.add(product);
+                }
+                ++countCarouselItems;
+                if (countCarouselItems > 12) break;
             }
         }
         return resp;

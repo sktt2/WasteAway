@@ -93,10 +93,6 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public UserRecommendation addRecommendation(UserRecommendation recommendation) {
-        return userRecommendations.save(recommendation);
-    }
-
     public UserRecommendation updateRecommendation(UserRecommendation recommendation) {
         this.getRecommendation(recommendation.getRecommendationId());
         return userRecommendations.save(recommendation);

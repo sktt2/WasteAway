@@ -36,11 +36,11 @@ class Recommendation extends Component {
             case "recommend":
                 if (this.state.recommend.length === 0) 
                     this.setState({
-                        messageDisplay: { ...this.state.messageDisplay, recommend: true},
+                        messageDisplay: { ...this.state.messageDisplay, recommend: true },
                     })
                 else
                     this.setState({
-                        messageDisplay: {...this.state.messageDisplay, recommend: false},
+                        messageDisplay: { ...this.state.messageDisplay, recommend: false },
                     })
                 break
             default:
@@ -69,7 +69,7 @@ class Recommendation extends Component {
             username: StorageHelper.getUsername(),
             recommend: this.state.recommendation
         }
-        ProductService.addRecommendation(newRecommendation)
+        ProductService.updateRecommendation(newRecommendation)
             .then(() => {
                 this.props.history.push("/products")
             })
@@ -141,13 +141,13 @@ class Recommendation extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid>
+                        <Grid item sx = {{ width: "70%" }}>
                             <Button
                                 color="success"
                                 type="submit"
-                                sx={{ marginRight: "2vh "}}
+                                sx={{ marginRight: "2vh" }}
                                 variant="contained"
-                                onClick={this.addRecommendation}>
+                                onClick={this.formSubmit}>
                                 Continue
                             </Button>
                         </Grid>

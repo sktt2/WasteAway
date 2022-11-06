@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -25,8 +24,7 @@ public class UserRecommendation {
     @Id @GeneratedValue
     private Long recommendationId;
 
-    @NotNull(message="recommendation should not be null")
-    private String recommendation;
+    private String recommendation = "NONE";
 
     @ManyToOne
     @JoinColumn(name="user_id")

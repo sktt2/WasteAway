@@ -15,8 +15,6 @@ public class RecommendationRequest {
 
     private String username;
 
-    private Set<Product> products;
-
     public String getRecommendation() {
         return recommendation;
     }
@@ -24,18 +22,13 @@ public class RecommendationRequest {
     public String getUsername() {
         return username;
     }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
  
     public RecommendationRequest() {
 
     }
 
-    public RecommendationRequest(String recommendation, String username, Set<Product> products) {
+    public RecommendationRequest(String recommendation, String username) {
         this.recommendation = recommendation;
         this.username = username;
-        this.products = products;
     }
 }

@@ -40,14 +40,11 @@ class ProductService {
     async getProductInterestByProduct(id) {
         return axios.get(API_URL + "product/interests/" + id )
     }
-    async addRecommendation(body) {
-        return axios.post(API_URL + "recommendation", body)
-    }
     async updateRecommendation(body) {
-        return axios.post(API_URL + "recommendation/update", body);
+        return axios.post(API_URL + "recommendation/update/", body)
     }
     async getProductsByUserRecommendation(id) {
-        return axios.get(API_URL + "recommendation/" + id)
+        return axios.get(API_URL + "product/recommendation/" + id)
     }
 
 }
