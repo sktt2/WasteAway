@@ -17,6 +17,12 @@ import ChatService from "../services/ChatService"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 import { red } from "@mui/material/colors"
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 class Chat extends Component {
     constructor(props) {
@@ -28,6 +34,7 @@ class Chat extends Component {
             message: "",
             chatter: "",
             givenAway: false,
+            open: false,
         }
         this.keyPress = this.keyPress.bind(this)
         this.addMessage = this.addMessage.bind(this)
@@ -71,6 +78,14 @@ class Chat extends Component {
         }
     }
 
+    handleClickOpen = () => {
+        this.setState({ open: true })
+    }
+    
+    handleClose = () => {
+        this.setState({ open: false })
+    }
+
     addMessage = (event) => {
         event.preventDefault()
         if (this.state.message === "") {
@@ -100,73 +115,89 @@ class Chat extends Component {
             productId: this.state.chat.productId,
         }).then(() => {
             this.setState({ givenAway: true })
+            this.handleClose()
         })
     }
 
     render() {
         return (
             <Box>
+                <Dialog
+                    open={this.state.open}
+                    onClose={() => this.handleClose()}
+                >
+                <DialogTitle id="alert-dialog-title">
+                    {"Give product to user?"}
+                </DialogTitle>
+                <DialogActions>
+                <Button onClick={() => this.handleClose()}>No</Button>
+                <Button onClick={(event) => this.giveProduct(event)} autoFocus>
+                    Yes
+                </Button>
+                </DialogActions>
+            </Dialog>
             <br/>
-        <Grid container component={Paper} xs={12}>
-            <Grid item xs={12}>
-                <List>
-                    <ListItem button /* Push to person's profile */>
-                        <ListItemIcon>
-                        <Avatar alt={this.state.chatter} sx={{ bgcolor: red[500] }}>
-                            {this.state.chatter.charAt(0).toUpperCase()}
-                        </Avatar>
-                        </ListItemIcon>
-                        <ListItemText primary={this.state.chatter}></ListItemText>
-                        <ListItemText secondary={StorageHelper.getUsername() === this.state.chat.ownerUsername ? "You're the owner" : ""} align="right">
-                            {this.state.chat.productName}
-                        </ListItemText>
-                        <ListItemIcon>
-                            <Avatar alt={this.state.chat.productName} src={this.state.chat.productImageUrl}/>
-                        </ListItemIcon>
-                    </ListItem>
-                </List>
-                <Divider />
-                <List style={{maxHeight: 500, minHeight: 500, overflow: 'auto'}}>
-                    {this.state.messages.map((data, i) => (
-                        <ListItem>
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} primary={data.content}></ListItemText>
+                <Grid container component={Paper} xs={12}>
+                    <Grid item xs={12}>
+                        <List>
+                            <ListItem button /* Push to person's profile */>
+                                <ListItemIcon>
+                                <Avatar alt={this.state.chatter} sx={{ bgcolor: red[500] }}>
+                                    {this.state.chatter.charAt(0).toUpperCase()}
+                                </Avatar>
+                                </ListItemIcon>
+                                <ListItemText primary={this.state.chatter}></ListItemText>
+                                <ListItemText secondary={StorageHelper.getUsername() === this.state.chat.ownerUsername ? "You're the owner" : ""} align="right">
+                                    {this.state.chat.productName}
+                                </ListItemText>
+                                <ListItemIcon>
+                                    <Avatar alt={this.state.chat.productName} src={this.state.chat.productImageUrl}/>
+                                </ListItemIcon>
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List style={{maxHeight: 500, minHeight: 500, overflow: 'auto'}}>
+                            {this.state.messages.map((data, i) => (
+                                <ListItem>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} primary={data.content}></ListItemText>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} secondary={this.convertDateTime(data.dateTime)}></ListItemText>
+                                        </Grid>
+                                    </Grid>
+                                </ListItem>
+                            ))}
+                            <div ref={el => { this.el = el; }} />
+                        </List>
+                        <Divider />
+                        <Grid container style={{padding: '20px'}}>
+                            {StorageHelper.getUsername() === this.state.chat.takerUsername ? "" : 
+                                <Grid xs={2} align="left">
+                                    <Fab color="secondary" variant="extended" onClick={() => this.setState({ open: true })} 
+                                        sx={{ ml: '20px' }} disabled={this.state.givenAway}>
+                                        <PanToolIcon sx={{ mr: 1 }} />
+                                        Give Away
+                                    </Fab>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText align={StorageHelper.getUsername() === data.senderUsername ? "right" : "left"} secondary={this.convertDateTime(data.dateTime)}></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                    ))}
-                    <div ref={el => { this.el = el; }} />
-                </List>
-                <Divider />
-                <Grid container style={{padding: '20px'}}>
-                    {StorageHelper.getUsername() === this.state.chat.takerUsername ? "" : 
-                        <Grid xs={2} align="left">
-                            <Fab color="secondary" variant="extended" onClick={(event) => this.giveProduct(event)} sx={{ ml: '20px' }} disabled={this.state.givenAway}>
-                                <PanToolIcon sx={{ mr: 1 }} />
-                                Give Away
-                            </Fab>
-                        </Grid>
-                    }
-                    <Grid item xs={StorageHelper.getUsername() === this.state.chat.takerUsername ? "11" : "9"}>
-                        <TextField id="outlined-basic-email" label="Type Something" 
-                            fullWidth value={this.state.message} 
-                            onChange={(event) =>
-                                this.setState({ message: event.target.value })
                             }
-                            onKeyDown={(event) => this.keyPress(event)}/>
-                    </Grid>
-                    <Grid xs={1} align="right">
-                        <Fab color="primary" aria-label="add" onClick={(event) => this.addMessage(event)}><SendIcon /></Fab>
+                            <Grid item xs={StorageHelper.getUsername() === this.state.chat.takerUsername ? "11" : "9"}>
+                                <TextField id="outlined-basic-email" label="Type Something" 
+                                    fullWidth value={this.state.message} 
+                                    onChange={(event) =>
+                                        this.setState({ message: event.target.value })
+                                    }
+                                    onKeyDown={(event) => this.keyPress(event)}/>
+                            </Grid>
+                            <Grid xs={1} align="right">
+                                <Fab color="primary" aria-label="add" onClick={(event) => this.addMessage(event)}><SendIcon /></Fab>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Grid>
-        <br></br>
-      </Box>
+            <br></br>
+            </Box>
         )
     }
 }
