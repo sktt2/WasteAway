@@ -1,37 +1,70 @@
 import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css"
-
+import { Box } from "@mui/system"
+import {
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    Button,
+    Alert,
+    Select,
+    MenuItem
+} from "@mui/material"
 class Recommendation extends Component {
     constructor(props) {
         super(props)
         this.state = {
             validated: "",
-            recommend: ""
+            recommend: "",
+            messageDisplay: {
+                recommend: false
+            }
         }
         this.validateInputs = this.validateInputs.bind(this)
+        this.handleChange = this.handleChange.bind(this)
         this.formSubmit = this.formSubmit.bind(this)
     }
 
     validateInputs = (event) => {
-        const form = event.currentTarget
-        if(form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
-            this.formSubmit(event)
+        switch (event) {
+            case "recommend":
+                if (this.state.recommend.length === 0) 
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, recommend: true},
+                    })
+                else
+                    this.setState({
+                        messageDisplay: {...this.state.messageDisplay, recommend: false},
+                    })
+                break
+            default:
+                return null
         }
-        this.setState( {validated: "was-validated" })
+    }
+
+    handleChange = (field) => {
+        this.setState(field)
     }
 
     formSubmit = (event) => {
         event.preventDefault()
+        const { messageDisplay } = this.state
+
+        for (let field in messageDisplay) {
+            if(this.state[field].length === 0 || messageDisplay[field]) {
+                this.setState({
+                    errorMessage: "Recommend cannot be blank",
+                    displayError: true,
+                })
+                return
+            }
+        }
         let newRecommendation = {
             username: StorageHelper.getUsername(),
             recommend: this.state.recommendation
@@ -40,54 +73,88 @@ class Recommendation extends Component {
             .then(() => {
                 this.props.history.push("/products")
             })
-            .catch(() => {
-                this.props.history.push("/error")
+            .catch((error) => {
+                const { message } = error.response.data
+                this.setState({
+                    errorMessage: message,
+                    displayError: true
+                })
             })
     }
 
     render() {
         return (
-            <div className="container">
-                <br></br>
-                <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className={styles.inputCard}>
-                        <Form
-                            noValidate
-                            className={this.state.validated}
-                            onSubmit={this.validateInputs}>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>What are you looking for?</Form.Label>
-                                    <Form.Select
-                                        value={this.state.recommend}
-                                        onChange={(event) =>
-                                            this.setState({ recommend: event.target.value })
-                                        }
-                                        required>
-                                        <option value="" hidden>Select category</option>
-                                        <option value="NONE">None</option>
-                                        <option value="BOOKS">Books</option>
-                                        <option value="ELECTRONICS">Electronics</option>
-                                        <option value="FASHION">Fashion</option>
-                                        <option value="FOOD">Food</option>
-                                        <option value="TOYS">Toys</option>
-                                        <option value="UTILITY">Utility</option>
-                                        <option value="VIDEO GAMES">Video Games</option>
-                                    </Form.Select>
-                                    <Form.Control.Feedback type="invalid">
-                                        Select a category
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <br></br>
-                            <Button className="btn btn-success" type="submit">
+            <Box>
+                <Box
+                    component="form"
+                    display="flex"
+                    sx={{
+                        border: "1px solid",
+                        flexDirection: "column",
+                        padding: "2vw 0",
+                        margin: "0vw 15vw",
+                        borderRadius: 2,
+                    }}
+                    alignItems= "center"
+                    autoComplete="off">
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        style= {{ width: "100% "}}
+                        rowSpacing={1}>
+                        <Grid item>
+                            {this.state.displayError ? (
+                                <Alert severity="error" sx= {{ margin: "0px 0px 2vh 0 "}}>
+                                    {this.state.errorMessage}
+                                </Alert>
+                            ) : (
+                                <Box />
+                            )}
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel id="recommend-label">What are you looking for?</InputLabel>
+                                <Select
+                                    labelId="recommend-label"
+                                    id="recommend-select-standard"
+                                    value={this.state.recommend}
+                                    onChange={(event) =>
+                                        this.handleChange({ recommend: event.target.value })
+                                    }
+                                    onBlur={() => this.validateInputs("recommend")}
+                                    label="Recommend">
+                                    <MenuItem value="NONE">None</MenuItem>
+                                    <MenuItem value="BOOKS">Books</MenuItem>
+                                    <MenuItem value="ELECTRONICS">Electronics</MenuItem>
+                                    <MenuItem value="FASHION">Fashion</MenuItem>
+                                    <MenuItem value="FOOD">Food</MenuItem>
+                                    <MenuItem value="TOYS">Toys</MenuItem>
+                                    <MenuItem value="UTILITY">Utility</MenuItem>
+                                    <MenuItem value="VIDEO GAMES">Video Games</MenuItem>
+                                </Select>
+                                <FormHelperText sx={{ color: "red" }} id="recommend-error-text">
+                                    {this.state.messageDisplay.recommend
+                                        ? "Recommendation cannot be blank"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid>
+                            <Button
+                                color="success"
+                                type="submit"
+                                sx={{ marginRight: "2vh "}}
+                                variant="contained"
+                                onClick={this.addRecommendation}>
                                 Continue
-                            </Button> 
-                        </Form>
-                    </div>
-                </div>
-            </div>
-        );
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+        )
     }
 }
 

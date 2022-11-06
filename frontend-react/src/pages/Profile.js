@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
 import { Grid } from "@mui/material"
+import CartIcon from '@mui/icons-material/LocalGroceryStore';
 import SettingsIcon from "@mui/icons-material/Settings"
 import StorageHelper from "../services/StorageHelper"
 import AddIcon from "@mui/icons-material/Add"
@@ -188,11 +189,20 @@ class Profile extends Component {
                             <Button
                                 variant="outlined"
                                 onClick={() => {
+                                    this.props.history.push("/recommendation")
+                                }}
+                                startIcon={<CartIcon />}
+                                sx = {{ height: "50%", margin: "0 0 0 1vh" }}>
+                                Change Recommendation
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                onClick={() => {
                                     this.props.history.push("/addproduct")
                                 }}
                                 startIcon={<AddIcon />}
                                 color="success"
-                                sx={{ height: "50%" }}>
+                                sx={{ height: "50%", margin: "0 0 0 1vh" }}>
                                 Add Product
                             </Button>
                             <Button

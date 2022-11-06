@@ -58,10 +58,6 @@ public class Product {
     @JsonManagedReference
     private ProductGA productGA;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<ProductInterest> productInterest;
-
     @ManyToOne
     @JoinColumn(name="product")
     private UserRecommendation recommendation;

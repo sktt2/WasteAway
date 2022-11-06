@@ -131,7 +131,7 @@ class ChangePass extends Component {
             })
             .catch((error)=>{
                 let { message } = error.response.data
-                if(message == "Bad credentials") message = "Incorrect Password"
+                if(message === "Bad credentials") message = "Incorrect Password"
                 this.setState({
                     errorMessage: message,
                     displayError: true,
