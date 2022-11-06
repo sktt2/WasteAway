@@ -150,25 +150,27 @@ public class ProductController {
 
     @PostMapping("/api/products/interest")
     public ResponseEntity<?> addProductInterest(@Valid @RequestBody AddProductInterestRequest addProductInterestRequest) {
-        String productid = addProductInterestRequest.getProductId();
-        String interestedusername = addProductInterestRequest.getInterestedUsername();
 
-        Long longProdId = Long.parseLong(productid);
+        Long productId = addProductInterestRequest.getProductId();
+        Long interestedUserId = addProductInterestRequest.getInterestedUserId();
+
         //check product exist
-        Product product = productService.getProduct(longProdId);
+        Product product = productService.getProduct(productId);
         User owner = product.getUser();
 
-        //get list of PIs
-        List<ProductInterest> pilist = userService.listProductInterests();
         // make sure owner cant fav their own product
-        User interestedUser = userService.getUserByUsername(interestedusername);
-        if (interestedUser.getId().equals(owner.getId())) {
+        User interestedUser = userService.getUser(interestedUserId);
+
+        if (interestedUserId == owner.getId()) {
             return ResponseEntity.badRequest().body(new MessageResponse("User cannot be interested in own product"));
-        };
-        
-        //check for duplicate PI
-        for (ProductInterest PI: pilist) {
-            if (PI.getUser().getUsername().equals(interestedusername) && PI.getProduct().equals(product)) {
+        }
+
+        //get list of Product Interest
+        List<ProductInterest> productInterestList = userService.listProductInterests();
+
+        //check for duplicate Product Interest
+        for (ProductInterest productInterest: productInterestList) {
+            if (productInterest.getUser().getUsername().equals(interestedUser.getUsername()) && productInterest.getProduct().equals(product)) {
                 return ResponseEntity.badRequest().body(new MessageResponse("Product interest made is duplicate of existing one"));
             }
         }
@@ -176,17 +178,19 @@ public class ProductController {
         ProductInterest productInterest = new ProductInterest(interestedUser, product);
         userService.addProductInterest(productInterest);
         return ResponseEntity.ok(new MessageResponse("Interest in product added successfully!"));
+
     }
 
     @DeleteMapping("api/products/interest/delete")
     public ResponseEntity<?> removeProductInterest(@Valid @RequestBody DeleteProductInterestRequest deleteProductInterestRequest) {
         List<ProductInterest> prodInterests = userService.listProductInterests();
-        Long userid = Long.parseLong(deleteProductInterestRequest.getUserId());
-        Long productid = Long.parseLong(deleteProductInterestRequest.getProductId());
+        Long userid = deleteProductInterestRequest.getInterestedUserId();
+        Long productid = deleteProductInterestRequest.getProductId();
         Long piid = 0L;
+
         for (ProductInterest PI : prodInterests) {
             if(PI.getUser().getId().equals(userid) && PI.getProduct().getId().equals(productid)) {
-                piid = PI.getProductinterestid();
+                piid = PI.getProductInterestId();
             }
         }
         ProductInterest productInterest = userService.getProductInterest(piid);
@@ -196,14 +200,15 @@ public class ProductController {
 
     @GetMapping("api/products/interests/{id}")
     public List<ProductInterestResponse> getProductInterestsByUser(@PathVariable Long id) {
-        Long userid = id; 
-        List<ProductInterest> prodInterests = userService.listProductInterests();
+        Long interestUserId = id; 
+        List<ProductInterest> productInterests = userService.listProductInterests();
         List<ProductInterestResponse> resp = new ArrayList<>();
-        for (ProductInterest prodInt : prodInterests) {
-            if (prodInt.getUser().getId() == userid) {
-                Long prodIntId = prodInt.getProductinterestid();
-                Long prodid = prodInt.getProduct().getId();
-                ProductInterestResponse piresp = new ProductInterestResponse(prodIntId, userid, prodid);
+        for (ProductInterest productInterest : productInterests) {
+            if (productInterest.getUser().getId() == interestUserId) {
+                Long productInterestId = productInterest.getProductInterestId();
+                Long productId = productInterest.getProduct().getId();
+                Long ownerId = productInterest.getProduct().getUser().getId();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId);
                 resp.add(piresp);
             }
         }
@@ -211,14 +216,17 @@ public class ProductController {
     }
 
     @GetMapping("api/products/product/interests/{id}")
-    public List<String> getProductInterestByProduct(@PathVariable Long id) {
-        Long productid = id; 
-        List<ProductInterest> prodInterests = userService.listProductInterests();
-        List<String> resp = new ArrayList<>();
-        for (ProductInterest prodInt : prodInterests) {
-            if (prodInt.getProduct().getId() == productid) {
-                String username = prodInt.getUser().getUsername();
-                resp.add(username);
+    public List<ProductInterestResponse> getProductInterestByProduct(@PathVariable Long id) {
+        Long productId = id; 
+        List<ProductInterest> productInterests = userService.listProductInterests();
+        List<ProductInterestResponse> resp = new ArrayList<>();
+        for (ProductInterest productInterest : productInterests) {
+            if (productInterest.getProduct().getId() == productId) {
+                Long interestUserId = productInterest.getUser().getId();
+                Long productInterestId = productInterest.getProductInterestId();
+                Long ownerId = productInterest.getProduct().getUser().getId();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId);
+                resp.add(piresp);
             }
         }
         return resp;

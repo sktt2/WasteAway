@@ -82,15 +82,15 @@ const Header = (props) => {
   };
   React.useEffect(() => {
     handleStatusChange();
-    console.log(notifs)
   });
 
   React.useEffect(() => {
     (async () => {
-      const username = StorageHelper.getUsername();
-      console.log(username);
-      const notifications = await NotificationService.getNotificationsByUsername(username);
-      setNotifs(notifications.data);
+      if(localStorage.getItem("user")){
+        const username = StorageHelper.getUsername();
+        const notifications = await NotificationService.getNotificationsByUsername(username);
+        setNotifs(notifications.data);
+      }
     })()
   }, [])
 
