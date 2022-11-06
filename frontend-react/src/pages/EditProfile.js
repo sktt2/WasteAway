@@ -47,7 +47,6 @@ class EditProfile extends Component {
         this.setState({ name: user.userInfo.name })
         this.setState({ email: user.email })
         this.setState({ address: user.userInfo.address })
-        console.log(typeof user.userInfo.phoneNumber, user.userInfo.phoneNumber)
         this.setState({ mobile: "" + user.userInfo.phoneNumber })
         await this.setState({ user: StorageHelper.getUser() })
     }
@@ -142,7 +141,7 @@ class EditProfile extends Component {
 
     render() {
         return (
-            <Box>
+            <Box sx={{padding: "2vh 0"}}>
                 <Box
                     component="form"
                     display="flex"
@@ -174,7 +173,7 @@ class EditProfile extends Component {
                                 <Box />
                             )}
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Name</InputLabel>
                                 <OutlinedInput
@@ -191,7 +190,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Email</InputLabel>
                                 <OutlinedInput
@@ -210,7 +209,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Address</InputLabel>
                                 <OutlinedInput
@@ -229,7 +228,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Mobile Number</InputLabel>
                                 <OutlinedInput
@@ -248,7 +247,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <Button
                                 color="success"
                                 type="submit"
@@ -258,9 +257,18 @@ class EditProfile extends Component {
                                 Save
                             </Button>
                             <Button
-                                sx={{ float: "right" }}
                                 variant="contained"
-                                onClick={()=>{this.props.history.push("/changepass")}}>
+                                onClick={() => {
+                                    this.props.history.push("/recommendation")
+                                }}
+                                sx = {{ bgcolor: "#333333", marginRight: "2vh" }}>
+                                Change Interest
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    this.props.history.push("/changepass")
+                                }}>
                                 Change Password
                             </Button>
                         </Grid>

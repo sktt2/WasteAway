@@ -28,12 +28,15 @@ public class UserController {
         return ResponseEntity.ok(new UserInfoResponse(user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getUserInfo()));
+                user.getUserInfo(),
+                user.isFirstTime()));
 
     }
 
     @PutMapping("api/users/update")
     public ResponseEntity<?> updateUserDetail(@RequestBody UpdateUserRequest updateUser) {
+
+        // Validation check for updating user email
         User checkUser = userService.getUserByEmail(updateUser.getEmail());
         User user = userService.getUserByUsername(updateUser.getUsername());
         if (checkUser != null && checkUser != user) {

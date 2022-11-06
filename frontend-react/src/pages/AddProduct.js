@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 import ProductService from "../services/ProductService"
@@ -166,7 +165,7 @@ class AddProduct extends Component {
                         border: "1px solid",
                         flexDirection: "column",
                         padding: "2vw 0",
-                        margin: "0vw 15vw",
+                        margin: "1vw 15vw",
                         borderRadius: 2,
                     }}
                     alignItems="center"
@@ -187,7 +186,7 @@ class AddProduct extends Component {
                                 <Box />
                             )}
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Product Name</InputLabel>
                                 <OutlinedInput
@@ -207,7 +206,7 @@ class AddProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <TextField
                                     id="description"
@@ -227,7 +226,7 @@ class AddProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel id="category-label">Category</InputLabel>
                                 <Select
@@ -255,7 +254,7 @@ class AddProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel id="condition-label">Condition</InputLabel>
                                 <Select
@@ -280,7 +279,13 @@ class AddProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item 
+                            display="flex"
+                            sx={{ 
+                                width: "80%",  
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
                             <Button
                                 variant="contained"
                                 component="label"
@@ -294,15 +299,22 @@ class AddProduct extends Component {
                                 Upload Image
                                 <input hidden accept="image/*" multiple type="file" />
                             </Button>
+                        </Grid>
+                        <Grid item 
+                            display="flex"
+                            sx={{ 
+                                width: "80%",  
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
                             <Box
                                 component="img"
                                 sx={{
                                     border: 0,
-                                    margin: "0 0 0 12vh ",
                                     height: 280,
                                     width: 350,
-                                    maxHeight: { xs: 300 },
-                                    maxWidth: { xs: 350 },
+                                    maxHeight: { xs: 350 },
+                                    maxWidth: { xs: 400 },
                                 }}
                                 alt={null}
                                 src={this.state.imageUrl}
@@ -311,7 +323,7 @@ class AddProduct extends Component {
                                 {this.state.messageDisplay.image ? "Image cannot be empty" : " "}
                             </FormHelperText>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <Button
                                 color="success"
                                 type="submit"

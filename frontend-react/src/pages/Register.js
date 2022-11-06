@@ -178,7 +178,7 @@ class Register extends Component {
 
     render() {
         return (
-            <Box>
+            <Box sx={{padding: "2vw 0"}}>
                 <Box
                     component="form"
                     display="flex"

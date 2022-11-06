@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
 import { Grid } from "@mui/material"
+import CartIcon from '@mui/icons-material/LocalGroceryStore';
 import SettingsIcon from "@mui/icons-material/Settings"
 import StorageHelper from "../services/StorageHelper"
 import AddIcon from "@mui/icons-material/Add"
@@ -105,7 +106,7 @@ class Profile extends Component {
     render() {
         let available = this.filterProduct("available")
         let availableTab
-        if (!available) availableTab = "No Products Found"
+        if (available.length === 0) availableTab = "No Products Found"
         else {
             availableTab = (
                 <Box>
@@ -156,7 +157,7 @@ class Profile extends Component {
             )
         }
         return (
-            <Box>
+            <Box sx={{padding: "0", margin:"0"}}>
                 <Box>
                     {this.state.popup && (
                         <PopUp
@@ -192,7 +193,7 @@ class Profile extends Component {
                                 }}
                                 startIcon={<AddIcon />}
                                 color="success"
-                                sx={{ height: "50%" }}>
+                                sx={{ height: "50%", margin: "0 0 0 1vh" }}>
                                 Add Product
                             </Button>
                             <Button

@@ -1,9 +1,12 @@
 package csd.app.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import csd.app.notification.NotificationRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -13,6 +16,14 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInfoRepository userInfos;
+
+    @Autowired
+    private ProductInterestRepository productInterests;
+
+    @Autowired NotificationRepository notifications;
+
+    @Autowired
+    private UserRecommendationRepository userRecommendations;
 
     public List<User> getUsers() {
         return users.findAll();
@@ -42,6 +53,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    // Save user into database and return user with generated userId
     public User addUser(User user) {
         if (users.existsByUsername(user.getUsername()) || users.existsByEmail(user.getEmail())) {
             return null;
@@ -59,6 +71,39 @@ public class UserServiceImpl implements UserService {
         }
         return userInfos.save(userInfo);
     }
+
+    public ProductInterest getProductInterest(Long id) {
+        if (productInterests.existsById(id)) {
+            return productInterests.findById(id)
+            .orElseThrow(() -> new RuntimeException("Error: Product Interest not found."));
+        }
+        return null;
+    }
+    public ProductInterest addProductInterest(ProductInterest prodinterest) {
+        return productInterests.save(prodinterest);
+    }
+
+    public void deleteProductInterest(ProductInterest prodinterest) {
+        productInterests.delete(prodinterest);
+    };
+
+    public List<ProductInterest> listProductInterests() {
+        return productInterests.findAll();
+    }
+
+    public UserRecommendation getRecommendation(Long id) {
+        if (userRecommendations.existsById(id)) {
+            return userRecommendations.findById(id)
+            .orElseThrow(() -> new RuntimeException("Error: Recommended category not found."));
+        }
+        return null;
+    }
+
+    public UserRecommendation updateRecommendation(UserRecommendation recommendation) {
+        return userRecommendations.save(recommendation);
+        
+    }
+
 
     public User updateUser(User user) {
         return users.save(user);

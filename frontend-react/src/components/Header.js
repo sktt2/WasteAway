@@ -1,8 +1,12 @@
 import * as React from "react"
+import ListItemAvatar from "@mui/material/ListItemAvatar"
+import Avatar from "@mui/material/Avatar"
+import Divider from "@mui/material/Divider"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
+import CircleIcon from "@mui/icons-material/Circle"
 import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import MenuIcon from "@mui/icons-material/Menu"
@@ -10,6 +14,11 @@ import Container from "@mui/material/Container"
 import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import Badge from "@mui/material/Badge"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import MenuItem from "@mui/material/MenuItem"
 import AccountCircle from "@mui/icons-material/AccountCircle"
@@ -17,18 +26,44 @@ import StorageHelper from "../services/StorageHelper"
 import { useHistory } from "react-router-dom"
 import AuthService from "../services/AuthService"
 import styles from "../styles/ComponentStyle.module.css"
-// import { fontWeight } from "@mui/system"
+import Popper from "@mui/material/Popper"
+import Paper from "@mui/material/Paper"
 import DeleteIcon from "@mui/icons-material/Delete"
+import NotificationService from "../services/NotificationService"
+import { Icon } from "@mui/material"
 
 const pages = ["products"]
-const settings = ["profile", "logout"]
+const settings = ["profile", "chats", "logout"]
 const loggedOut = ["login", "register"]
 
 const Header = (props) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null)
     const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const [anchorElNotif, setAnchorElNotif] = React.useState(null)
+    const [notifs, setNotifs] = React.useState([])
     const [isLoggedIn, setLoggedIn] = React.useState(false)
     const history = useHistory()
+
+    const handleOpenNotifMenu = (event) => {
+        setAnchorElNotif(anchorElNotif ? null : event.currentTarget)
+    }
+    const handleNotifClick = async (data) => {
+        if (data.read === false) {
+            const response = await NotificationService.updateNotificationIfRead(data.notifid).catch(
+                (error) => {
+                    console.log(error)
+                }
+            )
+        }
+        history.push("/chat/" + data.chatid)
+    }
+
+    const openNotif = Boolean(anchorElNotif)
+    const popperid = openNotif ? "notif-popper" : undefined
+    const notifcolors = {
+        true: "#bdbdbd",
+        false: "#fafafa",
+    }
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget)
@@ -57,16 +92,133 @@ const Header = (props) => {
         setLoggedIn(false)
         history.push("/")
     }
+    const getNotifications = async () => {
+        const username = StorageHelper.getUsername()
+        const messages = await NotificationService.getNotificationsByUsername(username).catch(
+            () => {}
+        )
+        console.log(messages.data)
+        return filterChat(messages.data)
+    }
+    const filterChat = (messages) => {
+        const chats = [...new Map(messages.map((item) => [item["chatid"], item])).values()]
+        console.log(chats)
+        chats.sort((a, b) => {
+            return b.notifid - a.notifid
+        })
+        return chats
+    }
     React.useEffect(() => {
         handleStatusChange()
-    })
+        if (isLoggedIn) {
+            const setNotifications = async () => {
+                const notifications = await getNotifications()
+                console.log(notifications)
+                setNotifs(notifications)
+            }
+            setNotifications()
+        }
+    }, [isLoggedIn])
+
+    const getTotalNotifs = () => {
+        let notifications = notifs
+        let counter = 0
+        notifications.map((data) => {
+            console.log(data)
+            if (!data.read) counter++
+            return data
+        })
+        return counter
+    }
     const loggedInMenu = (
         <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
-            <IconButton size="large" aria-label="show 17 new notifications" color="primary">
-                <Badge badgeContent={17} color="error">
+            <IconButton
+                id={popperid}
+                size="large"
+                aria-haspopup="true"
+                aria-label="notifications"
+                onClick={handleOpenNotifMenu}
+                color="primary">
+                <Badge badgeContent={getTotalNotifs()} color="error">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
+
+            <Popper id={popperid} open={openNotif} anchorEl={anchorElNotif} sx={{ width: "18%" }}>
+                <Paper
+                    variant="outlined"
+                    elevation={1}
+                    style={{ maxHeight: "30vh", overflow: "auto" }}>
+                    <List
+                        display="flex"
+                        sx={{
+                            width: "100%",
+                            bgcolor: "background.paper",
+                            padding: 0,
+                        }}>
+                        {notifs.map((data, i) => {
+                            return (
+                                <Box>
+                                    <Divider />
+                                    <ListItemButton
+                                        alignItems="flex-start"
+                                        display="flex"
+                                        onClick={() => handleNotifClick(data)}
+                                        sx={{
+                                            padding: "0",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            // border: "1px solid",
+                                            // borderColor: "grey"
+                                        }}>
+                                        <ListItemAvatar
+                                            sx={{
+                                                minWidth: "0",
+                                                padding: "0 10px 10px 10px",
+                                            }}>
+                                            <Avatar sx={{ bgcolor: "#f44336" }}>
+                                                {data.takerusername.charAt(0).toUpperCase()}
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            sx={{ minWidth: "0" }}
+                                            primary={data.takeruserame}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography
+                                                        sx={{
+                                                            display: "inline",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                        component="span"
+                                                        variant="body2"
+                                                        color="text.primary">
+                                                        {data.productName}
+                                                    </Typography>
+                                                    <Typography color="text.primary">
+                                                        {data.takerusername}
+                                                    </Typography>
+                                                    {data.chatMessage || "  "}
+                                                </React.Fragment>
+                                            }
+                                        />{" "}
+                                        {data.read ? null : (
+                                            <CircleIcon
+                                                sx={{
+                                                    float: "right",
+                                                    color: "#c7d8c6",
+                                                    border: "2px",
+                                                }}
+                                            />
+                                        )}
+                                    </ListItemButton>
+                                </Box>
+                            )
+                        })}
+                    </List>
+                </Paper>
+            </Popper>
+
             <Tooltip title="Open settings">
                 <IconButton
                     size="large"
@@ -141,13 +293,16 @@ const Header = (props) => {
     )
 
     return (
-        <AppBar position="static" className={styles.navbar} sx={{ backgroundColor: "#C7D8C6" }}>
+        <AppBar
+            position="static"
+            className={styles.navbar}
+            sx={{ backgroundColor: "#C7D8C6", padding: "0" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <DeleteIcon
-                        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                        color="primary"
-                    />
+                    <img
+                        src={"./logo.png"}
+                        style={{ maxHeight: "30px", maxWidth: "30px" }}
+                        alt=""></img>
                     <Typography
                         variant="h6"
                         noWrap
@@ -162,7 +317,7 @@ const Header = (props) => {
                             // letterSpacing: "rem",
                             textDecoration: "none",
                         }}>
-                        Waste Away
+                        WasteAway
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

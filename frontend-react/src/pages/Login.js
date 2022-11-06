@@ -33,7 +33,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        if (localStorage.hasOwnProperty("user")) {
+        if (StorageHelper.getUser()) {
             this.props.history.push("/")
         }
     }

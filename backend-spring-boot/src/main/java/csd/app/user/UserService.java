@@ -16,6 +16,12 @@ public interface UserService {
     UserInfo getUserInfoById(Long id);
 
     UserInfo addUserInfo(UserInfo userInfo);
+    ProductInterest getProductInterest(Long id);
+    ProductInterest addProductInterest(ProductInterest prodinterest);
+    void deleteProductInterest(ProductInterest prodinterest);
+    List<ProductInterest> listProductInterests();
+    UserRecommendation getRecommendation(Long id);
+    UserRecommendation updateRecommendation(UserRecommendation recommendation);
 
     User updateUser(User user);
 }
