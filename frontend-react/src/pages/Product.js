@@ -188,7 +188,8 @@ class Product extends Component {
                                     dateTime={data.dateTime}
                                     ownerName={data.ownerName}
                                     favourite={data.favourite ?  data.favourite : false}
-                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }>
+                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }
+                                    userExist={ (StorageHelper.getUser()) ?  true : false} >
                                     </CardComponent>
                             </Grid>
                         ))}

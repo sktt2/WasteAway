@@ -39,8 +39,8 @@ export default function CardComponent(props) {
 	const ownerName = props.ownerName;
 	const [year, month, day] = dateTime.split("-");
 	const date = new Date(+year, month - 1, +day.slice(0, 2));
-
 	const isOwner = props.isOwner;
+	const userExist = props.userExist;
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -186,22 +186,29 @@ export default function CardComponent(props) {
 			)}
 			{buttons === 1 && (
 				<CardActions disableSpacing>
-					
-						{isOwner ? (
+					{userExist ? (
+						isOwner ? (
 							<></>
 						) : fav ? (
-							<FavoriteIcon 
-                                id = "favouriteIcon"
-                                color={"success"}
-								onClick={() => {favouriteButtonClicked()}}
+							<FavoriteIcon
+								id="favouriteIcon"
+								color={"success"}
+								onClick={() => {
+									favouriteButtonClicked();
+								}}
 							/>
 						) : (
-							<FavoriteBorderIcon 
-                                id = "favouriteIcon"
-                                color={"default"}
-								onClick={() => {favouriteButtonClicked()}}
+							<FavoriteBorderIcon
+								id="favouriteIcon"
+								color={"default"}
+								onClick={() => {
+									favouriteButtonClicked();
+								}}
 							/>
-						)}
+						)
+					) : (
+						<></>
+					)}
 
 					<Button
 						variant="contained"

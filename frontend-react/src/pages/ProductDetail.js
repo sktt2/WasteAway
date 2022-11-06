@@ -27,6 +27,7 @@ class ProductDetail extends Component {
 			messageDisplay: false,
 			errormessage: "",
 			ownerItem: false,
+			userExist: false,
 		};
 	}
 
@@ -35,6 +36,7 @@ class ProductDetail extends Component {
 		const res = await ProductService.getProduct(this.state.id);
 		this.setState({ data: res.data });
 		if(StorageHelper.getUser()){
+			this.setState({userExist: true})
 			if (res.data.ownerName === StorageHelper.getUsername()) {
 				this.setState({ ownerItem: true });
 			}
@@ -124,7 +126,8 @@ class ProductDetail extends Component {
 						<Typography>{this.state.data.address}</Typography>
 						<Typography>{this.state.data.description}</Typography>
 						<Typography>{this.state.data.ownerName}</Typography>
-						{this.state.ownerItem ? (
+						{this.state.userExist? (
+						this.state.ownerItem ? (
 							<></>
 						) : this.state.fav ? (
 							<FavoriteIcon
@@ -136,7 +139,7 @@ class ProductDetail extends Component {
 								color={"default"}
 								onClick={this.favouriteButtonClicked}
 							/>
-						)}
+						)) : <></>}
 					</CardContent>
 					<Button
 						id="talkToUser"
