@@ -6,7 +6,7 @@ import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
-import CircleIcon from '@mui/icons-material/Circle';
+import CircleIcon from "@mui/icons-material/Circle"
 import Typography from "@mui/material/Typography"
 import Menu from "@mui/material/Menu"
 import MenuIcon from "@mui/icons-material/Menu"
@@ -135,7 +135,7 @@ const Header = (props) => {
                 id={popperid}
                 size="large"
                 aria-haspopup="true"
-                aria-label="show 17 new notifications"
+                aria-label="notifications"
                 onClick={handleOpenNotifMenu}
                 color="primary">
                 <Badge badgeContent={getTotalNotifs()} color="error">
@@ -153,68 +153,66 @@ const Header = (props) => {
                         sx={{
                             width: "100%",
                             bgcolor: "background.paper",
-                            padding: 0
+                            padding: 0,
                         }}>
                         {notifs.map((data, i) => {
                             return (
-                              <Box>
-                                <Divider />
-                                <ListItemButton
-                                  alignItems="flex-start"
-                                  display="flex"
-                                  onClick={() => handleNotifClick(data)}
-                                  sx={{
-                                    padding: "0",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    // border: "1px solid",
-                                    // borderColor: "grey"
-                                  }}
-                                >
-                                  <ListItemAvatar
-                                    sx={{
-                                      minWidth: "0",
-                                      padding: "0 10px 10px 10px",
-                                    }}
-                                  >
-                                    <Avatar sx={{ bgcolor: "#f44336" }}
-                                    >{data.takerusername.charAt(0).toUpperCase()}</Avatar>
-                                  </ListItemAvatar>
-                                  <ListItemText
-                                    sx={{ minWidth: "0" }}
-                                    primary={data.takeruserame}
-                                    secondary={
-                                      <React.Fragment>
-                                        <Typography
-                                          sx={{
-                                            display: "inline",
-                                            fontWeight: "bold",
-                                          }}
-                                          component="span"
-                                          variant="body2"
-                                          color="text.primary"
-                                        >
-                                          {data.productName}
-                                        </Typography>
-                                        <Typography color="text.primary">
-                                          {data.takerusername}
-                                        </Typography>
-                                        {data.chatMessage || "  "}
-                                      </React.Fragment>
-                                    }
-                                  />{" "}
-                                  {data.read ? null : (
-                                    <CircleIcon
-                                      sx={{
-                                        float: "right",
-                                        color: "#c7d8c6",
-                                        border: "2px",
-                                      }}
-                                    />
-                                  )}
-                                </ListItemButton>
-                              </Box>
-                            );
+                                <Box>
+                                    <Divider />
+                                    <ListItemButton
+                                        alignItems="flex-start"
+                                        display="flex"
+                                        onClick={() => handleNotifClick(data)}
+                                        sx={{
+                                            padding: "0",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            // border: "1px solid",
+                                            // borderColor: "grey"
+                                        }}>
+                                        <ListItemAvatar
+                                            sx={{
+                                                minWidth: "0",
+                                                padding: "0 10px 10px 10px",
+                                            }}>
+                                            <Avatar sx={{ bgcolor: "#f44336" }}>
+                                                {data.takerusername.charAt(0).toUpperCase()}
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            sx={{ minWidth: "0" }}
+                                            primary={data.takeruserame}
+                                            secondary={
+                                                <React.Fragment>
+                                                    <Typography
+                                                        sx={{
+                                                            display: "inline",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                        component="span"
+                                                        variant="body2"
+                                                        color="text.primary">
+                                                        {data.productName}
+                                                    </Typography>
+                                                    <Typography color="text.primary">
+                                                        {data.takerusername}
+                                                    </Typography>
+                                                    {data.chatMessage || "  "}
+                                                </React.Fragment>
+                                            }
+                                        />{" "}
+                                        {data.read ? null : (
+                                            <CircleIcon
+                                                sx={{
+                                                    float: "right",
+                                                    color: "#c7d8c6",
+                                                    border: "2px",
+                                                }}
+                                            />
+                                        )}
+                                    </ListItemButton>
+                                </Box>
+                            )
                         })}
                     </List>
                 </Paper>

@@ -194,7 +194,7 @@ class EditProduct extends Component {
                         border: "1px solid",
                         flexDirection: "column",
                         padding: "2vw 0",
-                        margin: "0vw 15vw",
+                        margin: "1vw 15vw",
                         borderRadius: 2,
                     }}
                     alignItems="center"
@@ -218,7 +218,7 @@ class EditProduct extends Component {
                                 <Box />
                             )}
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Product Name</InputLabel>
                                 <OutlinedInput
@@ -238,7 +238,7 @@ class EditProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <TextField
                                     id="description"
@@ -258,7 +258,7 @@ class EditProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel id="category-label">Category</InputLabel>
                                 <Select
@@ -286,7 +286,7 @@ class EditProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel id="condition-label">Condition</InputLabel>
                                 <Select
@@ -311,7 +311,7 @@ class EditProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <Button
                                 variant="contained"
                                 component="label"
@@ -342,7 +342,7 @@ class EditProduct extends Component {
                                 {this.state.messageDisplay.image ? "Image cannot be empty" : " "}
                             </FormHelperText>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <Button
                                 color="success"
                                 type="submit"

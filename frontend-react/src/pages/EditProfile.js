@@ -174,7 +174,7 @@ class EditProfile extends Component {
                                 <Box />
                             )}
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Name</InputLabel>
                                 <OutlinedInput
@@ -191,7 +191,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Email</InputLabel>
                                 <OutlinedInput
@@ -210,7 +210,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Address</InputLabel>
                                 <OutlinedInput
@@ -229,7 +229,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <FormControl sx={{ width: "100%" }}>
                                 <InputLabel htmlFor="component-outlined">Mobile Number</InputLabel>
                                 <OutlinedInput
@@ -248,7 +248,7 @@ class EditProfile extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "70%" }}>
+                        <Grid item sx={{ width: "80%" }}>
                             <Button
                                 color="success"
                                 type="submit"
@@ -260,7 +260,9 @@ class EditProfile extends Component {
                             <Button
                                 sx={{ float: "right" }}
                                 variant="contained"
-                                onClick={()=>{this.props.history.push("/changepass")}}>
+                                onClick={() => {
+                                    this.props.history.push("/changepass")
+                                }}>
                                 Change Password
                             </Button>
                         </Grid>
