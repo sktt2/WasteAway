@@ -30,6 +30,7 @@ import Popper from "@mui/material/Popper"
 import Paper from "@mui/material/Paper"
 import DeleteIcon from "@mui/icons-material/Delete"
 import NotificationService from "../services/NotificationService"
+import { Icon } from "@mui/material"
 
 const pages = ["products"]
 const settings = ["profile", "ChatNavigator", "logout"]
@@ -292,13 +293,16 @@ const Header = (props) => {
     )
 
     return (
-        <AppBar position="static" className={styles.navbar} sx={{ backgroundColor: "#C7D8C6" }}>
+        <AppBar
+            position="static"
+            className={styles.navbar}
+            sx={{ backgroundColor: "#C7D8C6", padding: "0" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <DeleteIcon
-                        sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-                        color="primary"
-                    />
+                    <img
+                        src={"./logo.png"}
+                        style={{ maxHeight: "30px", maxWidth: "30px" }}
+                        alt=""></img>
                     <Typography
                         variant="h6"
                         noWrap
@@ -313,7 +317,7 @@ const Header = (props) => {
                             // letterSpacing: "rem",
                             textDecoration: "none",
                         }}>
-                        Waste Away
+                        WasteAway
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
