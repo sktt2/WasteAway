@@ -297,11 +297,11 @@ class EditProduct extends Component {
                                     }
                                     onBlur={() => this.validateInputs("condition")}
                                     label="Condition">
-                                    <MenuItem value="BRAND NEW">Brand New</MenuItem>
-                                    <MenuItem value="LIKE MINT">Like New</MenuItem>
-                                    <MenuItem value="LIGHTLY Used">Lightly Used</MenuItem>
-                                    <MenuItem value="WELL USED">Well Used</MenuItem>
-                                    <MenuItem value="HEAVILY USED">Heavily Used</MenuItem>
+                                    <MenuItem value="Brand New">Brand New</MenuItem>
+                                    <MenuItem value="Like New">Like New</MenuItem>
+                                    <MenuItem value="Lightly Used">Lightly Used</MenuItem>
+                                    <MenuItem value="Well Used">Well Used</MenuItem>
+                                    <MenuItem value="Heavily Used">Heavily Used</MenuItem>
                                 </Select>
                                 <FormHelperText sx={{ color: "red" }} id="condition-error-text">
                                     {this.state.messageDisplay.condition
