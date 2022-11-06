@@ -92,6 +92,7 @@ export default class PopUp extends Component {
 
   handleClose = () => {
     this.setState({ dialogpopup: false });
+    this.props.closePopUp();
   };
   render() {
     return (
