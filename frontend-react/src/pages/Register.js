@@ -12,7 +12,7 @@ import {
     OutlinedInput,
     Button,
     Alert,
-    InputAdornment
+    InputAdornment,
 } from "@mui/material"
 
 import VisibilityIcon from "@mui/icons-material/Visibility"
@@ -66,7 +66,7 @@ class Register extends Component {
     validateInputs = (event) => {
         switch (event) {
             case "name":
-                if (this.state.name.length === 0)
+                if (this.state.name.length < 3)
                     this.setState({ messageDisplay: { ...this.state.messageDisplay, name: true } })
                 else
                     this.setState({ messageDisplay: { ...this.state.messageDisplay, name: false } })
@@ -178,7 +178,7 @@ class Register extends Component {
 
     render() {
         return (
-            <Box sx={{padding: "2vw 0"}}>
+            <Box sx={{ padding: "2vw 0" }}>
                 <Box
                     component="form"
                     display="flex"
@@ -238,7 +238,9 @@ class Register extends Component {
                                     label="Name"
                                 />
                                 <FormHelperText sx={{ color: "red" }} id="name-error-text">
-                                    {this.state.messageDisplay.name ? "Name cannot be blank" : " "}
+                                    {this.state.messageDisplay.name
+                                        ? "Name needs to be at least 3 characters"
+                                        : " "}
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
@@ -275,7 +277,7 @@ class Register extends Component {
                                         <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="toggle password visibility"
-                                                onClick={ () => this.toggleShowPassword("password")}
+                                                onClick={() => this.toggleShowPassword("password")}
                                                 edge="end">
                                                 {this.state.showpassword ? (
                                                     <VisibilityIcon />
@@ -311,7 +313,9 @@ class Register extends Component {
                                         <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="toggle password visibility"
-                                                onClick={ () => this.toggleShowPassword("confirmpassword")}
+                                                onClick={() =>
+                                                    this.toggleShowPassword("confirmpassword")
+                                                }
                                                 edge="end">
                                                 {this.state.showconfirmpassword ? (
                                                     <VisibilityIcon />
