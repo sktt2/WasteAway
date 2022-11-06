@@ -21,26 +21,18 @@ import lombok.*;
 @Setter
 public class UserRecommendation {
     
-    @Id @GeneratedValue
-    private Long recommendationId;
+    @Id 
+    private Long user_Id;
 
-    private String recommendation = "NONE";
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<Product> products = new HashSet<>();
+    private String recommendation;
 
     public UserRecommendation() {
 
     }
 
-    public UserRecommendation(String recommendation, User user) {
+    public UserRecommendation(String recommendation, Long userId) {
         this.recommendation = recommendation;
-        this.user = user;
+        this.user_Id = userId;
     }
 
     // public UserRecommendation(String recommendation, User user, Set<Product> products) {

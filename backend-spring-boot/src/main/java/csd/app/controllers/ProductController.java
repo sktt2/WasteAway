@@ -16,15 +16,16 @@ import csd.app.payload.request.AddProductInterestRequest;
 import csd.app.payload.request.DeleteProductInterestRequest;
 import csd.app.payload.request.AddProductRequest;
 import csd.app.payload.request.GiveProductRequest;
+import csd.app.payload.request.RecommendationRequest;
 import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
 import csd.app.user.ProductInterest;
-import csd.app.user.UserRecommendation;
-
 import csd.app.user.SameUserException;
 import csd.app.user.User;
+import csd.app.user.UserRecommendation;
 import csd.app.user.UserService;
+import csd.app.user.UserServiceImpl;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -38,6 +39,7 @@ public class ProductController {
 
     @Autowired
     private UserService userService;
+
 
     public ProductController(ProductService productService, UserService userService) {
         this.productService = productService;
@@ -221,10 +223,15 @@ public class ProductController {
 
     // Updates user recommendation setting
     @PutMapping("/api/products/recommendation/update")
-    public ResponseEntity<?> updateRecommendation(@RequestBody UserRecommendation UR) {
-        UserRecommendation userRecommendation = userService.getRecommendation(UR.getRecommendationId());
-        if (UR.getRecommendation() != null && UR.getUser() != null) {
-            userRecommendation.setRecommendation(UR.getRecommendation());
+    public ResponseEntity<?> updateRecommendation(@RequestBody RecommendationRequest UR) {
+        String recommendation = UR.getRecommendation();
+        String username = UR.getUsername();
+        User user = userService.getUserByUsername(username);
+        //UserRecommendation userRecommendation = userService.getRecommendation(UR.getRecommendationId());
+        if (recommendation != null && user != null) {
+            UserRecommendation userRecommendation = new UserRecommendation();
+            userRecommendation.setUser_Id(user.getId());
+            userRecommendation.setRecommendation(recommendation);
             userService.updateRecommendation(userRecommendation);
             return ResponseEntity.ok(new MessageResponse("User recommendation updated successfully"));
         }
@@ -232,23 +239,8 @@ public class ProductController {
     }
 
     // Carousel will show products matching user recommended category first
-    @GetMapping("api/products/product/recommendation/{id}")
-    public List<Product> getProductsByUserRecommendation(@PathVariable String category) {
-        List<Product> products = productService.listProducts();
-        List<Product> resp = new ArrayList<>();
-        if (category.equals("NONE")) resp = products;
-        else {
-            for (Product p : products) {
-                if (p.getCategory().equals(category)) {
-                    resp.add(p);
-                }
-            }
-            for (Product p : products) {
-                if (!(resp.contains(p))) {
-                    resp.add(p);
-                }
-            }
-        }
-        return resp;
+    @GetMapping("api/products/recommendation/{id}")
+    public String getProductsByUserRecommendation(@PathVariable Long id) {
+        return userService.getRecommendation(id).getRecommendation();
     }
 }

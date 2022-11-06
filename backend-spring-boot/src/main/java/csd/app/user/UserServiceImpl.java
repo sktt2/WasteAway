@@ -94,9 +94,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserRecommendation updateRecommendation(UserRecommendation recommendation) {
-        this.getRecommendation(recommendation.getRecommendationId());
         return userRecommendations.save(recommendation);
+        
     }
+
 
     public User updateUser(User user) {
         return users.save(user);

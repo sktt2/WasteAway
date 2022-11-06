@@ -25,6 +25,7 @@ class Product extends Component {
             url: "product/",
             data: [],
             mainData: [],
+            recommendData: [],
             searchText: "",
             filter: ""
         }
@@ -35,8 +36,16 @@ class Product extends Component {
         if (firstTime === true) {
             this.props.history.push("/recommendation")
         }
-        const recommend = ProductService.getRecommendation()
+        const recommend = await ProductService.getRecommendation(StorageHelper.getUserId())
         const res = await ProductService.getProducts()
+        console.log(recommend);
+        let recData
+        res.data.forEach(element => {
+            if(element.category === recommend){
+                this.state.recommendData.push(element)
+            }
+        })
+        //this.setState({recommendData: recData})
         this.setState({ mainData: res.data })
         this.setState({ data: res.data })
     }
@@ -131,7 +140,7 @@ class Product extends Component {
                 </Box>
                 <br></br>
                 <Carousel responsive={responsive}>
-                    {this.state.data.map((data, i) => (
+                    {this.state.recommendData.map((data, i) => (
                         <CarouselComponent
                             title={data.productName}
                             condition={data.condition}

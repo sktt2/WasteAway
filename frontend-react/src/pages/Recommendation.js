@@ -21,9 +21,9 @@ class Recommendation extends Component {
         super(props)
         this.state = {
             validated: "",
-            recommend: "",
+            recommendation: "",
             messageDisplay: {
-                recommend: false
+                recommendation: false
             }
         }
         this.validateInputs = this.validateInputs.bind(this)
@@ -33,14 +33,14 @@ class Recommendation extends Component {
 
     validateInputs = (event) => {
         switch (event) {
-            case "recommend":
-                if (this.state.recommend.length === 0) 
+            case "recommendation":
+                if (this.state.recommendation.length === 0) 
                     this.setState({
-                        messageDisplay: { ...this.state.messageDisplay, recommend: true },
+                        messageDisplay: { ...this.state.messageDisplay, recommendation: true },
                     })
                 else
                     this.setState({
-                        messageDisplay: { ...this.state.messageDisplay, recommend: false },
+                        messageDisplay: { ...this.state.messageDisplay, recommendation: false },
                     })
                 break
             default:
@@ -67,7 +67,7 @@ class Recommendation extends Component {
         }
         let newRecommendation = {
             username: StorageHelper.getUsername(),
-            recommend: this.state.recommendation
+            recommendation: this.state.recommendation
         }
         ProductService.updateRecommendation(newRecommendation)
             .then(() => {
@@ -115,15 +115,15 @@ class Recommendation extends Component {
                         </Grid>
                         <Grid item sx={{ width: "70%" }}>
                             <FormControl sx={{ width: "100%" }}>
-                                <InputLabel id="recommend-label">Select recommendation category</InputLabel>
+                                <InputLabel id="recommendation-label">Select recommendation category</InputLabel>
                                 <Select
-                                    labelId="recommend-label"
-                                    id="recommend-select-standard"
-                                    value={this.state.recommend}
+                                    labelId="recommendation-label"
+                                    id="recommendation-select-standard"
+                                    value={this.state.recommendation}
                                     onChange={(event) =>
-                                        this.handleChange({ recommend: event.target.value })
+                                        this.handleChange({ recommendation: event.target.value })
                                     }
-                                    onBlur={() => this.validateInputs("recommend")}
+                                    onBlur={() => this.validateInputs("recommendation")}
                                     label="Recommend">
                                     <MenuItem value="NONE">None</MenuItem>
                                     <MenuItem value="BOOKS">Books</MenuItem>
@@ -134,8 +134,8 @@ class Recommendation extends Component {
                                     <MenuItem value="UTILITY">Utility</MenuItem>
                                     <MenuItem value="VIDEO GAMES">Video Games</MenuItem>
                                 </Select>
-                                <FormHelperText sx={{ color: "red" }} id="recommend-error-text">
-                                    {this.state.messageDisplay.recommend
+                                <FormHelperText sx={{ color: "red" }} id="recommendation-error-text">
+                                    {this.state.messageDisplay.recommendation
                                         ? "Recommendation cannot be blank"
                                         : " "}
                                 </FormHelperText>

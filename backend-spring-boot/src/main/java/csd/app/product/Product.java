@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import csd.app.user.User;
 import csd.app.user.UserRecommendation;
 import lombok.*;
@@ -57,10 +58,6 @@ public class Product {
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference
     private ProductGA productGA;
-
-    @ManyToOne
-    @JoinColumn(name="product")
-    private UserRecommendation recommendation;
 
     public Product() {
     }
