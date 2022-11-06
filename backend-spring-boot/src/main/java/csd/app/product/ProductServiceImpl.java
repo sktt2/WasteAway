@@ -14,6 +14,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductGARepository productGAs;
 
+    // Get all products in database
     public List<Product> listProducts() {
         return products.findAll();
     }
@@ -23,10 +24,12 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    // Get all products from user in database
     public List<Product> getProductsByUser(User user) {
         return products.findByUser(user);
     }
 
+    // Save product into database and return product with productId generated
     public Product addProduct(Product product) {
         if (product.getUser() == null) {
             return null;
@@ -43,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         products.delete(product);
     }
 
+    // Get all products that have been given away
     public List<ProductGA> listProductGAs() {
         return productGAs.findAll();
     }
@@ -55,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    // Save product given away into database and return product with productId generated
     public ProductGA addProductGA(ProductGA productGA) {
         return productGAs.save(productGA);
     }

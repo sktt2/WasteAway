@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.*;
 
+// Implement from Spring Framework UserDetails
 @Getter
 @Setter
 public class UserDetailsImpl implements UserDetails {
@@ -35,6 +36,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
+
+        // Get authorities based on role
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());

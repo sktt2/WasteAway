@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    // Save user into database and return user with generated userId
     public User addUser(User user) {
         if (users.existsByUsername(user.getUsername()) || users.existsByEmail(user.getEmail())) {
             return null;

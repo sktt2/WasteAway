@@ -47,17 +47,21 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    // API for user log in
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+        // Check if username exists and password is correct
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                         loginRequest.getPassword()));
-
+        
+        // Set authentication of user
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        // Generate JWT cookie to be stored in user's browser
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
@@ -72,6 +76,7 @@ public class AuthController {
                         roles, userinfo));
     }
 
+    // API for user registration
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userService.getUserByUsername(signUpRequest.getUsername()) != null) {
@@ -90,6 +95,7 @@ public class AuthController {
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
+        // Give role to user
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -125,6 +131,8 @@ public class AuthController {
 
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser() {
+
+        // Remove JWT cookie from browser
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("You've been signed out!"));
@@ -139,6 +147,7 @@ public class AuthController {
 
         User user = userService.getUserByUsername(username);
 
+        // Error checking for change password
         if (user == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("User not found"));
         } else if (authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, currentPassword)).isAuthenticated() != true) {
@@ -147,6 +156,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Do not reuse the same password"));
         } else {
             try {
+
+                // Change user password
                 String encodeNewPassword = encoder.encode(newPassword);
                 user.setPassword(encodeNewPassword);
                 userService.updateUser(user);

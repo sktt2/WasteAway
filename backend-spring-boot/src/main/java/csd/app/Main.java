@@ -55,6 +55,8 @@ public class Main {
             System.out.println("[Add user]: " + users.save(user));
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
             userInfos.save(userInfo);
+
+            // Create products for testing
             Product newProd = new Product("CAMERA", "OLD", LocalDateTime.now().toString(), "ELECTRONICS", "this is a description of the product");
             newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/1%2F4eb7ecac-272d-44bf-bc6d-153304cde503?alt=media&token=11154ee6-c06b-4d10-bea3-7e35fa378faa");
             newProd.setUser(user);
@@ -113,6 +115,8 @@ public class Main {
             System.out.println("[Add user]: " + users.save(user));
             UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 111", 12345678);
             userInfos.save(userInfo);
+
+            // Create products for testing
             Product newProd = new Product("LAPTOP", "New", LocalDateTime.now().toString(), "ELECTRONICS", "this is a description of the product");
             newProd.setImageUrl("https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F203a9695-d69f-42fa-ba80-2f92c4a578bd?alt=media&token=d70384bb-a6a0-489c-88fc-b03ae7ea1d6e");
             newProd.setUser(user);

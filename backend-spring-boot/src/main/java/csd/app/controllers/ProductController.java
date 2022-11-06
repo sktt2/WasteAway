@@ -37,6 +37,7 @@ public class ProductController {
         this.userService = userService;
     }
 
+    // Get all products from database
     @GetMapping("/api/products")
     public List<ProductResponse> getProducts() {
         List<Product> products = productService.listProducts();
@@ -51,7 +52,8 @@ public class ProductController {
         }
         return resp;
     }
-
+    
+    // Get product by productId
     @GetMapping("/api/products/{id}")
     public ResponseEntity<?> getProduct(@PathVariable Long id) {
         Product product = productService.getProduct(id);
@@ -63,6 +65,8 @@ public class ProductController {
 
     @PostMapping("/api/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody AddProductRequest addProductRequest) {
+
+        // Create new product and set to user
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
                 addProductRequest.getDateTime(), addProductRequest.getCategory(),
                 addProductRequest.getDescription(), addProductRequest.getImageUrl());
@@ -74,6 +78,7 @@ public class ProductController {
         return ResponseEntity.ok(new MessageResponse("Product registered successfully!"));
     }
 
+    // Get all products owned by user
     @GetMapping("api/products/user/{id}")
     public List<ProductResponse> getProductByOwner(User user) {
         List<Product> products = productService.getProductsByUser(user);
@@ -113,6 +118,7 @@ public class ProductController {
         return ResponseEntity.ok(new MessageResponse("Product has been removed"));
     }
 
+    // Give product from owner to receiver
     @PostMapping("/api/products/give")
     public ResponseEntity<?> giveProduct(@Valid @RequestBody GiveProductRequest giveProductRequest) {
         Long productId = giveProductRequest.getProductId();
@@ -133,13 +139,13 @@ public class ProductController {
 
     }
 
+    // Get all products that have been given away already by the owner
     @GetMapping("api/products/give/{id}")
     public List<ProductGA> getGiveAwayByOwner(@PathVariable Long id) {
         List<ProductGA> productGAs = productService.listProductGAs();
         List<ProductGA> resp = new ArrayList<>();
         for (ProductGA productGA : productGAs) {
             Product product = productService.getProduct(productGA.getId());
-            // .orElseThrow(() -> new ProductNotFoundException(productGA.getId()));
             if (id == product.getUser().getId()) {
                 resp.add(productGA);
             }
