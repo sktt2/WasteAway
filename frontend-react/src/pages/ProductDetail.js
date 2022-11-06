@@ -13,7 +13,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
 import ProductService from "../services/ProductService";
 import ChatService from "../services/ChatService";
-import bulbasaur from "../bulbasaur.jpg";
 import StorageHelper from "../services/StorageHelper";
 import styles from "../styles/ComponentStyle.module.css";
 
@@ -28,6 +27,7 @@ class ProductDetail extends Component {
 			messageDisplay: false,
 			errormessage: "",
 			ownerItem: false,
+			userExist: false,
 		};
 	}
 
@@ -36,6 +36,7 @@ class ProductDetail extends Component {
 		const res = await ProductService.getProduct(this.state.id);
 		this.setState({ data: res.data });
 		if(StorageHelper.getUser()){
+			this.setState({userExist: true})
 			if (res.data.ownerName === StorageHelper.getUsername()) {
 				this.setState({ ownerItem: true });
 			}
@@ -112,12 +113,12 @@ class ProductDetail extends Component {
 
 	render() {
 		return (
-			<Box className="container" style={{ width: "55%" }}>
+			<Box className="container" style={{ padding: "2vw 0", width: "55%" }}>
 				<Card className={styles.productDetails}>
 					<CardMedia
 						component="img"
 						variant="top"
-						image={this.state.data.imageUrl || bulbasaur}
+						image={this.state.data.imageUrl || ""}
 					/>
 					<CardContent>
 						<Typography>{this.state.data.productName}</Typography>
@@ -125,7 +126,8 @@ class ProductDetail extends Component {
 						<Typography>{this.state.data.address}</Typography>
 						<Typography>{this.state.data.description}</Typography>
 						<Typography>{this.state.data.ownerName}</Typography>
-						{this.state.ownerItem ? (
+						{this.state.userExist? (
+						this.state.ownerItem ? (
 							<></>
 						) : this.state.fav ? (
 							<FavoriteIcon
@@ -137,7 +139,7 @@ class ProductDetail extends Component {
 								color={"default"}
 								onClick={this.favouriteButtonClicked}
 							/>
-						)}
+						)) : <></>}
 					</CardContent>
 					<Button
 						id="talkToUser"

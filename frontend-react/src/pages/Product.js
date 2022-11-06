@@ -9,8 +9,7 @@ import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
 import UserService from "../services/UserService"
 import StorageHelper from "../services/StorageHelper"
-import StorageHelper from "../services/StorageHelper"
-import "../styles/MainStyle.css"
+    
 
 
 const responsive = {
@@ -75,7 +74,7 @@ class Product extends Component {
 
     render() {
         return (
-            <Box className="container">
+            <Box sx={{padding: "2vw 0"}} className="container">
                 <Carousel responsive={responsive}>
                     {this.state.recommendData.map((data, i) => (
                         <CarouselComponent
@@ -189,7 +188,8 @@ class Product extends Component {
                                     dateTime={data.dateTime}
                                     ownerName={data.ownerName}
                                     favourite={data.favourite ?  data.favourite : false}
-                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }>
+                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }
+                                    userExist={ (StorageHelper.getUser()) ?  true : false} >
                                     </CardComponent>
                             </Grid>
                         ))}

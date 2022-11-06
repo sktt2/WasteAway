@@ -1,5 +1,3 @@
-import bulbasaur from "../bulbasaur.jpg";
-
 function CarouselComponent(props) {
     const title = props.title;
     //   const description = props.description;
@@ -18,7 +16,7 @@ function CarouselComponent(props) {
                     borderStyle: "solid",
                 }}>
                 <img
-                    src={imgSource || bulbasaur}
+                    src={imgSource || ""}
                     alt={imgSource}
                     style={{ minWidth: "80%", maxWidth: "80%", minHeight: 250, maxHeight: 250 }}></img>
             </div>

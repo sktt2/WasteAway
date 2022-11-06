@@ -140,8 +140,8 @@ export default class PopUp extends Component {
               <Box display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
                 <h4>{this.state.title}</h4>
               </Box>
-              <Box display="flex" sx={{ marginTop: 2}} >
-                <Box display="flex" sx={{ alignItems: "center"}}>
+              <Box display="flex" sx={{ marginTop: 2, alignItems: "center", justifyContent: "center"}} >
+                <Box display="flex" sx={{ alignItems: "center", justifyContent: "center"}}>
                   <h6 >{this.state.label}</h6>
 									<FormControl  sx={{ minWidth: 200 , marginLeft: '2%'}}>
 										<Select
@@ -155,8 +155,10 @@ export default class PopUp extends Component {
 										</Select>
 									</FormControl>
                   </Box>
-                  <Button sx={{  marginLeft: 5 }} variant="contained" onClick={this.handleSubmit}>Submit</Button>
 								</Box>
+                <Box display="flex" sx={{ justifyContent: "center", alignItems: "center", marginTop: "3vh" }}>
+                    <Button variant="contained" onClick={this.handleSubmit}>Submit</Button>
+                  </Box>
                 {this.state.error && (
                   <Box display="flex" sx={{color: "red" , alignItems: "center", marginTop: 1}}>{this.state.errorMessage}</Box>
                 )}

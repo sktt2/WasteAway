@@ -1,10 +1,7 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 
-// Import CSS styling
-import styles from "../styles/ComponentStyle.module.css"
 import { Box } from "@mui/system"
 import {
     FormControl,
@@ -84,7 +81,7 @@ class Recommendation extends Component {
 
     render() {
         return (
-            <Box>
+            <Box sx = {{padding: "2vw 0"}}>
                 <Box
                     component="form"
                     display="flex"
@@ -124,7 +121,7 @@ class Recommendation extends Component {
                                         this.handleChange({ recommendation: event.target.value })
                                     }
                                     onBlur={() => this.validateInputs("recommendation")}
-                                    label="Recommend">
+                                    label="Select Recommendation Category">
                                     <MenuItem value="NONE">None</MenuItem>
                                     <MenuItem value="BOOKS">Books</MenuItem>
                                     <MenuItem value="ELECTRONICS">Electronics</MenuItem>
