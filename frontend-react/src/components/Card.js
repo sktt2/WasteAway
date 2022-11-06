@@ -55,7 +55,7 @@ export default function CardComponent(props) {
 	};
 
     const favouriteButtonClicked = async () => {
-        if (localStorage.getItem("user")){
+        if (StorageHelper.getUser()){
             if (fav) {
                 await ProductService.removeProductInterest({
                     interestedUserId: StorageHelper.getUserId(),

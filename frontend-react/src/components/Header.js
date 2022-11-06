@@ -25,7 +25,6 @@ import StorageHelper from "../services/StorageHelper";
 import { useHistory } from "react-router-dom";
 import AuthService from "../services/AuthService";
 import styles from "../styles/ComponentStyle.module.css";
-// import { fontWeight } from "@mui/system"
 import Popper from "@mui/material/Popper";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -104,7 +103,7 @@ const Header = (props) => {
 
   React.useEffect(() => {
     (async () => {
-      if (localStorage.getItem("user")) {
+      if(StorageHelper.getUser()){
         const username = StorageHelper.getUsername();
         const notifications =
           await NotificationService.getNotificationsByUsername(username);

@@ -35,7 +35,7 @@ class ProductDetail extends Component {
 		// Load data of product
 		const res = await ProductService.getProduct(this.state.id);
 		this.setState({ data: res.data });
-		if(localStorage.getItem("user")){
+		if(StorageHelper.getUser()){
 			if (res.data.ownerName === StorageHelper.getUsername()) {
 				this.setState({ ownerItem: true });
 			}
@@ -54,7 +54,7 @@ class ProductDetail extends Component {
 
 	favouriteButtonClicked = async () => {
 		// Change like/unlike
-		if (localStorage.getItem("user")){
+		if (StorageHelper.getUser()){
 			if (this.state.fav) {
 				await ProductService.removeProductInterest({
 					interestedUserId: StorageHelper.getUserId(),
