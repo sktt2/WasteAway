@@ -36,8 +36,8 @@ import csd.app.user.UserInfoRepository;
 @SpringBootTest(classes = csd.app.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class ProductIntegrationTest {
 
-        // @LocalServerPort
-        private int port = 8443;
+        @LocalServerPort
+        private int port;
 
         private final String baseUrl = "https://wasteaway.gay:";
 

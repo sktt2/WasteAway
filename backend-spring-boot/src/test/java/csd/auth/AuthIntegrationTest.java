@@ -29,7 +29,8 @@ import csd.app.roles.*;
 @SpringBootTest(classes = csd.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AuthIntegrationTest {
 
-    private int port = 8443;
+    @LocalServerPort
+    private int port;
 
     private final String baseUrl = "https://wasteaway.gay:";
 
