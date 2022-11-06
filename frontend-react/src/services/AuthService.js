@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios from "axios"
+import StorageHelper from "./StorageHelper"
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/auth/"
 
 class AuthService {
     signin(username, password) {
@@ -11,14 +12,14 @@ class AuthService {
                 password,
             },
             {
-                withCredentials: true,
+                "Access-Control-Allow-Origin": "*",
             }
-        );
+        )
     }
 
     logout() {
-        localStorage.removeItem("user");
-        localStorage.removeItem("user_id");
+        StorageHelper.removeUser()
+        return axios.post(API_URL + "signout", {})
     }
 
     register(username, name, email, password, address, phoneNumber) {
@@ -29,8 +30,12 @@ class AuthService {
             name,
             address,
             phoneNumber,
-        });
+        })
+    }
+
+    async changePassword(body) {
+        return axios.post(API_URL + "changepassword", body)
     }
 }
 
-export default new AuthService();
+export default new AuthService()

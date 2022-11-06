@@ -1,263 +1,360 @@
 import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 
-import Form from "react-bootstrap/Form"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
-import storage from "../services/FirebaseConfig";
-
+import storage from "../services/FirebaseConfig"
+import { Box } from "@mui/system"
+import {
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    OutlinedInput,
+    Button,
+    Alert,
+    TextField,
+    Select,
+    MenuItem,
+} from "@mui/material"
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
 
 class EditProduct extends Component {
     constructor(props) {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            data: [],
             validated: "",
             url: "/product/edit/",
+            productName: "",
+            condition: "",
+            category: "",
+            description: "",
+            image: null,
+            imageUrl: "",
+            displayError: false,
+            displaySuccess: false,
+            errorMessage: "",
+            messageDisplay: {
+                productName: false,
+                category: false,
+                condition: false,
+                description: false,
+                image: false,
+            },
         }
         this.validateInputs = this.validateInputs.bind(this)
+        this.handleChange = this.handleChange.bind(this)
         this.editDetails = this.editDetails.bind(this)
     }
 
     async componentDidMount() {
         const res = await ProductService.getProduct(this.state.id)
-        this.setState({ data: res.data })
-        if (res.data.ownerName !== StorageHelper.getUserName()) {
+        this.setState({ productName: res.data.productName })
+        this.setState({ category: res.data.category })
+        this.setState({ condition: res.data.condition })
+        this.setState({ description: res.data.description })
+        this.setState({ imageUrl: res.data.imageUrl })
+        this.setState({ oldImage: res.data.imageUrl })
+        if (res.data.ownerName !== StorageHelper.getUsername()) {
             this.props.history.push("/profile")
         }
     }
 
     // Return proper error modal on invalid input
     validateInputs = (event) => {
-        const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
-            this.editDetails(event)
+        switch (event) {
+            case "productName":
+                if (this.state.productName.length === 0)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, productName: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, productName: false },
+                    })
+                break
+            case "description":
+                if (this.state.description.length < 5)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, description: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, description: false },
+                    })
+                break
+            case "category":
+                if (this.state.category.length === 0)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, category: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, category: false },
+                    })
+                break
+            case "condition":
+                if (this.state.condition.length === 0)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, condition: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, condition: false },
+                    })
+                break
+            case "image":
+                if (this.state.image === null)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, image: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, image: false },
+                    })
+                break
+            default:
+                return null
         }
-        this.setState({ validated: "was-validated" })
     }
-
-    editDetails = (event) => {
+    handleChange = (field) => {
+        this.setState(field)
+    }
+    editDetails = async (event) => {
         event.preventDefault()
-        // String productName, String condition, String dateTime, String category, String description
-        if (this.state.image != null){
-            const file = this.state.image;
-            const imageName = JSON.parse(localStorage.getItem("user")).id + "/" + this.state.urlImage.split('/')[3];
-            const storageRef = ref(storage, imageName);
+        let imageUrl = this.state.imageUrl
+        if (this.state.image != null) {
+            const file = this.state.image
+            const imageName = StorageHelper.getUserId() + "/" + this.state.imageUrl.split("/")[3]
+            const storageRef = ref(storage, imageName)
 
             //upload new file
-            uploadBytes(storageRef, file)
-            .then((snapshot) => {
-                console.log('Uploaded a blob or file!');
-
-                //get new image URL and store all data in SQL DB
-                getDownloadURL(storageRef)
-                .then((imageURL) => {
-
-                    let body = {
-                        id: this.state.id,
-                        productName: this.state.productname || this.state.data.productName,
-                        condition: this.state.conditions || this.state.data.condition,
-                        dateTime: new Date().toISOString(),
-                        category: this.state.category || this.state.data.category,
-                        description: this.state.description || this.state.data.description,
-                        imageUrl: imageURL,
-                    }
-                    
-                    ProductService.updateProductDetail(body)
-                    .then(() => {
-                        document.getElementById("errorMessage").style.display = "none";
-                        document.getElementById("successMessage").style.display = "block";
-                        setTimeout(function(){
-                            window.location.reload('false')
-                        }, 2000);
+            const newImageUrl = await uploadBytes(storageRef, file)
+                .then(async () => {
+                    return await getDownloadURL(storageRef).catch((error) => {
+                        this.setState({
+                            displayError: true,
+                            errorMessage:
+                                "There is a problem uploading the image. Please try again.",
+                        })
                     })
-                    .catch(() => {
-                        this.props.history.push('/error')
-                    });
-                    
-                    //find old file to delete
-                    const deleteRef = ref(storage, this.state.data.imageUrl);
-                    deleteObject(deleteRef)
-                    .then(() => {
-                        console.log("Old image deleted from firebase");
-                    })
-                    .catch((error) => { //error for deleting old object
-                        console.log("Failed to delete old image");
-                        console.log(error);
-                    });
                 })
-                .catch((error) => { //error for failing to get URL for new image
-                    document.getElementById("errorMessage").style.display = "block";
-                });
-            })
-            .catch(() => { // error for upload
-                document.getElementById("errorMessage").style.display = "block";
-            });
-        }else {
-            let body = {
-                id: this.state.id,
-                productName: this.state.productname || this.state.data.productName,
-                condition: this.state.conditions || this.state.data.condition,
-                dateTime: new Date().toISOString(),
-                category: this.state.category || this.state.data.category,
-                description: this.state.description || this.state.data.description,
-                imageUrl: this.state.data.imageUrl,
+                .catch((error) => {
+                    this.setState({
+                        displayError: true,
+                        errorMessage: "There is a problem uploading the image. Please try again.",
+                    })
+                })
+            if (newImageUrl != null) {
+                imageUrl = newImageUrl
             }
-            
-            ProductService.updateProductDetail(body)
-            .then(() => {
-                document.getElementById("successMessage").style.display = "block";
-                setTimeout(function(){
-                    window.location.reload('false')
-                }, 2000);
+            //find old file to delete
+            const deleteRef = ref(storage, this.state.oldImage)
+            deleteObject(deleteRef).catch((error) => {
+                //error for deleting old object
+                console.log("Failed to delete old image")
+                console.log(error)
             })
-            .catch(() => {
-                this.props.history.push('/error')
-            });
         }
+        let body = {
+            id: this.state.id,
+            productName: this.state.productName,
+            condition: this.state.condition,
+            dateTime: new Date().toISOString(),
+            category: this.state.category,
+            description: this.state.description,
+            imageUrl,
+        }
+
+        ProductService.updateProductDetail(body)
+            .then(() => {
+                this.setState({ displaySuccess: true })
+                setTimeout(() => {
+                    this.props.history.push("/profile")
+                }, 1000)
+            })
+            .catch((error) => {
+                const { message } = error.response.data
+                this.setState({
+                    errorMessage: message,
+                    displayError: true,
+                })
+            })
     }
 
     render() {
         return (
-            <div className="container">
-                <br></br>
-                <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className={styles.inputCard}>
-                        <form
-                            noValidate
-                            className={this.state.validated}
-                            onSubmit={this.validateInputs}>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Product Name</Form.Label>
-                                    <Form.Control
-                                        placeholder="Product name"
-                                        name="productname"
-                                        value={
-                                            this.state.productname || this.state.data.productName
-                                        }
-                                        onChange={(event) =>
-                                            this.setState({ productname: event.target.value })
-                                        }
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide a product name.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Category</Form.Label>
-                                    <Form.Select
-                                        value={this.state.category || this.state.data.category}
-                                        onChange={(event) =>
-                                            this.setState({ category: event.target.value })
-                                        }
-                                        required>
-                                        <option value="" hidden>
-                                            Select category
-                                        </option>
-                                        <option value="BOOKS">Books</option>
-                                        <option value="ELECTRONICS">Electronics</option>
-                                        <option value="FASHION">Fashion</option>
-                                        <option value="FOOD">Food</option>
-                                        <option value="TOYS">Toys</option>
-                                        <option value="UTILITY">Utility</option>
-                                        <option value="VIDEOGAMES">Video Games</option>
-                                        <option value="OTHERS">Others</option>
-                                    </Form.Select>
-                                    <Form.Control.Feedback type="invalid">
-                                        Select a category.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control
-                                        placeholder="Description"
-                                        name="description"
-                                        as="textarea"
-                                        rows={3}
-                                        value={
-                                            this.state.description || this.state.data.description
-                                        }
-                                        onChange={(event) =>
-                                            this.setState({ description: event.target.value })
-                                        }
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide the product description.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Condition of Product</Form.Label>
-                                    <Form.Control
-                                        placeholder="Conditions"
-                                        name="conditions"
-                                        as="textarea"
-                                        rows={3}
-                                        value={this.state.condition || this.state.data.condition}
-                                        onChange={(event) =>
-                                            this.setState({ conditions: event.target.value })
-                                        }
-                                        required
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide the product condition.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Label>Product Image</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(event) =>
-                                            this.setState({
-                                                image: event.target.files[0],
-                                                urlImage: URL.createObjectURL(event.target.files[0]),
-                                            })
-                                        }
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Please provide the product image.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <div>
-                                    <img
-                                        className="container-fluid w-100"
-                                        src={this.state.urlImage || this.state.data.imageUrl}
-                                        value={this.state.urlImage}
-                                    />
-                                </div>
-                            </div>
-                            <br></br>
-                            <div id="successMessage" style={{ display: "none", color: "green" }}>
-                                SAVED SUCCESSFULLY
-                            </div>
-                            <div id="errorMessage" style={{ display: "none", color: "red" }}>
-                                ERROR! PLEASE TRY AGAIN!
-                            </div>
-                            <button className="btn btn-success" type="submit">
-                                SAVE
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <Box>
+                <Box
+                    component="form"
+                    display="flex"
+                    sx={{
+                        border: "1px solid",
+                        flexDirection: "column",
+                        padding: "2vw 0",
+                        margin: "1vw 15vw",
+                        borderRadius: 2,
+                    }}
+                    alignItems="center"
+                    autoComplete="off">
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{ width: "100%" }}
+                        rowSpacing={1}>
+                        <Grid item>
+                            {this.state.displayError ? (
+                                <Alert severity="error">{this.state.errorMessage}</Alert>
+                            ) : (
+                                <Box />
+                            )}
+                            {this.state.displaySuccess ? (
+                                <Alert severity="success">Updated Successfully </Alert>
+                            ) : (
+                                <Box />
+                            )}
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Product Name</InputLabel>
+                                <OutlinedInput
+                                    fullWidth={true}
+                                    id="component-outlined"
+                                    value={this.state.productName}
+                                    onChange={(event) =>
+                                        this.handleChange({ productName: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("productName")}
+                                    label="Product Name"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="productName-error-text">
+                                    {this.state.messageDisplay.productName
+                                        ? "Product name cannot be empty"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <TextField
+                                    id="description"
+                                    label="Description"
+                                    multiline
+                                    rows={2}
+                                    value={this.state.description}
+                                    onChange={(event) =>
+                                        this.handleChange({ description: event.target.value })
+                                    }
+                                    onBlur={() => this.validateInputs("description")}
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="description-error-text">
+                                    {this.state.messageDisplay.description
+                                        ? "Description needs to be at least 5 characters"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel id="category-label">Category</InputLabel>
+                                <Select
+                                    labelId="category-label"
+                                    id="category-select-standard"
+                                    value={this.state.category}
+                                    onChange={(event) =>
+                                        this.handleChange({ category: event.target.value })
+                                    }
+                                    onBlur={() => this.validateInputs("category")}
+                                    label="Category">
+                                    <MenuItem value="BOOKS">Books</MenuItem>
+                                    <MenuItem value="ELECTRONICS">Electronics</MenuItem>
+                                    <MenuItem value="FASHION">Fashion</MenuItem>
+                                    <MenuItem value="FOOD">Food</MenuItem>
+                                    <MenuItem value="TOYS">Toys</MenuItem>
+                                    <MenuItem value="UTILITY">Utility</MenuItem>
+                                    <MenuItem value="VIDEO GAMES">Video Games</MenuItem>
+                                    <MenuItem value="OTHERS">Others</MenuItem>
+                                </Select>
+                                <FormHelperText sx={{ color: "red" }} id="category-error-text">
+                                    {this.state.messageDisplay.category
+                                        ? "Category cannot be blank"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel id="condition-label">Condition</InputLabel>
+                                <Select
+                                    labelId="condition-label"
+                                    id="condition-simple-select-standard"
+                                    value={this.state.condition}
+                                    onChange={(event) =>
+                                        this.handleChange({ condition: event.target.value })
+                                    }
+                                    onBlur={() => this.validateInputs("condition")}
+                                    label="Condition">
+                                    <MenuItem value="BRAND NEW">Brand New</MenuItem>
+                                    <MenuItem value="LIKE MINT">Like New</MenuItem>
+                                    <MenuItem value="LIGHTLY Used">Lightly Used</MenuItem>
+                                    <MenuItem value="WELL USED">Well Used</MenuItem>
+                                    <MenuItem value="HEAVILY USED">Heavily Used</MenuItem>
+                                </Select>
+                                <FormHelperText sx={{ color: "red" }} id="condition-error-text">
+                                    {this.state.messageDisplay.condition
+                                        ? "Condition cannot be blank"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <Button
+                                variant="contained"
+                                component="label"
+                                onBlur={() => this.validateInputs("image")}
+                                onChange={(event) =>
+                                    this.handleChange({
+                                        image: event.target.files[0],
+                                        imageUrl: URL.createObjectURL(event.target.files[0]),
+                                    })
+                                }>
+                                Upload Image
+                                <input hidden accept="image/*" multiple type="file" />
+                            </Button>
+                            <Box
+                                component="img"
+                                sx={{
+                                    border: 0,
+                                    margin: "0 0 0 12vh ",
+                                    height: 280,
+                                    width: 350,
+                                    maxHeight: { xs: 300 },
+                                    maxWidth: { xs: 350 },
+                                }}
+                                alt={null}
+                                src={this.state.imageUrl}
+                            />
+                            <FormHelperText sx={{ color: "red" }} id="condition-error-text">
+                                {this.state.messageDisplay.image ? "Image cannot be empty" : " "}
+                            </FormHelperText>
+                        </Grid>
+                        <Grid item sx={{ width: "80%" }}>
+                            <Button
+                                color="success"
+                                type="submit"
+                                sx={{ marginRight: "2vh" }}
+                                variant="contained"
+                                onClick={this.editDetails}>
+                                Save
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
         )
     }
 }

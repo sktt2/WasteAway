@@ -1,162 +1,397 @@
-import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { Component } from "react"
 
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
-import AuthService from "../services/AuthService";
+import AuthService from "../services/AuthService"
 
 // Import CSS styling
-import styles from "../features/ComponentStyle.module.css";
+import { Box } from "@mui/system"
+import {
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    OutlinedInput,
+    Button,
+    Alert,
+    InputAdornment
+} from "@mui/material"
+
+import VisibilityIcon from "@mui/icons-material/Visibility"
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
+import IconButton from "@mui/material/IconButton"
 
 class Register extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-            validated: "",
-            errormessage: "",
-            messageDisplay: false,
-        };
-        this.validateInputs = this.validateInputs.bind(this);
-        this.registerClicked = this.registerClicked.bind(this);
+            errorMessage: "",
+            displayError: false,
+            messageDisplay: {
+                username: false,
+                name: false,
+                email: false,
+                password: false,
+                confirmpassword: false,
+                address: false,
+                mobile: false,
+            },
+            username: "",
+            name: "",
+            email: "",
+            password: "",
+            confirmpassword: "",
+            address: "",
+            mobile: "",
+            showpassword: false,
+            showconfirmpassword: false,
+        }
+        this.validateInputs = this.validateInputs.bind(this)
+        this.toggleShowPassword = this.toggleShowPassword.bind(this)
+        this.registerClicked = this.registerClicked.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
 
-    // TODO
-    // Import Formik library for custom form validation
-
-    passwordEqualsConfirm() {
-        return this.state.password === this.state.confirmpassword
+    toggleShowPassword = (index) => {
+        switch (index) {
+            case "password":
+                this.setState({ showpassword: !this.state.showpassword })
+                break
+            case "confirmpassword":
+                this.setState({ showconfirmpassword: !this.state.showconfirmpassword })
+                break
+            default:
+                return null
+        }
     }
 
     validateInputs = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false || !this.passwordEqualsConfirm()) {
-            event.preventDefault();
-            event.stopPropagation();
-        } else {
-            this.registerClicked(event);
+        switch (event) {
+            case "name":
+                if (this.state.name.length === 0)
+                    this.setState({ messageDisplay: { ...this.state.messageDisplay, name: true } })
+                else
+                    this.setState({ messageDisplay: { ...this.state.messageDisplay, name: false } })
+                break
+            case "username":
+                if (this.state.username.length < 5)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, username: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, username: false },
+                    })
+                break
+            case "email":
+                if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, email: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, email: false },
+                    })
+                break
+            case "password":
+                if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.state.password))
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, password: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, password: false },
+                    })
+                break
+            case "confirmpassword":
+                if (this.state.password !== this.state.confirmpassword)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, confirmpassword: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, confirmpassword: false },
+                    })
+                break
+            case "address":
+                if (this.state.address.length === 0)
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, address: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, address: false },
+                    })
+                break
+            case "mobile":
+                if (!/([8-9]{1})([0-9]{7})$/.test(this.state.mobile))
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, mobile: true },
+                    })
+                else
+                    this.setState({
+                        messageDisplay: { ...this.state.messageDisplay, mobile: false },
+                    })
+                break
+            default:
+                return null
         }
-        this.setState({ validated: "was-validated" });
-    };
-
+    }
+    handleChange = (field) => {
+        this.setState(field)
+    }
     registerClicked = (event) => {
-        event.preventDefault();
-        let username = this.state.username;
-        let name = this.state.name;
-        let email = this.state.email;
-        let password = this.state.password;
-        let address = this.state.address;
-        let mobile = this.state.mobile;
+        event.preventDefault()
+        let messageDisplay = this.state.messageDisplay
+        for (let field in messageDisplay) {
+            if (this.state[field].length === 0 || messageDisplay[field]) {
+                this.setState({
+                    errorMessage: "There are invalid fields",
+                    displayError: true,
+                })
+                return
+            }
+        }
+        let username = this.state.username
+        let name = this.state.name
+        let email = this.state.email
+        let password = this.state.password
+        let address = this.state.address
+        let mobile = this.state.mobile
         AuthService.register(username, name, email, password, address, mobile)
             .then(() => {
-                AuthService.signin(username, password)
-                    .then((response) => {
-                        localStorage.setItem("user", JSON.stringify(response.data));
-                        this.props.history.push("/product");
+                this.props.history.push("/login")
+            })
+            .catch((error) => {
+                // Read body of error response and display message get to alert
+                const { message } = error.response.data
+                if (message.includes("Username is already taken"))
+                    this.setState({
+                        errorMessage: "Username is already taken",
+                        displayError: true,
+                    })
+                if (message.includes("Email is already"))
+                    this.setState({
+                        errorMessage: "Email is already taken",
+                        displayError: true,
                     })
             })
-            .catch(error => {
-                // Read body of error response and display message get to alert
-                console.log(error.response.data)
-                this.setState({ 
-                    errormessage: "Username/Email has already been used!",
-                    messageDisplay: true,
-                });
-            })
-    };
+    }
 
     render() {
         return (
-            <div className="container">
-                <br></br>
-                <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <div className={styles.inputCard}>
-                        <Alert variant="danger" show={this.state.messageDisplay} onClose={() => this.setState({ messageDisplay: false, })} dismissible>
-                            {/* Map each errormessage from error.response.data[i] here */}
-                            {this.state.errormessage}
-                        </Alert>
-                        <Form noValidate className={this.state.validated} onSubmit={this.validateInputs}>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control placeholder="Username" name="username" required value={this.state.username || ""}
-                                        onChange={(event) => this.setState({ username: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter a username.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control placeholder="Name" name="name" required value={this.state.name || ""}
-                                        onChange={(event) => this.setState({ name: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter your name.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Email" name="email" required value={this.state.email || ""}
-                                        onChange={(event) => this.setState({ email: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter your email.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" name="password" required value={this.state.password || ""}
-                                        onChange={(event) => this.setState({ password: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter a password.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Confirm Password" name="confirmpassword" required value={this.state.confirmpassword || ""}
-                                        onChange={(event) => this.setState({ confirmpassword: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter the above password.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                <Form.Label>Home Address</Form.Label>
-                                <Form.Control placeholder="Address" name="address" required value={this.state.address || ""} 
-                                    onChange={(event) => this.setState({ address: event.target.value, })}/>
-                                <Form.Control.Feedback type="invalid">
-                                    Enter your home address.
-                                </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <div>
-                                <Form.Group>
-                                    <Form.Label>Mobile Number</Form.Label>
-                                    <Form.Control placeholder="Mobile Number" name="mobile" required value={this.state.mobile || ""}
-                                        onChange={(event) => this.setState({ mobile: event.target.value, })}/>
-                                    <Form.Control.Feedback type="invalid">
-                                        Enter your mobile number.
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </div>
-                            <br></br>
-                            <Button className="btn btn-success" type="submit">Register</Button>{" "}
-                            <Button className="btn btn-success" onClick={() => this.props.history.push("/login")}>
-                                Return to Login
+            <Box>
+                <Box
+                    component="form"
+                    display="flex"
+                    sx={{
+                        border: "1px solid",
+                        flexDirection: "column",
+                        padding: "1vw 0",
+                        margin: "0vw 15vw",
+                        borderRadius: 2,
+                    }}
+                    alignItems="center"
+                    autoComplete="off">
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{ width: "100%" }}
+                        rowSpacing={1}>
+                        <Grid item>
+                            {this.state.displayError ? (
+                                <Alert severity="error">{this.state.errorMessage}</Alert>
+                            ) : (
+                                <Box />
+                            )}
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Username</InputLabel>
+                                <OutlinedInput
+                                    fullWidth={true}
+                                    id="component-outlined"
+                                    value={this.state.username}
+                                    onChange={(event) =>
+                                        this.handleChange({ username: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("username")}
+                                    label="Username"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="username-error-text">
+                                    {this.state.messageDisplay.username
+                                        ? "Username needs to be at least 5 characters"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Name</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.name}
+                                    onChange={(event) =>
+                                        this.handleChange({ name: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("name")}
+                                    label="Name"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="name-error-text">
+                                    {this.state.messageDisplay.name ? "Name cannot be blank" : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Email</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.email}
+                                    onChange={(event) =>
+                                        this.handleChange({ email: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("email")}
+                                    label="Email"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="email-error-text">
+                                    {this.state.messageDisplay.email
+                                        ? "Invalid email address"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Password</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    type={this.state.showpassword ? "text" : "password"}
+                                    value={this.state.password}
+                                    onChange={(event) =>
+                                        this.handleChange({ password: event.target.value })
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={ () => this.toggleShowPassword("password")}
+                                                edge="end">
+                                                {this.state.showpassword ? (
+                                                    <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    onBlur={(event) => this.validateInputs("password")}
+                                    label="Password"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="password-error-text">
+                                    {this.state.messageDisplay.password
+                                        ? "Password must have at least 8 characters, at least one number and one letter"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">
+                                    Confirm Password
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    type={this.state.showconfirmpassword ? "text" : "password"}
+                                    value={this.state.confirmpassword}
+                                    onChange={(event) =>
+                                        this.handleChange({ confirmpassword: event.target.value })
+                                    }
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={ () => this.toggleShowPassword("confirmpassword")}
+                                                edge="end">
+                                                {this.state.showconfirmpassword ? (
+                                                    <VisibilityIcon />
+                                                ) : (
+                                                    <VisibilityOffIcon />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    onBlur={(event) => this.validateInputs("confirmpassword")}
+                                    label="Confirm Password"
+                                />
+                                <FormHelperText
+                                    sx={{ color: "red" }}
+                                    id="confirmpassword-error-text">
+                                    {this.state.messageDisplay.confirmpassword
+                                        ? "Passwords must be the same"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Address</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.address}
+                                    onChange={(event) =>
+                                        this.handleChange({ address: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("address")}
+                                    label="Address"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="address-error-text">
+                                    {this.state.messageDisplay.address
+                                        ? "Address cannot be blank"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <FormControl sx={{ width: "100%" }}>
+                                <InputLabel htmlFor="component-outlined">Mobile Number</InputLabel>
+                                <OutlinedInput
+                                    id="component-outlined"
+                                    value={this.state.mobile}
+                                    onChange={(event) =>
+                                        this.handleChange({ mobile: event.target.value })
+                                    }
+                                    onBlur={(event) => this.validateInputs("mobile")}
+                                    label="Mobile Number"
+                                />
+                                <FormHelperText sx={{ color: "red" }} id="name-error-text">
+                                    {this.state.messageDisplay.mobile
+                                        ? "Mobile number must be 8 characters starting with 8 or 9"
+                                        : " "}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item sx={{ width: "70%" }}>
+                            <Button
+                                color="success"
+                                type="submit"
+                                sx={{ marginRight: "2vh" }}
+                                variant="contained"
+                                onClick={this.registerClicked}>
+                                Register
                             </Button>
-                        </Form>
-                    </div>
-                </div>
-            </div>
-        );
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={() => this.props.history.push("/login")}>
+                                Back to Login
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+        )
     }
 }
 
-export default Register;
+export default Register
