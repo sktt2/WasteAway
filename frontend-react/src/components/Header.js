@@ -100,6 +100,10 @@ const Header = (props) => {
     }
     const filterChat = (messages) => {
         const chats = [...new Map(messages.map((item) => [item["chatid"], item])).values()]
+        console.log(chats)
+        chats.sort((a, b) => {
+            return b.notifid - a.notifid
+        })
         return chats
     }
     React.useEffect(() => {
