@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -80,8 +81,8 @@ class ProductIntegrationTest {
                 users.save(user);
                 UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 11111", 87231231);
                 userInfos.save(userInfo);
-                Product product = new Product("IPHONE3", "Well Used", LocalDateTime.now().toString(), "ELECTRONICS",
-                                "this is a description of the product");
+                Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(), "ELECTRONICS",
+                                "This is the description");
                 product.setImageUrl(
                                 "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 product.setUser(user);
@@ -105,6 +106,8 @@ class ProductIntegrationTest {
                 userInfos.save(userInfo);
                 Product product = new Product("CAMERA", "OLD",
                                 LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+                product.setImageUrl(
+                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 product.setUser(user);
                 Long id = products.save(product).getId();
                 URI uri = new URI(baseUrl + port + "/api/products/" + id);
@@ -137,12 +140,18 @@ class ProductIntegrationTest {
                 userInfos.save(userInfo);
                 Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
                                 "ELECTRONICS", "this is a description");
+                product.setImageUrl(
+                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 Product product2 = new Product("LAPTOP", "OLD",
                                 LocalDateTime.now().toString(),
                                 "ELECTRONICS", "this is a description");
+                product2.setImageUrl(
+                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 Product product3 = new Product("TABLET", "NEW",
                                 LocalDateTime.now().toString(),
                                 "ELECTRONICS", "this is a description");
+                product3.setImageUrl(
+                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 product.setUser(user);
                 product2.setUser(user);
                 product3.setUser(user);
@@ -202,6 +211,8 @@ class ProductIntegrationTest {
                 userInfos.save(userInfo);
                 Product product = new Product("CAMERA", "OLD",
                                 LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+                product.setImageUrl(
+                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
                 product.setUser(user);
                 products.save(product);
                 Long id = product.getId();
