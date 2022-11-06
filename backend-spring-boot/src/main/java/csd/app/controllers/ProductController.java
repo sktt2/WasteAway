@@ -208,7 +208,8 @@ public class ProductController {
                 Long productInterestId = productInterest.getProductInterestId();
                 Long productId = productInterest.getProduct().getId();
                 Long ownerId = productInterest.getProduct().getUser().getId();
-                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId);
+                String interestedUsername  = productInterest.getUser().getUsername();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
                 resp.add(piresp);
             }
         }
@@ -225,7 +226,8 @@ public class ProductController {
                 Long interestUserId = productInterest.getUser().getId();
                 Long productInterestId = productInterest.getProductInterestId();
                 Long ownerId = productInterest.getProduct().getUser().getId();
-                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId);
+                String interestedUsername  = productInterest.getUser().getUsername();
+                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
                 resp.add(piresp);
             }
         }

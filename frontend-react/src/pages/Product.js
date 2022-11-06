@@ -33,7 +33,7 @@ class Product extends Component {
 
     async componentDidMount() {
         const res = await ProductService.getProducts()
-        // myArray.find(x => x.id === '45').foo;
+
         if (localStorage.getItem("user")){
 
             const allProductInterests = await ProductService.getProductInterestByUser(StorageHelper.getUserId())
