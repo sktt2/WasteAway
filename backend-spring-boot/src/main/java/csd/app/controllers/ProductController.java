@@ -227,12 +227,13 @@ public class ProductController {
         String recommendation = UR.getRecommendation();
         String username = UR.getUsername();
         User user = userService.getUserByUsername(username);
-        //UserRecommendation userRecommendation = userService.getRecommendation(UR.getRecommendationId());
         if (recommendation != null && user != null) {
             UserRecommendation userRecommendation = new UserRecommendation();
             userRecommendation.setUser_Id(user.getId());
             userRecommendation.setRecommendation(recommendation);
             userService.updateRecommendation(userRecommendation);
+            user.setFirstTime(false);
+            userService.updateUser(user);
             return ResponseEntity.ok(new MessageResponse("User recommendation updated successfully"));
         }
         return ResponseEntity.badRequest().body((new MessageResponse("Failed to update user recommendation")));

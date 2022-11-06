@@ -55,7 +55,7 @@ class Login extends Component {
         AuthService.signin(username, password)
             .then((response) => {
                 StorageHelper.setUser(JSON.stringify(response.data))
-                this.props.history.push("/recommendation")
+                this.props.history.push("/products")
             })
             .catch((err) => {
                 this.setState({

@@ -48,9 +48,7 @@ class ProductDetail extends Component {
         userid,
         productid
       }
-      console.log(req);
       ProductService.removeProductInterest(req);
-      console.log("meow");
     } else {
       let newProductInterest = {
         interestedusername,

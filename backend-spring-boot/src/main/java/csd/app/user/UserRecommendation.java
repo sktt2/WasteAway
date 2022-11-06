@@ -35,9 +35,4 @@ public class UserRecommendation {
         this.user_Id = userId;
     }
 
-    // public UserRecommendation(String recommendation, User user, Set<Product> products) {
-    //     this.recommendation = recommendation;
-    //     this.user = user;
-    //     this.products = products;
-    // }
 }

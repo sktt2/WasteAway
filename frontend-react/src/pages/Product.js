@@ -7,6 +7,7 @@ import Carousel from "react-multi-carousel"
 import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
+import UserService from "../services/UserService"
 import StorageHelper from "../services/StorageHelper"
 import "../styles/MainStyle.css"
 
@@ -32,19 +33,21 @@ class Product extends Component {
     }
 
     async componentDidMount() {
-        const firstTime = StorageHelper.getFirstTime()
-        if (firstTime === true) {
-            this.props.history.push("/recommendation")
-        }
-        const recommend = await ProductService.getRecommendation(StorageHelper.getUserId())
         const res = await ProductService.getProducts()
-        console.log(recommend);
-        let recData
-        res.data.forEach(element => {
-            if(element.category === recommend){
-                this.state.recommendData.push(element)
+        if(StorageHelper.getUser()){
+            const user = await UserService.getUser(StorageHelper.getUsername())
+            //if user has not declared recommendation, redirect to recommend page
+            if (user.data.firstTime === true) {
+                this.props.history.push("/recommendation")
             }
-        })
+            //get recommended items for carousel
+            const recommend = await ProductService.getRecommendation(StorageHelper.getUserId())       
+            res.data.forEach(element => {
+                if(element.category === recommend.data && element.ownerName !== StorageHelper.getUsername()){
+                    this.state.recommendData.push(element)
+                }
+            })
+        }
         //this.setState({recommendData: recData})
         this.setState({ mainData: res.data })
         this.setState({ data: res.data })
@@ -53,6 +56,18 @@ class Product extends Component {
     render() {
         return (
             <Box className="container">
+                <Carousel responsive={responsive}>
+                    {this.state.recommendData.map((data, i) => (
+                        <CarouselComponent
+                            title={data.productName}
+                            condition={data.condition}
+                            address={data.address}
+                            imgSource={data.imageUrl}
+                            category={data.category}
+                            buttonLink={this.state.url + data.id}></CarouselComponent>
+                    ))}
+                </Carousel>
+                <br></br>
                 <Box style={{paddingTop: '1%'}}>
                 <input style={{height: 55, width: '60%'}}
                     type="search"
@@ -138,18 +153,6 @@ class Product extends Component {
                     </Select>
                 </FormControl>
                 </Box>
-                <br></br>
-                <Carousel responsive={responsive}>
-                    {this.state.recommendData.map((data, i) => (
-                        <CarouselComponent
-                            title={data.productName}
-                            condition={data.condition}
-                            address={data.address}
-                            imgSource={data.imageUrl}
-                            category={data.category}
-                            buttonLink={this.state.url + data.id}></CarouselComponent>
-                    ))}
-                </Carousel>
                 <br></br>
                 <Box>
                     <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>

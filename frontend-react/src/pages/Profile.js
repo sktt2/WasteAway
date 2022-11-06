@@ -189,15 +189,6 @@ class Profile extends Component {
                             <Button
                                 variant="outlined"
                                 onClick={() => {
-                                    this.props.history.push("/recommendation")
-                                }}
-                                startIcon={<CartIcon />}
-                                sx = {{ height: "50%", margin: "0 0 0 1vh" }}>
-                                Change Recommendation
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
                                     this.props.history.push("/addproduct")
                                 }}
                                 startIcon={<AddIcon />}
