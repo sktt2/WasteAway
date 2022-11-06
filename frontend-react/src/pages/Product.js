@@ -34,7 +34,7 @@ class Product extends Component {
     async componentDidMount() {
         const res = await ProductService.getProducts()
 
-        if (localStorage.getItem("user")){
+        if (StorageHelper.getUser()){
 
             const allProductInterests = await ProductService.getProductInterestByUser(StorageHelper.getUserId())
 
@@ -172,7 +172,7 @@ class Product extends Component {
                                     dateTime={data.dateTime}
                                     ownerName={data.ownerName}
                                     favourite={data.favourite ?  data.favourite : false}
-                                    isOwner={ (localStorage.getItem("user")) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }>
+                                    isOwner={ (StorageHelper.getUser()) ? ((StorageHelper.getUsername() === data.ownerName) ? true : false) : false }>
                                     </CardComponent>
                             </Grid>
                         ))}

@@ -85,7 +85,7 @@ const Header = (props) => {
 
   React.useEffect(() => {
     (async () => {
-      if(localStorage.getItem("user")){
+      if(StorageHelper.getUser()){
         const username = StorageHelper.getUsername();
         const notifications = await NotificationService.getNotificationsByUsername(username);
         setNotifs(notifications.data);

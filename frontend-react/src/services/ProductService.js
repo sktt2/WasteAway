@@ -46,6 +46,10 @@ class ProductService {
     async getProductInterestByProduct(id) {
         return axios.get(API_URL + "product/interests/" + id )
     }
+
+    async getBooleanIfProductGAExist(productId) {
+        return axios.get(API_URL + "give?productId=" + productId)
+    }
 }
 
 export default new ProductService()

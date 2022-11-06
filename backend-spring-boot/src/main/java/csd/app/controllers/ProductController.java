@@ -233,4 +233,14 @@ public class ProductController {
         }
         return resp;
     }
+
+    @GetMapping("api/products/give")
+    public Boolean getBooleanIfProductGAExist(@RequestParam("productId") @PathVariable Long productId) {
+        ProductGA productGA = productService.getProductGA(productId);
+        if (productGA == null) {
+            return false;
+        }
+        return true;
+    }
+
 }
