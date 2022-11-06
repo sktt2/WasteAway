@@ -126,7 +126,7 @@ class ProductDetail extends Component {
 						<Typography>{this.state.data.description}</Typography>
 						<Typography>{this.state.data.ownerName}</Typography>
 						{this.state.ownerItem ? (
-							<FavoriteBorderIcon  color={"default"} />
+							<></>
 						) : this.state.fav ? (
 							<FavoriteIcon
 								color={"success"}

@@ -189,7 +189,7 @@ export default function CardComponent(props) {
 				<CardActions disableSpacing>
 					
 						{isOwner ? (
-							<FavoriteBorderIcon  color={"default"} />
+							<></>
 						) : fav ? (
 							<FavoriteIcon 
                                 id = "favouriteIcon"
