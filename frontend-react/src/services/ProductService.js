@@ -27,31 +27,30 @@ class ProductService {
         return axios.get(url + "give/" + id)
     }
     async addProductInterest(body) {
-        return axios.post(API_URL + "interest", body)
+        return axios.post(url + "interest", body)
     }
     async removeProductInterest(body) {
-        return axios.delete(API_URL + "interest/delete", { data: body })
+        return axios.delete(url + "interest/delete", { data: body })
     }
     async getProductInterestByUser(id) {
-        return axios.get(API_URL + "interests/" + id)
+        return axios.get(url + "interests/" + id)
     }
     async getProductInterestByProduct(id) {
-        return axios.get(API_URL + "product/interests/" + id )
+        return axios.get(url + "product/interests/" + id)
     }
 
     async getBooleanIfProductGAExist(productId) {
-        return axios.get(API_URL + "give?productId=" + productId)
+        return axios.get(url + "give?productId=" + productId)
     }
     async getRecommendation(id) {
-        return axios.get(API_URL + "recommendation/" + id)
+        return axios.get(url + "recommendation/" + id)
     }
     async updateRecommendation(body) {
-        return axios.put(API_URL + "recommendation/update", body)
+        return axios.put(url + "recommendation/update", body)
     }
     async getProductsByUserRecommendation(id) {
-        return axios.get(API_URL + "product/recommendation/" + id)
+        return axios.get(url + "product/recommendation/" + id)
     }
-
 }
 
 export default new ProductService()
