@@ -31,4 +31,9 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification addNotification(Notification notif) {
         return notifications.save(notif);
     };
+
+    public Notification updateNotificationIfRead(Notification notif) {
+        notif.setRead(true);
+        return notifications.save(notif);
+    }
 }

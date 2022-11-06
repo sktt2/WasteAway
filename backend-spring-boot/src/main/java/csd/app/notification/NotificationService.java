@@ -6,4 +6,5 @@ public interface NotificationService {
     List<Notification> getNotificationbyUsername(String username);
     Notification getNotificationById(Long id);
     Notification addNotification(Notification notif);
+    Notification updateNotificationIfRead(Notification notif);
 }

@@ -46,12 +46,30 @@ const Header = (props) => {
   const handleOpenNotifMenu = (event) => {
     setAnchorElNotif(anchorElNotif ? null : event.currentTarget);
   };
-  const handleNotifClick = (chat) => {
-    history.push("/chat/" + chat.chatid)
-  }
+  const handleNotifClick = async (data) => {
+    console.log(data.notifid)
+    if (data.read === false) {
+      NotificationService.updateNotificationIfRead(data.notifid).then(
+        (response) => {
+          if (response.status === 200) {
+            data.read = true;
+            history.push("/chat/" + data.chatid);
+          }
+        }
+      ).catch(() => {
+        history.push("/error");
+      });
+      console.log("read successfully");
+    }
+    history.push("/chat/" + data.chatid);
+  };
 
   const openNotif = Boolean(anchorElNotif);
   const popperid = openNotif ? "notif-popper" : undefined;
+  const notifcolors = {
+    true: "#bdbdbd",
+    false: "#fafafa",
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -86,13 +104,14 @@ const Header = (props) => {
 
   React.useEffect(() => {
     (async () => {
-      if(localStorage.getItem("user")){
+      if (localStorage.getItem("user")) {
         const username = StorageHelper.getUsername();
-        const notifications = await NotificationService.getNotificationsByUsername(username);
-        setNotifs(notifications.data);
+        const notifications =
+          await NotificationService.getNotificationsByUsername(username);
+        setNotifs(notifications.data.reverse());
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   const loggedInMenu = (
     <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "flex" } }}>
@@ -156,7 +175,11 @@ const Header = (props) => {
               />
             </ListItemButton> */}
             {notifs.map((data, i) => (
-              <ListItemButton alignItems="flex-start" onClick={() => handleNotifClick(data)}>
+              <ListItemButton
+                alignItems="flex-start"
+                onClick={() => handleNotifClick(data)}
+                sx={{ color: notifcolors[data.read] }}
+              >
                 <ListItemAvatar>
                   <Avatar
                     alt={data.takerName}

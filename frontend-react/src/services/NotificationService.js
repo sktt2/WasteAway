@@ -10,6 +10,9 @@ class NotificationService {
     async getNotificationsByUsername(username) {
         return axios.get(API_URL + username)
     }
+    async updateNotificationIfRead(notifid) {
+        return axios.put(API_URL + 'update/' + notifid)
+    }
 }
 
 export default new NotificationService()
