@@ -55,6 +55,4 @@ public class UserController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Invalid Details"));
         }
     }
-
-    
 }

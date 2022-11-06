@@ -115,7 +115,7 @@ class Recommendation extends Component {
                         </Grid>
                         <Grid item sx={{ width: "70%" }}>
                             <FormControl sx={{ width: "100%" }}>
-                                <InputLabel id="recommend-label">What are you looking for?</InputLabel>
+                                <InputLabel id="recommend-label">Select recommendation category</InputLabel>
                                 <Select
                                     labelId="recommend-label"
                                     id="recommend-select-standard"

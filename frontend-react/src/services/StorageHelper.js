@@ -14,6 +14,9 @@ class StorageHelper {
     static getName() {
         return JSON.parse(localStorage.getItem("user")).userInfo.name
     }
+    static getFirstTime() {
+        return JSON.parse(localStorage.getItem("user")).firstTime
+    }
     static removeUser() {
         localStorage.removeItem("user")
     }

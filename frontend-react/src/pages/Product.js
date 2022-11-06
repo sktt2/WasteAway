@@ -7,7 +7,6 @@ import Carousel from "react-multi-carousel"
 import CardComponent from "../components/Card"
 import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
-import UserService from "../services/UserService"
 import StorageHelper from "../services/StorageHelper"
 import "../styles/MainStyle.css"
 
@@ -32,8 +31,12 @@ class Product extends Component {
     }
 
     async componentDidMount() {
+        const firstTime = StorageHelper.getFirstTime()
+        if (firstTime === true) {
+            this.props.history.push("/recommendation")
+        }
+        const recommend = ProductService.getRecommendation()
         const res = await ProductService.getProducts()
-        const recommend = ProductService.get
         this.setState({ mainData: res.data })
         this.setState({ data: res.data })
     }
@@ -134,6 +137,7 @@ class Product extends Component {
                             condition={data.condition}
                             address={data.address}
                             imgSource={data.imageUrl}
+                            category={data.category}
                             buttonLink={this.state.url + data.id}></CarouselComponent>
                     ))}
                 </Carousel>
