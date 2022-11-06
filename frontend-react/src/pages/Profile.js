@@ -157,7 +157,7 @@ class Profile extends Component {
             )
         }
         return (
-            <Box>
+            <Box sx={{padding: "0", margin:"0"}}>
                 <Box>
                     {this.state.popup && (
                         <PopUp

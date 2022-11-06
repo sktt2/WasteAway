@@ -279,7 +279,13 @@ class AddProduct extends Component {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item sx={{ width: "80%" }}>
+                        <Grid item 
+                            display="flex"
+                            sx={{ 
+                                width: "80%",  
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
                             <Button
                                 variant="contained"
                                 component="label"
@@ -293,15 +299,22 @@ class AddProduct extends Component {
                                 Upload Image
                                 <input hidden accept="image/*" multiple type="file" />
                             </Button>
+                        </Grid>
+                        <Grid item 
+                            display="flex"
+                            sx={{ 
+                                width: "80%",  
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
                             <Box
                                 component="img"
                                 sx={{
                                     border: 0,
-                                    margin: "0 0 0 12vh ",
                                     height: 280,
                                     width: 350,
-                                    maxHeight: { xs: 300 },
-                                    maxWidth: { xs: 350 },
+                                    maxHeight: { xs: 350 },
+                                    maxWidth: { xs: 400 },
                                 }}
                                 alt={null}
                                 src={this.state.imageUrl}

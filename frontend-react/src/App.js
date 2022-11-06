@@ -4,7 +4,6 @@ import Header from "./components/Header.js"
 import Login from "./pages/Login.js"
 import React, { Component } from "react"
 import { Container } from "react-bootstrap"
-import Logout from "./pages/Logout.js"
 import Error from "./components/Error.js"
 import Product from "./pages/Product.js"
 import ProductDetail from "./pages/ProductDetail"
@@ -36,7 +35,6 @@ class App extends Component {
                         <Container>
                             <Switch>
                                 <Route path="/login" component={Login} />
-                                <Route path="/logout" component={Logout}></Route>
                                 <Route path="/error" component={Error}></Route>
                                 <Route path="/product/edit/:id" component={EditProduct}></Route>
                                 <Route path="/product/:id" component={ProductDetail}></Route>

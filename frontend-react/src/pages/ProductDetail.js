@@ -111,7 +111,7 @@ class ProductDetail extends Component {
 
 	render() {
 		return (
-			<Box className="container" style={{ width: "55%" }}>
+			<Box className="container" style={{ padding: "2vw 0", width: "55%" }}>
 				<Card className={styles.productDetails}>
 					<CardMedia
 						component="img"

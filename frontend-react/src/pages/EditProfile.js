@@ -141,7 +141,7 @@ class EditProfile extends Component {
 
     render() {
         return (
-            <Box>
+            <Box sx={{padding: "2vh 0"}}>
                 <Box
                     component="form"
                     display="flex"

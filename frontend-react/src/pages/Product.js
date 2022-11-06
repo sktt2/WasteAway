@@ -74,7 +74,7 @@ class Product extends Component {
 
     render() {
         return (
-            <Box className="container">
+            <Box sx={{padding: "2vw 0"}} className="container">
                 <Carousel responsive={responsive}>
                     {this.state.recommendData.map((data, i) => (
                         <CarouselComponent
