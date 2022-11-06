@@ -11,7 +11,6 @@ import ProductDetail from "./pages/ProductDetail"
 import Register from "./pages/Register.js"
 import Recommendation from "./pages/Recommendation.js"
 import AddProduct from "./pages/AddProduct.js"
-import ForgotPass from "./pages/ForgotPass.js"
 import ChangePass from "./pages/ChangePass.js"
 import Profile from "./pages/Profile"
 import EditProduct from "./pages/EditProduct.js"
@@ -48,9 +47,8 @@ class App extends Component {
                                 <Route path="/addproduct" component={AddProduct}></Route>
                                 <Route path="/register" component={Register}></Route>
                                 <Route path="/recommendation" component={Recommendation}></Route>
-                                <Route path="/forgotpass" component={ForgotPass}></Route>
                                 <Route path="/chat/:id" component={Chat}></Route>
-                                <Route path="/chatnavigator" component={ChatNavigator}></Route>
+                                <Route path="/chats" component={ChatNavigator}></Route>
                                 <Route exact path="/" component={Product} />
                                 <Redirect to="/error" />
                             </Switch>

@@ -1,10 +1,7 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 
-// Import CSS styling
-import styles from "../styles/ComponentStyle.module.css"
 import { Box } from "@mui/system"
 import {
     FormControl,

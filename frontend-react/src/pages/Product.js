@@ -9,8 +9,7 @@ import CarouselComponent from "../components/Carousel"
 import ProductService from "../services/ProductService"
 import UserService from "../services/UserService"
 import StorageHelper from "../services/StorageHelper"
-import StorageHelper from "../services/StorageHelper"
-import "../styles/MainStyle.css"
+    
 
 
 const responsive = {

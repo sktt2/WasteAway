@@ -33,7 +33,7 @@ import NotificationService from "../services/NotificationService"
 import { Icon } from "@mui/material"
 
 const pages = ["products"]
-const settings = ["profile", "ChatNavigator", "logout"]
+const settings = ["profile", "chats", "logout"]
 const loggedOut = ["login", "register"]
 
 const Header = (props) => {

@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 import ProductService from "../services/ProductService"

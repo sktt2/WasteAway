@@ -20,7 +20,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 // Import CSS styling
 import styles from "../styles/ComponentStyle.module.css";
-import bulbasaur from "../bulbasaur.jpg";
 import ProductService from "../services/ProductService"
 import StorageHelper from "../services/StorageHelper"
 
@@ -149,7 +148,7 @@ export default function CardComponent(props) {
 			<CardMedia
 				component="img"
 				style={{ minHeight: 300, maxHeight: 300 }}
-				image={imgSource || bulbasaur}
+				image={imgSource || ""}
 			/>
 			<CardContent>
 				<Typography variant="body2" color="text.secondary">

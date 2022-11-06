@@ -13,7 +13,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
 import ProductService from "../services/ProductService";
 import ChatService from "../services/ChatService";
-import bulbasaur from "../bulbasaur.jpg";
 import StorageHelper from "../services/StorageHelper";
 import styles from "../styles/ComponentStyle.module.css";
 
@@ -117,7 +116,7 @@ class ProductDetail extends Component {
 					<CardMedia
 						component="img"
 						variant="top"
-						image={this.state.data.imageUrl || bulbasaur}
+						image={this.state.data.imageUrl || ""}
 					/>
 					<CardContent>
 						<Typography>{this.state.data.productName}</Typography>
