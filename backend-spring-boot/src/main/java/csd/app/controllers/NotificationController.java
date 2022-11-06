@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class NotificationController {
-    
+
     @Autowired
     private NotificationService notificationService;
 
@@ -27,8 +27,10 @@ public class NotificationController {
         List<Notification> notiflist = notificationService.getNotificationbyUsername(username);
         List<NotificationResponse> resp = new ArrayList<NotificationResponse>();
         for (Notification notif : notiflist) {
-            NotificationResponse notifasresponse =
-            new NotificationResponse(notif.getNotifid(), notif.getChat().getId(), notif.getChat().getTaker().getUsername(), notif.getChat().getProduct().getId(), notif.getChat().getProduct().getProductName(), notif.getChat().getProduct().getImageUrl(), notif.getMessageContent(), false);
+            NotificationResponse notifasresponse = new NotificationResponse(notif.getNotifid(), notif.getChat().getId(),
+                    notif.getChat().getTaker().getUsername(), notif.getChat().getProduct().getId(),
+                    notif.getChat().getProduct().getProductName(), notif.getChat().getProduct().getImageUrl(),
+                    notif.getMessageContent(), notif.getIsRead());
             resp.add(notifasresponse);
         }
         return resp;
