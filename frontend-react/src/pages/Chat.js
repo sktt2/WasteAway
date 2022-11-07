@@ -41,6 +41,9 @@ class Chat extends Component {
     }
 
     async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
         const res = await ChatService.getChatById(this.state.id)
         this.setState({ chat: res.data })
         this.setState({ chatter: (StorageHelper.getUsername() === this.state.chat.ownerUsername ?

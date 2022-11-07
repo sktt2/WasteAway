@@ -48,6 +48,9 @@ class Profile extends Component {
     }
 
     async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
         const res = await ProductService.getProductByOwner(StorageHelper.getUserId())
         const give = await ProductService.getGAProductByOwner(StorageHelper.getUserId())
         this.setState({ data: res.data })

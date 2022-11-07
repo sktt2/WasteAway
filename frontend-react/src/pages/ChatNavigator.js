@@ -25,6 +25,9 @@ class ChatNavigator extends Component {
     }
 
     async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
         const res = await ChatService.getChatByUser(StorageHelper.getUsername())
         this.setState({ mainData: res.data })
         this.setState({ data: res.data })

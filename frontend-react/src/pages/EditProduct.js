@@ -49,6 +49,9 @@ class EditProduct extends Component {
     }
 
     async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
         const res = await ProductService.getProduct(this.state.id)
         this.setState({ productName: res.data.productName })
         this.setState({ category: res.data.category })
