@@ -18,6 +18,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import IconButton from "@mui/material/IconButton"
+import StorageHelper from "../services/StorageHelper"
 
 class Register extends Component {
     constructor(props) {
@@ -48,6 +49,12 @@ class Register extends Component {
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
         this.registerClicked = this.registerClicked.bind(this)
         this.handleChange = this.handleChange.bind(this)
+    }
+
+    async componentDidMount() {
+        if (StorageHelper.getUser()) {
+            this.props.history.push("/")
+        }
     }
 
     toggleShowPassword = (index) => {
