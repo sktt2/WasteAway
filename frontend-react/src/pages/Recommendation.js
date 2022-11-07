@@ -28,6 +28,12 @@ class Recommendation extends Component {
         this.formSubmit = this.formSubmit.bind(this)
     }
 
+    async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
+    }
+
     validateInputs = (event) => {
         switch (event) {
             case "recommendation":

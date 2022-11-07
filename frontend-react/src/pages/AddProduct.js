@@ -42,6 +42,12 @@ class AddProduct extends Component {
         this.addProductClicked = this.addProductClicked.bind(this)
     }
 
+    async componentDidMount() {
+        if (StorageHelper.getUser() == null) {
+            this.props.history.push("/")
+        }
+    }
+
     validateInputs = (event) => {
         switch (event) {
             case "productName":
