@@ -48,7 +48,7 @@ class EditProfile extends Component {
         this.setState({ email: user.email })
         this.setState({ address: user.userInfo.address })
         this.setState({ mobile: "" + user.userInfo.phoneNumber })
-        await this.setState({ user: StorageHelper.getUser() })
+        this.setState({ user: StorageHelper.getUser() })
     }
 
     validateInputs = (event) => {
@@ -141,7 +141,7 @@ class EditProfile extends Component {
 
     render() {
         return (
-            <Box sx={{padding: "2vh 0"}}>
+            <Box sx={{ padding: "2vh 0" }}>
                 <Box
                     component="form"
                     display="flex"
@@ -261,7 +261,7 @@ class EditProfile extends Component {
                                 onClick={() => {
                                     this.props.history.push("/recommendation")
                                 }}
-                                sx = {{ bgcolor: "#333333", marginRight: "2vh" }}>
+                                sx={{ bgcolor: "#333333", marginRight: "2vh" }}>
                                 Change Interest
                             </Button>
                             <Button

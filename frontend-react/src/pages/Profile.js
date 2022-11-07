@@ -42,12 +42,15 @@ class Profile extends Component {
             title: "",
             label: "",
             button: 0,
+            name: "",
+            username: "",
         }
         this.triggerPopUp = this.triggerPopUp.bind(this)
         this.closePopUp = this.closePopUp.bind(this)
     }
 
     async componentDidMount() {
+        console.log(StorageHelper.getUser())
         if (StorageHelper.getUser() == null) {
             this.props.history.push("/")
         }
@@ -56,6 +59,7 @@ class Profile extends Component {
         this.setState({ data: res.data })
         const object = give.data.reduce((obj, item) => ((obj[item.id] = item.receiverId), obj), {})
         this.setState({ give: object })
+        this.setState({ name: StorageHelper.getName(), username: StorageHelper.getUserId() })
     }
 
     handleChange = (event, newValue) => {
@@ -181,12 +185,12 @@ class Profile extends Component {
                                     paddingBottom: "10px",
                                     fontSize: "h5.fontSize",
                                 }}>
-                                {StorageHelper.getName().replace(
+                                {this.state.name.replace(
                                     /(^\w|\s\w)(\S*)/g,
                                     (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
                                 )}
                             </Typography>
-                            <Typography>{StorageHelper.getUsername()}</Typography>
+                            <Typography>{this.state.username}</Typography>
                         </Box>
                         <Box sx={{ alignSelf: "center" }}>
                             <Button

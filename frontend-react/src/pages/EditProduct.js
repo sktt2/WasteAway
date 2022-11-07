@@ -53,15 +53,15 @@ class EditProduct extends Component {
             this.props.history.push("/")
         }
         const res = await ProductService.getProduct(this.state.id)
+        if (res.data.ownerName !== StorageHelper.getUsername()) {
+            this.props.history.push("/profile")
+        }
         this.setState({ productName: res.data.productName })
         this.setState({ category: res.data.category })
         this.setState({ condition: res.data.condition })
         this.setState({ description: res.data.description })
         this.setState({ imageUrl: res.data.imageUrl })
         this.setState({ oldImage: res.data.imageUrl })
-        if (res.data.ownerName !== StorageHelper.getUsername()) {
-            this.props.history.push("/profile")
-        }
     }
 
     // Return proper error modal on invalid input
