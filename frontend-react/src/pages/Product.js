@@ -46,7 +46,7 @@ class Product extends Component {
             //get recommended items for carousel
             const recommend = await ProductService.getRecommendation(StorageHelper.getUserId())       
             res.data.forEach(element => {
-                if(element.category === recommend.data && element.ownerName !== StorageHelper.getUsername()){
+                if(element.category.toLowerCase() === recommend.data.toLowerCase() && element.ownerName !== StorageHelper.getUsername()){
                     this.state.recommendData.push(element)
                 }
             })

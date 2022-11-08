@@ -59,7 +59,7 @@ class Profile extends Component {
         this.setState({ data: res.data })
         const object = give.data.reduce((obj, item) => ((obj[item.id] = item.receiverId), obj), {})
         this.setState({ give: object })
-        this.setState({ name: StorageHelper.getName(), username: StorageHelper.getUserId() })
+        this.setState({ name: StorageHelper.getName(), username: StorageHelper.getUsername() })
     }
 
     handleChange = (event, newValue) => {
