@@ -1,7 +1,7 @@
+/* eslint-disable no-sequences */
 import React, { Component } from "react"
 import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
 import { Grid } from "@mui/material"
-import CartIcon from "@mui/icons-material/LocalGroceryStore"
 import SettingsIcon from "@mui/icons-material/Settings"
 import StorageHelper from "../services/StorageHelper"
 import AddIcon from "@mui/icons-material/Add"
