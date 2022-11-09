@@ -1,9 +1,13 @@
 package csd.app.product;
 
 import java.util.List;
+
+import csd.app.exception.ProductNotFoundException;
+import csd.app.exception.UserNotFoundException;
 import csd.app.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     // Save product into database and return product with productId generated
     public Product addProduct(Product product) {
         if (product.getUser() == null) {
-            return null;
+            throw new UserNotFoundException();
         }
         return products.save(product);
     }

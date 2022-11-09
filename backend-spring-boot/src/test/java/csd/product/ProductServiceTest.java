@@ -1,9 +1,9 @@
 package csd.product;
 
+import csd.app.exception.ProductNotFoundException;
 import csd.app.product.Product;
 import csd.app.product.ProductGA;
 import csd.app.product.ProductGARepository;
-import csd.app.product.ProductNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
