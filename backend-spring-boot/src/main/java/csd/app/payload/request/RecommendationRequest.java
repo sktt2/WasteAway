@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RecommendationRequest {
-    @NotNull(message = "Recommendation cannot be empty")
+    @NotBlank(message = "Recommendation cannot be empty")
     private String recommendation;
 
-    @NotNull(message = "Username cannot be empty")
+    @NotBlank(message = "Username cannot be empty")
     private String username;
  
     public RecommendationRequest() {

@@ -20,16 +20,16 @@ public class User {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @NotNull(message = "Username should not be null")
+    @NotBlank(message = "Username should not be null")
     @Column(unique = true)
     private String username;
 
     @Email
     @Column(unique = true)
-    @NotNull(message = "email should not be null")
+    @NotBlank(message = "email should not be null")
     private String email;
 
-    @NotNull(message = "Password should not be null")
+    @NotBlank(message = "Password should not be null")
     private String password;
 
     private boolean firstTime = true;

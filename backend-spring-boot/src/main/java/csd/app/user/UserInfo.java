@@ -22,7 +22,7 @@ public class UserInfo implements Serializable {
     @JsonIgnore
     private @Id Long id;
 
-    @NotNull(message = "Please enter your name")
+    @NotBlank(message = "Please enter your name")
     @Column
     private String name;
 

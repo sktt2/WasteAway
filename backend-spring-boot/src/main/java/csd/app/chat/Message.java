@@ -15,11 +15,11 @@ public class Message {
     
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @NotNull(message = "Message cannot be empty")
+    @NotBlank(message = "Message cannot be empty")
     @Size(min = 1, message = "Message cannot be empty")
     private String content;
 
-    @NotNull(message = "Date and time should not be empty")
+    @NotBlank(message = "Date and time should not be empty")
     private String dateTime;
 
     @ManyToOne
