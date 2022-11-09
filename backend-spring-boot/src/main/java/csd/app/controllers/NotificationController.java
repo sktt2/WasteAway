@@ -6,6 +6,8 @@ import csd.app.notification.Notification;
 import csd.app.notification.NotificationService;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.NotificationResponse;
+import csd.app.user.User;
+import csd.app.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,16 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/api/notifications/{username}")
-    public List<NotificationResponse> getNotificationByUsername(@PathVariable String username) {
+    public ResponseEntity<?> getNotificationByUsername(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        if (user == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("User does not exist"));
+        }
+
         List<Notification> notiflist = notificationService.getNotificationbyUsername(username);
         List<NotificationResponse> resp = new ArrayList<NotificationResponse>();
         for (Notification notif : notiflist) {
@@ -33,7 +43,7 @@ public class NotificationController {
                     notif.getMessageContent(), notif.getIsRead());
             resp.add(notifasresponse);
         }
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 
     @PutMapping("/api/notifications/update/{notifid}")
@@ -41,7 +51,7 @@ public class NotificationController {
         Notification oldNotif = notificationService.getNotificationById(notifid);
         Notification updatedNotif = notificationService.updateNotificationIfRead(oldNotif);
         if (!updatedNotif.getIsRead()) {
-            System.out.println("Server error");
+            return ResponseEntity.badRequest().body(new MessageResponse("Notification is not read"));
         }
         return ResponseEntity.ok(new MessageResponse("Notification is now read!"));
     }

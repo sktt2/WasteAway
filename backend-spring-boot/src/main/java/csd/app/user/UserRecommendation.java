@@ -1,19 +1,9 @@
 package csd.app.user;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import csd.app.product.Product;
 import lombok.*;
 
 @Entity
@@ -21,9 +11,10 @@ import lombok.*;
 @Setter
 public class UserRecommendation {
     
-    @Id 
-    private Long user_Id;
+    @Id @NotNull(message = "User Id cannot be empty")
+    private Long userId;
 
+    @NotNull (message = "Recommendation cannot be empty")
     private String recommendation;
 
     public UserRecommendation() {
@@ -32,7 +23,7 @@ public class UserRecommendation {
 
     public UserRecommendation(String recommendation, Long userId) {
         this.recommendation = recommendation;
-        this.user_Id = userId;
+        this.userId = userId;
     }
 
 }

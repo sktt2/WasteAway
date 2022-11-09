@@ -1,27 +1,18 @@
 package csd.app.payload.request;
 
-import java.util.Set;
 import javax.validation.constraints.*;
 
-import csd.app.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class RecommendationRequest {
-    @NotNull
+    @NotNull(message = "Recommendation cannot be empty")
     private String recommendation;
 
+    @NotNull(message = "Username cannot be empty")
     private String username;
-
-    public String getRecommendation() {
-        return recommendation;
-    }
-
-    public String getUsername() {
-        return username;
-    }
  
     public RecommendationRequest() {
 

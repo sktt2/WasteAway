@@ -195,7 +195,7 @@ class ProductIntegrationTest {
                 ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
                                 String.class);
                 JsonNode root = objectMapper.readTree(result.getBody());
-
+                
                 assertEquals(200, result.getStatusCode().value());
                 assertEquals("Product registered successfully!",
                                 root.path("message").asText());

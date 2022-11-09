@@ -100,7 +100,6 @@ public class AuthIntegrationTest {
         ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
         JsonNode root = objectMapper.readTree(result.getBody());
 
-        //assertEquals(200, result.getStatusCode().value());
         assertEquals("User registered successfully!", root.path("message").asText());
         assertEquals(true, users.existsByUsername("tester1"));
         assertEquals(200, result.getStatusCode().value());
