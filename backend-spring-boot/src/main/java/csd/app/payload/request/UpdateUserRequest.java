@@ -8,23 +8,24 @@ import lombok.*;
 
 @ToString
 public class UpdateUserRequest {
-	@NotBlank
+	@NotBlank(message = "Username should not be empty")
 	@Size(min = 3, max = 20)
 	private String username;
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
+	@NotBlank(message = "Email not be empty")
+	@Size(max = 50, message = "Email should be under 50 characters")
+	@Email(message = "Invalid email")
 	private String email;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
+	@NotBlank(message = "Name not be empty")
+	@Size(min = 3, max = 50, message = "Name should be between 3 to 50 characters")
 	private String name;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
+	@NotBlank(message = "Address not be empty")
+	@Size(min = 3, max = 50, message = "Address should be between 3 to 50 characters")
 	private String address;
 
-	@NotBlank
+	@NotBlank(message = "Phone number not be empty")
+	@Pattern(regexp = "^[89][0-9]{7}", message = "Invalid phone number")
 	private int phoneNumber;
 }

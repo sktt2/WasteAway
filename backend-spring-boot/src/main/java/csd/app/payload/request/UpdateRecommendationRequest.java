@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @ToString
 public class UpdateRecommendationRequest {
-    @NotNull
+    @NotNull (message = "Recommendation should not be empty")
     private String recommendation;
 
     public String getRecommendation() {

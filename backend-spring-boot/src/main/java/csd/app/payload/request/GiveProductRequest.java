@@ -1,13 +1,17 @@
 package csd.app.payload.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.constraints.*;
+
+import lombok.*;
 
 @Getter
 @Setter
 
 public class GiveProductRequest {
+	@NotBlank (message = "Receiver username should not be empty")
 	private String receiverUsername;
+
+	@NotBlank (message = "Product ID should not be empty")
 	private Long productId;
 
 	public GiveProductRequest() {

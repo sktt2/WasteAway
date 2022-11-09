@@ -14,22 +14,26 @@ public class SignupRequest {
 
     @NotBlank(message="Email should not be empty")
     @Size(max = 50, message="Email should not be above 50 characters")
-    @Email
+    @Email(message = "Invalid Email")
     private String email;
 
     private Set<String> role;
 
-    @NotBlank
-    @Size(min = 8, max = 40, message = "Password should be at least 8 characters with at least 1 number and 1 letter")
+    @NotBlank(message = "Password should not be empty")
+    @Size(min = 8, max = 40, message = "Password should be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Password should be at least 8 characters long and should contain with at least 1 number and 1 letter")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Name should not be empty")
     @Size(min = 3, max = 50, message = "Name should be between 3 to 50 characters long")
     private String name;
 
+    @NotBlank(message = "Address should not be empty")
     @Size(min = 3, max = 50, message = "Address should be between 3 to 50 characters long")
     private String address;
 
     @NotNull(message = "Phone number should not be empty")
+    @Min(value = 80000000, message = "Invalid phone number, phone number should be 8 digits starting with 8/9")
+    @Max(value = 99999999, message = "Invalid phone number, phone number should be 8 digits starting with 8/9")
     private int phoneNumber;
 }

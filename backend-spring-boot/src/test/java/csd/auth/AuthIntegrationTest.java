@@ -89,7 +89,7 @@ public class AuthIntegrationTest {
         JSONObject personJsonObject = new JSONObject();
         personJsonObject.put("username", "tester1");
         personJsonObject.put("email", "tester1@email.com");
-        personJsonObject.put("password", "password");
+        personJsonObject.put("password", "password123");
         personJsonObject.put("name", "Tester 1");
         personJsonObject.put("address", "TesterVille Street 1");
         personJsonObject.put("phoneNumber", "81112111");
@@ -113,7 +113,7 @@ public class AuthIntegrationTest {
         JSONObject personJsonObject = new JSONObject();
         personJsonObject.put("username", "tester8");
         personJsonObject.put("email", "tester9@email.com");
-        personJsonObject.put("password", "password");
+        personJsonObject.put("password", "password123");
         personJsonObject.put("name", "Tester 9");
         personJsonObject.put("address", "TesterVille Street 9");
         personJsonObject.put("phoneNumber", "89992999");
@@ -137,7 +137,7 @@ public class AuthIntegrationTest {
         JSONObject personJsonObject = new JSONObject();
         personJsonObject.put("username", "tester6");
         personJsonObject.put("email", "tester10@email.com");
-        personJsonObject.put("password", "password");
+        personJsonObject.put("password", "password123");
         personJsonObject.put("name", "Tester 10");
         personJsonObject.put("address", "TesterVille Street 10");
         personJsonObject.put("phoneNumber", "81112111");
