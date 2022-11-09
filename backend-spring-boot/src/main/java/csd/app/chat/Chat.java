@@ -51,4 +51,7 @@ public class Chat {
         this.owner = owner;
         this.product = product;
     }
+
+    public Chat() {
+    }
 }

@@ -8,10 +8,11 @@ import lombok.*;
 @Setter
 
 public class GiveProductRequest {
-	@NotBlank (message = "Receiver username should not be empty")
+
+	@NotBlank(message = "Receiver username cannot not be empty")
 	private String receiverUsername;
 
-	@NotBlank (message = "Product ID should not be empty")
+	@NotNull(message = "Product Id cannot not be null")
 	private Long productId;
 
 	public GiveProductRequest() {

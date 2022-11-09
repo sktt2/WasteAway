@@ -7,19 +7,19 @@ import lombok.*;
 @Getter
 public class MessageRequest {
 
-    @NotBlank(message = "Content should not be empty")
+    @NotBlank(message = "Content cannot be empty")
     private String content;
 
-    @NotBlank(message = "Date time not be empty")
+    @NotBlank(message = "Date time cannot be empty")
     private String dateTime;
 
-    @NotBlank(message = "Sender username should not be empty")
+    @NotBlank(message = "Sender username cannot be empty")
     private String senderUsername;
 
-    @NotBlank(message = "Receiver username should not be empty")
+    @NotBlank(message = "Receiver username cannot be empty")
 	private String receiverUsername;
     
-    @NotBlank(message = "Chat ID should not be empty")
+    @NotNull(message = "Chat Id cannot be null")
     private Long chatId;
     
 }

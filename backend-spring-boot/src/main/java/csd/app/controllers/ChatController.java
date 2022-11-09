@@ -35,10 +35,8 @@ public class ChatController {
         List<Chat> chats = chatService.getChatbyUsername(username);
         List<ChatResponse> response = new ArrayList<>();
         for (Chat chat : chats) {
-            ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner().getId(),
-                    chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
-                    chat.getProduct().getId(), chat.getProduct().getProductName(),
-                    chat.getProduct().getImageUrl());
+            ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner(),
+                    chat.getTaker(), chat.getProduct());
             response.add(chatResp);
         }
         return ResponseEntity.ok(response);
@@ -47,10 +45,8 @@ public class ChatController {
     @GetMapping("/api/chat/{id}")
     public ResponseEntity<?> getChatById(@PathVariable Long id) {
         Chat chat = chatService.getChatById(id);
-        ChatResponse response = new ChatResponse(chat.getId(), chat.getOwner().getId(),
-                chat.getOwner().getUsername(), chat.getTaker().getId(), chat.getTaker().getUsername(),
-                chat.getProduct().getId(), chat.getProduct().getProductName(),
-                chat.getProduct().getImageUrl());
+        ChatResponse response = new ChatResponse(chat.getId(), chat.getOwner(),
+                chat.getTaker(), chat.getProduct());
         return ResponseEntity.ok(response);
     }
 
@@ -61,10 +57,8 @@ public class ChatController {
         List<Message> messages = chatService.getMessagesByChat(chat);
         List<ChatMessageResponse> response = new ArrayList<>();
         for (Message message : messages) {
-            ChatMessageResponse chatMessageResp = new ChatMessageResponse(message.getContent(),
-                    message.getDateTime(), message.getSender().getId(),
-                    message.getSender().getUsername(), message.getReceiver().getId(),
-                    message.getReceiver().getUsername(), message.getChat().getId());
+            ChatMessageResponse chatMessageResp = new ChatMessageResponse(message, 
+                    message.getSender(), message.getReceiver(), message.getChat().getId());
             response.add(chatMessageResp);
         }
         return ResponseEntity.ok(response);
@@ -75,10 +69,8 @@ public class ChatController {
         Chat savedChat = chatService.addChat(chatRequest.getTakerId(), chatRequest.getOwnerId(),
                 chatRequest.getProductId());
         notificationService.addNotification((new Notification(savedChat, savedChat.getTaker(), savedChat.getOwner(), false)));
-        ChatResponse response = new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(),
-                savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), 
-                savedChat.getTaker().getUsername(), savedChat.getProduct().getId(),
-                savedChat.getProduct().getProductName(), savedChat.getProduct().getImageUrl());
+        ChatResponse response = new ChatResponse(savedChat.getId(), savedChat.getOwner(),
+                savedChat.getTaker(), savedChat.getProduct());
         return ResponseEntity.created(URI.create("/api/chat")).body(response);
     }
 
@@ -92,10 +84,8 @@ public class ChatController {
         chatNotification.setMessageContent(savedMessage.getContent());
         notificationService.addNotification(chatNotification);
 
-        ChatMessageResponse response = new ChatMessageResponse(savedMessage.getContent(),
-                savedMessage.getDateTime(), savedMessage.getSender().getId(),
-                savedMessage.getSender().getUsername(), savedMessage.getReceiver().getId(),
-                savedMessage.getReceiver().getUsername(), savedMessage.getChat().getId());
+        ChatMessageResponse response = new ChatMessageResponse(savedMessage, 
+        savedMessage.getSender(), savedMessage.getReceiver(), savedMessage.getChat().getId());
         return ResponseEntity.created(URI.create("/api/chat/" + messageRequest.getChatId() + "/messages"))
                 .body(response);
     }

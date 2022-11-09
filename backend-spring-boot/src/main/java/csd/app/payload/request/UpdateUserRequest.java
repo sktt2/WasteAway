@@ -25,7 +25,7 @@ public class UpdateUserRequest {
 	@Size(min = 3, max = 50, message = "Address should be between 3 to 50 characters")
 	private String address;
 
-	@NotBlank(message = "Phone number not be empty")
+	@NotNull(message = "Phone number not be null")
 	@Pattern(regexp = "^[89][0-9]{7}", message = "Invalid phone number")
 	private int phoneNumber;
 }
