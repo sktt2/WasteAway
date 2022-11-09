@@ -354,27 +354,24 @@ class ProductIntegrationTest {
                 assertEquals("Recommendation cannot be empty", root.path("message").asText());
         }
 
-        // @Test
-        // public void getUserRecommendation_Success() throws Exception {
-        //         User user = new User("tester2", "blabla@hotmail.com",
-        //                         encoder.encode("password1"));
-        //         users.save(user);
-        //         Long userId = user.getId();
-        //         UserInfo userInfo = new UserInfo(userId, user.getUsername(),
-        //                         "SINGAPORE01234567", 87231231);
-        //         userInfos.save(userInfo);
-        //         UserRecommendation userRecommendation = new UserRecommendation("ELECTRONICS", userId);
-        //         userRecommendations.save(userRecommendation);
+        @Test
+        public void getUserRecommendation_Success() throws Exception {
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password1"));
+                users.save(user);
+                Long userId = user.getId();
+                UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                                "SINGAPORE01234567", 87231231);
+                userInfos.save(userInfo);
+                UserRecommendation userRecommendation = new UserRecommendation("ELECTRONICS", userId);
+                userRecommendations.save(userRecommendation);
 
-                
+                URI uri = new URI(baseUrl + port + "/api/products/recommendation/" + userId);
 
-        //         URI uri = new URI(baseUrl + port + "/api/products/product/recommendation/" + userId);
-
-        //         ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);
-        //         String validRecommendation = result.getBody();
-                
-        //         assertNotNull(validRecommendation);
-        //         assertEquals(200, result.getStatusCode().value());
-        //         //assertEquals(response.getRecommendation(), validRecommendation);
-        // }
+                ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);
+                String validRecommendation = result.getBody();
+                assertNotNull(validRecommendation);
+                assertEquals(200, result.getStatusCode().value());
+                assertEquals(userRecommendation.getRecommendation(), validRecommendation);
+        }
 }
