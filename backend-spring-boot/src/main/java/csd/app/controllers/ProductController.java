@@ -36,7 +36,6 @@ public class ProductController {
     @Autowired
     private UserService userService;
 
-
     public ProductController(ProductService productService, UserService userService) {
         this.productService = productService;
         this.userService = userService;

@@ -21,6 +21,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return notiflist;
     };
+
     public Notification getNotificationById(Long id) {
         if (notifications.existsById(id)) {
             return notifications.findById(id)
@@ -28,6 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return null;
     };
+    
     public Notification addNotification(Notification notif) {
         return notifications.save(notif);
     };
