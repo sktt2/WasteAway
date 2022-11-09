@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>csd</groupId>
-	<artifactId>app</artifactId>
-	<version>wasteaway-1.0</version>
+	<artifactId>wasteaway</artifactId>
+	<version>1.0.0</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
