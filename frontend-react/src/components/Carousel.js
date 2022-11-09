@@ -13,7 +13,7 @@ function CarouselComponent(props) {
                     display: "flex",
                     alignItems: "stretched",
                     alignContent: "center",
-                    borderStyle: "solid",
+                    borderBottom: "solid",
                 }}>
                 <img
                     src={imgSource || ""}
