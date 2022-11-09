@@ -7,6 +7,6 @@ public interface ChatService {
     List<Chat> getChatbyUsername(String username);
     Chat getChatById(Long id);
     List<Message> getMessagesByChat(Chat chat);
-    Chat addChat(Chat chat, Long takerId, Long ownerId, Long productId);
-    Message addMessage(Message message, String senderUsername, String receiverUsername, Long chatId);
+    Chat addChat(Long takerId, Long ownerId, Long productId);
+    Message addMessage(String content, String dateTime, String senderUsername, String receiverUsername, Long chatId);
 }

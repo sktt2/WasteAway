@@ -1,13 +1,14 @@
 package csd.app.payload.response;
 
-import lombok.*;
-
-@Getter
-@Setter
+import javax.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MessageResponse {
+
+    @NotBlank(message = "Message response cannot be empty or null")
     private String message;
 
+    @Autowired
     public MessageResponse(String message) {
         this.message = message;
     }

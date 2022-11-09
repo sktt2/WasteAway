@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -15,7 +16,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 public class Chat {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
@@ -45,6 +45,10 @@ public class Chat {
     @OneToMany(mappedBy="chat", cascade = CascadeType.ALL) 
     private List<Notification> notification;
 
-    public Chat() {
+    @Autowired
+    public Chat(User taker, User owner, Product product) {
+        this.taker = taker;
+        this.owner = owner;
+        this.product = product;
     }
 }
