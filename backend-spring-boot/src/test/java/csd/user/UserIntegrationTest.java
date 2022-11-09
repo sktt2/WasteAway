@@ -161,9 +161,6 @@ class UserIntegrationTest {
                 new HttpEntity<RecommendationRequest>(recommendationRequest), String.class);
         JsonNode root = objectMapper.readTree(result.getBody());
 
-        System.out.println("***********");
-        System.out.println(root);
-        System.out.println(result);
         assertEquals(400, result.getStatusCode().value());
         assertEquals("Recommendation cannot be emptyUsername cannot be empty", root.path("message").asText());
     }
