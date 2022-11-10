@@ -9,18 +9,18 @@ import lombok.*;
 public class AddProductRequest {
     
     @NotBlank(message = "Product name should not be empty")
-    @Size(min = 1, max = 100, message = "Product name should be at least 1 character long")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     private String productName;
 
     @NotBlank(message = "Category should not be empty")
     private String category;
 
     @NotBlank(message = "Product description should not be empty")
-    @Size(min = 5, max = 200, message = "Product description should be at least 5 characters long")
+    @Size(min = 5, max = 200, message = "Product description should be between 5-200 characters long")
     private String description;
 
     @NotBlank(message = "Product condition should not be empty")
-    @Size(min = 1, max = 100, message = "Product condition should be at least 1 character long")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     private String condition;
 
     @NotBlank(message = "Date and time should not be empty")

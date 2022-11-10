@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -32,15 +31,15 @@ public class Product {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
     @NotBlank(message = "Product name should not be empty")
-    @Size(min = 1, max = 100, message = "Product name should be at least 1 character long")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     private String productName;
 
     @NotBlank(message = "Product description should not be empty")
-    @Size(min = 5, max = 200, message = "Product description should be at least 5 characters long")
+    @Size(min = 5, max = 200, message = "Product description should be between 5-200 characters long")
     private String description;
 
     @NotBlank(message = "Product condition should not be empty")
-    @Size(min = 1, max = 100, message = "Product condition should be at least 1 character long")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     @Column(name = "conditions")
     private String condition;
 

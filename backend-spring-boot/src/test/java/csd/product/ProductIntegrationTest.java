@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -31,350 +32,599 @@ import csd.app.user.User;
 import csd.app.user.UserRepository;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
-import csd.app.user.UserRecommendation;
-import csd.app.user.UserRecommendationRepository;
-import csd.app.payload.request.RecommendationRequest;
+import csd.app.user.ProductInterest;
+import csd.app.user.ProductInterestRepository;
+import csd.app.payload.request.AddProductInterestRequest;
+import csd.app.payload.request.DeleteProductInterestRequest;
+import csd.app.payload.response.ProductInterestResponse;
+import csd.app.user.UserService;
+import csd.app.user.UserServiceImpl;
 
 /** Start an actual HTTP server listening at a random port */
 @SpringBootTest(classes = csd.app.Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 class ProductIntegrationTest {
 
-        @LocalServerPort
-        private int port;
+    @LocalServerPort
+    private int port;
 
-        private final String baseUrl = "http://localhost:";
+    private final String baseUrl = "http://localhost:";
 
-        @Autowired
-        /**
-         * Use TestRestTemplate for testing a real instance of your application as an
-         * external actor.
-         * TestRestTemplate is just a convenient subclass of RestTemplate that is
-         * suitable for integration tests.
-         * It is fault tolerant, and optionally can carry Basic authentication headers.
-         */
-        private TestRestTemplate restTemplate;
+    @Autowired
+    /**
+     * Use TestRestTemplate for testing a real instance of your application as an
+     * external actor.
+     * TestRestTemplate is just a convenient subclass of RestTemplate that is
+     * suitable for integration tests.
+     * It is fault tolerant, and optionally can carry Basic authentication headers.
+     */
+    private TestRestTemplate restTemplate;
 
-        @Autowired
-        private ProductRepository products;
+    @Autowired
+    private ProductRepository products;
 
-        @Autowired
-        private UserRepository users;
+    @Autowired
+    private UserRepository users;
 
-        @Autowired
-        private UserInfoRepository userInfos;
+    @Autowired
+    private UserInfoRepository userInfos;
 
-        @Autowired
-        private UserRecommendationRepository userRecommendations;
+    @Autowired
+    private ProductInterestRepository productInterests;
 
-        @Autowired
-        private BCryptPasswordEncoder encoder;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
-        @Autowired
-        private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private UserService userService;
 
-        @AfterEach
-        void tearDown() {
-                // clear the database after each test
-                products.deleteAll();
-                users.deleteAll();
-                userInfos.deleteAll();
-        }
+    @Autowired
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-        @Test
-        public void getProducts_Success() throws Exception {
-                URI uri = new URI(baseUrl + port + "/api/products");
-                User user = new User("tester1", "abc@test.com", encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 11111", 87231231);
-                userInfos.save(userInfo);
-                Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(), "ELECTRONICS",
-                                "This is the description");
-                product.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                product.setUser(user);
-                products.save(product);
+    @AfterEach
+    void tearDown() {
+        // clear the database after each test
+        products.deleteAll();
+        users.deleteAll();
+        userInfos.deleteAll();
+        productInterests.deleteAll();
+        // responses.deleteAll();
+    }
 
-                ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
-                                Product[].class);
-                Product[] productArr = result.getBody();
+    @Test
+    public void getProducts_Success() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester1", "abc@test.com", encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 11111", 87231231);
+        userInfos.save(userInfo);
+        Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(), "ELECTRONICS",
+                "This is the description");
+        product.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        product.setUser(user);
+        products.save(product);
 
-                assertNotNull(productArr);
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals(1, productArr.length);
-        }
+        ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
+                Product[].class);
+        Product[] productArr = result.getBody();
 
-        @Test
-        public void getProduct_ValidProductId_Success() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
-                userInfos.save(userInfo);
-                Product product = new Product("CAMERA", "OLD",
-                                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-                product.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                product.setUser(user);
-                Long id = products.save(product).getId();
-                URI uri = new URI(baseUrl + port + "/api/products/" + id);
+        assertNotNull(productArr);
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(1, productArr.length);
+    }
 
-                ResponseEntity<Product> result = restTemplate.getForEntity(uri,
-                                Product.class);
-                Product validProduct = result.getBody();
+    @Test
+    public void getProduct_ValidProductId_Success() throws Exception {
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(), "SINGAPORE 511111", 87231231);
+        userInfos.save(userInfo);
+        Product product = new Product("CAMERA", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        product.setUser(user);
+        Long id = products.save(product).getId();
+        URI uri = new URI(baseUrl + port + "/api/products/" + id);
 
-                assertNotNull(validProduct);
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals(product.getProductName(), validProduct.getProductName());
-        }
+        ResponseEntity<Product> result = restTemplate.getForEntity(uri,
+                Product.class);
+        Product validProduct = result.getBody();
 
-        @Test
-        public void getProduct_InvalidProductId_Failure() throws Exception {
-                URI uri = new URI(baseUrl + port + "/api/products/4");
+        assertNotNull(validProduct);
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(product.getProductName(), validProduct.getProductName());
+    }
 
-                ResponseEntity<Product> result = restTemplate.getForEntity(uri,
-                                Product.class);
+    @Test
+    public void getProduct_InvalidProductId_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products/4");
 
-                assertEquals(400, result.getStatusCode().value());
-        }
+        ResponseEntity<Product> result = restTemplate.getForEntity(uri,
+                Product.class);
 
-        @Test
-        public void getProductByOwner_Success() throws Exception {
-                User user = new User("tester1", "abc@test.com", encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-                                "SINGAPORE1234567", 87231231);
-                userInfos.save(userInfo);
-                Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
-                                "ELECTRONICS", "this is a description");
-                product.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                Product product2 = new Product("LAPTOP", "OLD",
-                                LocalDateTime.now().toString(),
-                                "ELECTRONICS", "this is a description");
-                product2.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                Product product3 = new Product("TABLET", "NEW",
-                                LocalDateTime.now().toString(),
-                                "ELECTRONICS", "this is a description");
-                product3.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                product.setUser(user);
-                product2.setUser(user);
-                product3.setUser(user);
-                products.save(product);
-                products.save(product2);
-                products.save(product3);
+        assertEquals(400, result.getStatusCode().value());
+    }
 
-                Long userId = user.getId();
-                URI uri = new URI(baseUrl + port + "/api/products/user/" + userId);
+    @Test
+    public void getProductByOwner_Success() throws Exception {
+        User user = new User("tester1", "abc@test.com", encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+                "SINGAPORE1234567", 87231231);
+        userInfos.save(userInfo);
+        Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
+                "ELECTRONICS", "this is a description");
+        product.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        Product product2 = new Product("LAPTOP", "OLD",
+                LocalDateTime.now().toString(),
+                "ELECTRONICS", "this is a description");
+        product2.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        Product product3 = new Product("TABLET", "NEW",
+                LocalDateTime.now().toString(),
+                "ELECTRONICS", "this is a description");
+        product3.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        product.setUser(user);
+        product2.setUser(user);
+        product3.setUser(user);
+        products.save(product);
+        products.save(product2);
+        products.save(product3);
 
-                ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
-                                Product[].class);
-                Product[] productArr = result.getBody();
+        Long userId = user.getId();
+        URI uri = new URI(baseUrl + port + "/api/products/user/" + userId);
 
-                assertNotNull(productArr);
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals(3, productArr.length);
-        }
+        ResponseEntity<Product[]> result = restTemplate.getForEntity(uri,
+                Product[].class);
+        Product[] productArr = result.getBody();
 
-        @Test
-        public void addProduct_Success() throws Exception {
-                URI uri = new URI(baseUrl + port + "/api/products");
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password"));
-                users.save(user);
+        assertNotNull(productArr);
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(3, productArr.length);
+    }
 
-                JSONObject productJsonObject = new JSONObject();
-                productJsonObject.put("productName", "CAMERA");
-                productJsonObject.put("condition", "NEW");
-                productJsonObject.put("dateTime", LocalDateTime.now().toString());
-                productJsonObject.put("category", "ELECTRONICS");
-                productJsonObject.put("description", "Test Description");
-                productJsonObject.put("imageUrl",
-                                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-                productJsonObject.put("userId", user.getId());
+    @Test
+    public void addProduct_Success() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
 
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("imageUrl",
+                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
 
-                ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
-                                String.class);
-                JsonNode root = objectMapper.readTree(result.getBody());
-                
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals("Product registered successfully!",
-                                root.path("message").asText());
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
 
-        @Test
-        public void deleteProduct_ValidProductId_Success() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-                                "SINGAPORE01234567", 87231231);
-                userInfos.save(userInfo);
-                Product product = new Product("CAMERA", "OLD",
-                                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-                product.setImageUrl(
-                                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
-                product.setUser(user);
-                products.save(product);
-                Long id = product.getId();
-                URI uri = new URI(baseUrl + port + "/api/products/remove/" + id);
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
 
-                ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE,
-                                null, Void.class);
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals("Product registered successfully!",
+                root.path("message").asText());
+    }
 
-                assertEquals(200, result.getStatusCode().value());
-                Optional<Product> emptyValue = Optional.empty();
-                assertEquals(emptyValue, products.findById(product.getId()));
-        }
+    @Test
+    public void addProduct_NameTooLong_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
 
-        @Test
-        public void deleteProduct_InvalidProductId_Failure() throws Exception {
-                URI uri = new URI(baseUrl + port + "/api/products/remove/4");
+        //JSONObject created with productName > 100 char long
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("imageUrl",
+                        "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
 
-                ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE,
-                                null, Void.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
 
-                assertEquals(400, result.getStatusCode().value());
-        }
-
-        @Test
-        public void updateProduct_ValidProductId_Success() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-                                "SINGAPORE01234567", 87231231);
-                userInfos.save(userInfo);
-
-                Product product = new Product("PHONE", "OLD",
-                                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-                product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-                product.setUser(user);
-                products.save(product);
-
-                product.setProductName("WATER BOTTLE");
-                product.setDateTime(LocalDateTime.now().toString());
-                product.setCategory("UTILITY");
-                product.setCondition("NEW");
-                product.setDescription("A WATER BOTTLE");
-                product.setImageUrl(
-                                "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
-                Long updatedId = product.getId();
-
-                URI uri = new URI(baseUrl + port + "/api/products/update");
-
-                HttpEntity<Product> resp = new HttpEntity<Product>(product);
-                ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-                                resp, String.class);
-                JsonNode root = objectMapper.readTree(result.getBody());
-
-                Product updatedProduct = products.findById(updatedId).get();
-
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals("Product detail updated successfully", root.path("message").asText());
-                assertEquals(product.getProductName(), updatedProduct.getProductName());
-        }
-
-        @Test
-        public void updateProduct_InvalidProductId_Failure() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password"));
-                users.save(user);
-                UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
-                                "SINGAPORE01234567", 87231231);
-                userInfos.save(userInfo);
-
-                Product product = new Product("PHONE", "OLD",
-                                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
-                product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
-                product.setUser(user);
-                products.save(product);
-                product.setId(999l);
-
-                URI uri = new URI(baseUrl + port + "/api/products/update/");
-
-                ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-                                new HttpEntity<Product>(product), String.class);
-                JsonNode root = objectMapper.readTree(result.getBody());
-
-                assertEquals(400, result.getStatusCode().value());
-                assertEquals("Product not found: 999", root.path("message").asText());
-        }        
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
         
-        @Test
-        public void updateUserRecommendation_ValidRecommendation_Success() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password1"));
-                users.save(user);
-                Long userId = user.getId();
-                UserInfo userInfo = new UserInfo(userId, user.getUsername(),
-                                "SINGAPORE01234567", 87231231);
-                userInfos.save(userInfo);
-                UserRecommendation userRecommendation = new UserRecommendation("NONE", userId);      
-                userRecommendations.save(userRecommendation);
-                RecommendationRequest recommendationRequest = new RecommendationRequest("ELECTRONICS", user.getUsername());
-                
-                URI uri = new URI(baseUrl + port + "/api/products/recommendation/update");
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product name should be between 1-100 character long",
+                        root.path("message").asText());
+    }
 
-                ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-                                new HttpEntity<RecommendationRequest>(recommendationRequest), String.class);
-                JsonNode root = objectMapper.readTree(result.getBody());
+    @Test
+    public void addProduct_DescTooShort_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
 
-                UserRecommendation updatedUserRecommendation = userRecommendations.findById(userId).get();
-                assertEquals(200, result.getStatusCode().value());
-                assertEquals("User recommendation updated successfully", root.path("message").asText());
-                assertEquals(recommendationRequest.getRecommendation(), updatedUserRecommendation.getRecommendation());
-        }
+        //JSONObject is created with description < 5 char long
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "less");
+        productJsonObject.put("imageUrl",
+                        "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
 
-        @Test
-        public void updateUserRecommendation_InvalidRecommendation_Failure() throws Exception {
-                User user = new User("tester2", "blabla@hotmail.com",
-                                encoder.encode("password1"));
-                users.save(user);
-                Long userId = user.getId();
-                UserInfo userInfo = new UserInfo(userId, user.getUsername(),
-                                "SINGAPORE01234567", 87231231);
-                userInfos.save(userInfo);
-                UserRecommendation userRecommendation = new UserRecommendation("NONE", userId);      
-                userRecommendations.save(userRecommendation);
-                RecommendationRequest recommendationRequest = new RecommendationRequest("", user.getUsername());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
 
-                URI uri = new URI(baseUrl + port + "/api/products/recommendation/update");
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product description should be between 5-200 characters long",
+                        root.path("message").asText());
+    }
 
-                ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-                                new HttpEntity<RecommendationRequest>(recommendationRequest), String.class);
-                JsonNode root = objectMapper.readTree(result.getBody());
+    @Test
+    public void addProduct_MissingProdName_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
 
-                assertEquals(400, result.getStatusCode().value());
-                assertEquals("Recommendation cannot be empty", root.path("message").asText());
-        }
+        //JsonObject is built without a description field
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("imageUrl",
+                        "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
 
-        // @Test
-        // public void getUserRecommendation_Success() throws Exception {
-        //         User user = new User("tester2", "blabla@hotmail.com",
-        //                         encoder.encode("password1"));
-        //         users.save(user);
-        //         Long userId = user.getId();
-        //         UserInfo userInfo = new UserInfo(userId, user.getUsername(),
-        //                         "SINGAPORE01234567", 87231231);
-        //         userInfos.save(userInfo);
-        //         UserRecommendation userRecommendation = new UserRecommendation("ELECTRONICS", userId);
-        //         userRecommendations.save(userRecommendation);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
 
-                
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product name should not be empty",
+                        root.path("message").asText());
+    }
 
-        //         URI uri = new URI(baseUrl + port + "/api/products/product/recommendation/" + userId);
+    @Test
+    public void addProduct_MissingDesc_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
 
-        //         ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);
-        //         String validRecommendation = result.getBody();
-                
-        //         assertNotNull(validRecommendation);
-        //         assertEquals(200, result.getStatusCode().value());
-        //         //assertEquals(response.getRecommendation(), validRecommendation);
-        // }
+        //JsonObject is built without a description field
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("imageUrl",
+                        "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product description should not be empty",
+                        root.path("message").asText());
+    }
+
+    @Test
+    public void addProduct_MissingCategory_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
+
+        //JsonObject is built without a description field
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("imageUrl",
+                        "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Category should not be empty",
+                        root.path("message").asText());
+    }
+
+    @Test
+    public void addProduct_MissingCondition_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
+
+        //JsonObject is built without a description field
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("imageUrl",
+                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        productJsonObject.put("userId", user.getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product condition should not be empty",
+                        root.path("message").asText());
+    }
+
+    @Test
+    public void addProduct_MissingImage_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products");
+        User user = new User("tester2", "blabla@hotmail.com",
+                        encoder.encode("password"));
+        users.save(user);
+
+        //JsonObject is built without a description field
+        JSONObject productJsonObject = new JSONObject();
+        productJsonObject.put("productName", "CAMERA");
+        productJsonObject.put("condition", "NEW");
+        productJsonObject.put("dateTime", LocalDateTime.now().toString());
+        productJsonObject.put("category", "ELECTRONICS");
+        productJsonObject.put("description", "Test Description");
+        productJsonObject.put("userId", user.getId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                        String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+        
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Image url should not be empty",
+                        root.path("message").asText());
+    }
+
+    @Test
+    public void deleteProduct_ValidProductId_Success() throws Exception {
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+                "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+        Product product = new Product("CAMERA", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl(
+                "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+        product.setUser(user);
+        products.save(product);
+        Long id = product.getId();
+        URI uri = new URI(baseUrl + port + "/api/products/remove/" + id);
+
+        ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE,
+                null, Void.class);
+
+        assertEquals(200, result.getStatusCode().value());
+        Optional<Product> emptyValue = Optional.empty();
+        assertEquals(emptyValue, products.findById(product.getId()));
+    }
+
+    @Test
+    public void deleteProduct_InvalidProductId_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/products/remove/4");
+
+        ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE,
+                null, Void.class);
+
+        assertEquals(400, result.getStatusCode().value());
+    }
+
+    @Test
+    public void updateProduct_ValidProductId_Success() throws Exception {
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+                "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        Product product = new Product("PHONE", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        product.setUser(user);
+        products.save(product);
+
+        product.setProductName("WATER BOTTLE");
+        product.setDateTime(LocalDateTime.now().toString());
+        product.setCategory("UTILITY");
+        product.setCondition("NEW");
+        product.setDescription("A WATER BOTTLE");
+        product.setImageUrl(
+                "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/HQ222?wid=1649&hei=2207&fmt=jpeg&q4034080576lt=95&.v=165");
+        Long updatedId = product.getId();
+
+        URI uri = new URI(baseUrl + port + "/api/products/update");
+
+        HttpEntity<Product> resp = new HttpEntity<Product>(product);
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+                resp, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        Product updatedProduct = products.findById(updatedId).get();
+
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals("Product detail updated successfully", root.path("message").asText());
+        assertEquals(product.getProductName(), updatedProduct.getProductName());
+    }
+
+    @Test
+    public void updateProduct_InvalidProductId_Failure() throws Exception {
+        User user = new User("tester2", "blabla@hotmail.com",
+                encoder.encode("password"));
+        users.save(user);
+        UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+                "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        Product product = new Product("PHONE", "OLD",
+                LocalDateTime.now().toString(), "ELECTRONICS", "TestDescription");
+        product.setImageUrl("https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+        product.setUser(user);
+        products.save(product);
+        product.setId(999l);
+
+        URI uri = new URI(baseUrl + port + "/api/products/update/");
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
+                new HttpEntity<Product>(product), String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Product not found: 999", root.path("message").asText());
+    }
+
+    // @Test
+    // public void addProductInterest_Success() throws Exception {
+    //     URI uri = new URI(baseUrl + port + "/api/products/interest");
+    //     User user = new User("tester2", "blabla@hotmail.com",
+    //             encoder.encode("password1"));
+    //     users.save(user);
+    //     UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+    //             "SINGAPORE01234567", 87231231);
+    //     userInfos.save(userInfo);
+
+    //     User owner = new User("tester3", "test@email.com", encoder.encode("password123"));
+    //     users.save(owner);
+    //     UserInfo ownerInfo = new UserInfo(owner.getId(), owner.getUsername(), "123 Test Street", 98765432);
+    //     userInfos.save(ownerInfo);
+
+    //     Product product = new Product("PHONE", "NEW", LocalDateTime.now().toString(),
+    //             "ELECTRONICS", "this is a description");
+    //     product.setImageUrl(
+    //             "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+    //     product.setUser(owner);
+    //     products.save(product);
+        
+    //     JSONObject productInterestJsonObject = new JSONObject();
+    //     productInterestJsonObject.put("user", user);
+    //     productInterestJsonObject.put("productInterestId", product.getId());
+        
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.setContentType(MediaType.APPLICATION_JSON);
+    //     HttpEntity<String> request = new HttpEntity<String>(productInterestJsonObject.toString(), headers);
+
+    //     ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+    //     JsonNode root = objectMapper.readTree(result.getBody());
+
+    //     assertEquals(200, result.getStatusCode().value());
+    //     assertEquals("Interest in product added successfully", root.path("message").asText());
+    // }
+
+    // @Test
+    // public void getProductInterestsByUser_Success() throws Exception {
+    // User user = new User("tester2", "blabla@hotmail.com",
+    // encoder.encode("password1"));
+    // users.save(user);
+    // UserInfo userInfo = new UserInfo(user.getId(), user.getUsername(),
+    // "SINGAPORE01234567", 87231231);
+    // userInfos.save(userInfo);
+
+    // User owner = new User("tester3", "test@email.com",
+    // encoder.encode("password123"));
+    // users.save(owner);
+    // UserInfo ownerInfo = new UserInfo(owner.getId(), owner.getUsername(), "123 Test Street", 98765432);
+    // userInfos.save(ownerInfo);
+
+    // Product product1 = new Product("PHONE", "NEW",
+    // LocalDateTime.now().toString(),
+    // "ELECTRONICS", "this is a description");
+    // product1.setImageUrl(
+    // "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+    // Product product2 = new Product("LAPTOP", "OLD",
+    // LocalDateTime.now().toString(),
+    // "ELECTRONICS", "this is a description");
+    // product2.setImageUrl(
+    // "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+    // Product product3 = new Product("TABLET", "NEW",
+    // LocalDateTime.now().toString(),
+    // "ELECTRONICS", "this is a description");
+    // product3.setImageUrl(
+    // "https://firebasestorage.googleapis.com/v0/b/wasteaway-d8e06.appspot.com/o/2%2F54703383-060f-4eb2-a666-5edee035e9ba?alt=media&token=a0fa175d-c74f-48cf-9076-82984008a24b");
+    // product1.setUser(owner);
+    // product2.setUser(owner);
+    // product3.setUser(owner);
+    // products.save(product1);
+    // products.save(product2);
+    // products.save(product3);
+
+    // // Long productId1 = product1.getId();
+    // // Long productId2 = product2.getId();
+    // // Long productId3 = product3.getId();
+
+    // Long userId = user.getId();
+
+    // ProductInterest interest1 = new ProductInterest(user, product1);
+    // ProductInterest interest2 = new ProductInterest(user, product2);
+    // ProductInterest interest3 = new ProductInterest(user, product3);
+
+    // UserService svc = new UserServiceImpl();
+    // svc.addProductInterest(interest1);
+    // svc.addProductInterest(interest2);
+    // svc.addProductInterest(interest3);
+
+    // URI uri = new URI(baseUrl + port + "/api/products/interests/" + userId);
+
+    // ResponseEntity<ProductInterestResponse[]> result =
+    // restTemplate.getForEntity(uri, ProductInterestResponse[].class);
+    // ProductInterestResponse[] respArr = result.getBody();
+    // // JsonNode root = objectMapper.readTree(result.getBody());
+
+    // assertNotNull(respArr);
+    // assertEquals(200, result.getStatusCode().value());
+    // assertEquals(3, respArr.length);
+    // }
 }
