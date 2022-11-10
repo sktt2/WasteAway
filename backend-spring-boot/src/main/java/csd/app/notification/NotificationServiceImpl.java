@@ -15,7 +15,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> allnotifs = notifications.findAll();
         List<Notification> notiflist = new ArrayList<Notification>();
         for (Notification notif : allnotifs) {
-            if (notif.getChat().getOwner().getUsername().equals(username)) {
+            if (notif.getReceiver().getUsername().equals(username)) {
                 notiflist.add(notif);
             }
         }

@@ -20,8 +20,12 @@ public class SignupRequest {
     private Set<String> role;
 
     @NotBlank(message = "Password should not be empty")
+<<<<<<< HEAD
     //pattern checks for both length of the string to be within 8-40 char long, and checks there is at least 1 num and 1 letter.
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,40}$", message = "Password should be at least 8 characters long and should contain with at least 1 number and 1 letter")
+=======
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Password should be at least 8 characters long and should contain at least 1 number and 1 letter")
+>>>>>>> origin/registertests
     private String password;
 
     @NotBlank(message = "Name should not be empty")

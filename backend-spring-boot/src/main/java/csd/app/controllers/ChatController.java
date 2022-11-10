@@ -81,7 +81,7 @@ public class ChatController {
         if (savedChat == null) {
             throw new RuntimeException("Taker cannot be Owner!"); // handled in frontend
         }
-        notificationService.addNotification((new Notification(savedChat, false)));
+        notificationService.addNotification((new Notification(savedChat, savedChat.getTaker(), savedChat.getOwner(), false)));
         return new ChatResponse(savedChat.getId(), savedChat.getOwner().getId(),
                 savedChat.getOwner().getUsername(), savedChat.getTaker().getId(), savedChat.getTaker().getUsername(),
                 savedChat.getProduct().getId(), savedChat.getProduct().getProductName(),
@@ -94,7 +94,7 @@ public class ChatController {
         Message savedMessage = chatService.addMessage(message, messageRequest.getSenderUsername(),
                 messageRequest.getReceiverUsername(), messageRequest.getChatId());
 
-        Notification chatNotification = new Notification(savedMessage.getChat(), false);
+        Notification chatNotification = new Notification(savedMessage.getChat(), savedMessage.getSender(), savedMessage.getReceiver(), false);
         chatNotification.setMessageContent(savedMessage.getContent());
         notificationService.addNotification(chatNotification);
 

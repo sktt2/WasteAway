@@ -7,10 +7,10 @@ import lombok.*;
 @Setter
 public class ChatRequest {
 
-    @NotBlank(message="Taker ID cannot be empty")
+    @NotNull(message="Taker ID cannot be empty")
     private Long takerId;
 
-    @NotBlank(message="Product ID should not be empty")
+    @NotNull(message="Product ID should not be empty")
 	private Long productId;
     
 }

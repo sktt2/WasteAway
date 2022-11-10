@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import csd.app.chat.Chat;
-
+import csd.app.user.User;
 import lombok.*;
 
 @Entity
@@ -25,6 +25,16 @@ public class Notification {
     @JoinColumn(name = "chat_id")
     private Chat chat;
     
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "notif_sender_id")
+    private User sender;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "notif_receiver_id")
+    private User receiver;
+    
     private String messageContent;
 
     private boolean isRead;
@@ -37,9 +47,11 @@ public class Notification {
 
     }
     
-    public Notification(Chat chat, boolean isRead) {
+    public Notification(Chat chat, User sender, User receiver, boolean isRead) {
         this.chat = chat;
         this.isRead = isRead;
+        this.receiver = receiver;
+        this.sender = sender;
     }
     
 
