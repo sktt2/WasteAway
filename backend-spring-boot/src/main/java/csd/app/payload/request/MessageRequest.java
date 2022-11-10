@@ -19,7 +19,7 @@ public class MessageRequest {
     @NotBlank (message = "Receiver username should not be empty")
 	private String receiverUsername;
     
-    @NotBlank (message = "Chat ID should not be empty")
+    @NotNull (message = "Chat ID should not be empty")
     private Long chatId;
     
 }
