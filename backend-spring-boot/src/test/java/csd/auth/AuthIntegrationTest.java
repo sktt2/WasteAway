@@ -552,7 +552,7 @@ public class AuthIntegrationTest {
         JsonNode root = objectMapper.readTree(result.getBody());
 
         assertEquals(400, result.getStatusCode().value());
-        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+        assertEquals("Password should be at least 8 characters long and should contain at least 1 number and 1 letter", root.path("message").asText());
     }
 
     @Test
@@ -572,7 +572,7 @@ public class AuthIntegrationTest {
         JsonNode root = objectMapper.readTree(result.getBody());
 
         assertEquals(400, result.getStatusCode().value());
-        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+        assertEquals("Password should be at least 8 characters long and should contain at least 1 number and 1 letter", root.path("message").asText());
     }
 
     @Test
@@ -592,6 +592,6 @@ public class AuthIntegrationTest {
         JsonNode root = objectMapper.readTree(result.getBody());
 
         assertEquals(400, result.getStatusCode().value());
-        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+        assertEquals("Password should be at least 8 characters long and should contain at least 1 number and 1 letter", root.path("message").asText());
     }
 }
