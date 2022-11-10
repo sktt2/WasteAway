@@ -208,6 +208,99 @@ class ProductIntegrationTest {
         }
 
         @Test
+        public void addProduct_NameTooLong_Failure() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products");
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password"));
+                users.save(user);
+
+                //JSONObject created with productName > 100 char long
+                JSONObject productJsonObject = new JSONObject();
+                productJsonObject.put("productName", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+                productJsonObject.put("condition", "NEW");
+                productJsonObject.put("dateTime", LocalDateTime.now().toString());
+                productJsonObject.put("category", "ELECTRONICS");
+                productJsonObject.put("description", "Test Description");
+                productJsonObject.put("imageUrl",
+                                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+                productJsonObject.put("userId", user.getId());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+                ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                                String.class);
+                JsonNode root = objectMapper.readTree(result.getBody());
+                
+                assertEquals(400, result.getStatusCode().value());
+                assertEquals("Product name should be between 1-100 character long",
+                                root.path("message").asText());
+        }
+
+        @Test
+        public void addProduct_DescTooShort_Failure() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products");
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password"));
+                users.save(user);
+
+                //JSONObject is created with description < 5 char long
+                JSONObject productJsonObject = new JSONObject();
+                productJsonObject.put("productName", "CAMERA");
+                productJsonObject.put("condition", "NEW");
+                productJsonObject.put("dateTime", LocalDateTime.now().toString());
+                productJsonObject.put("category", "ELECTRONICS");
+                productJsonObject.put("description", "less");
+                productJsonObject.put("imageUrl",
+                                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+                productJsonObject.put("userId", user.getId());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+                ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                                String.class);
+                JsonNode root = objectMapper.readTree(result.getBody());
+                
+                assertEquals(400, result.getStatusCode().value());
+                assertEquals("Product description should be between 5-200 characters long",
+                                root.path("message").asText());
+        }
+
+        @Test
+        public void addProduct_MissingDesc_Failure() throws Exception {
+                URI uri = new URI(baseUrl + port + "/api/products");
+                User user = new User("tester2", "blabla@hotmail.com",
+                                encoder.encode("password"));
+                users.save(user);
+
+                //JsonObject is built without a description field
+                JSONObject productJsonObject = new JSONObject();
+                productJsonObject.put("productName", "CAMERA");
+                productJsonObject.put("condition", "NEW");
+                productJsonObject.put("dateTime", LocalDateTime.now().toString());
+                productJsonObject.put("category", "ELECTRONICS");
+                //productJsonObject.put("description", "less");
+                productJsonObject.put("imageUrl",
+                                "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-3gs-ofic.jpg");
+                productJsonObject.put("userId", user.getId());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<String> request = new HttpEntity<String>(productJsonObject.toString(), headers);
+
+                ResponseEntity<String> result = restTemplate.postForEntity(uri, request,
+                                String.class);
+                JsonNode root = objectMapper.readTree(result.getBody());
+                
+                assertEquals(400, result.getStatusCode().value());
+                assertEquals("Product description should not be empty",
+                                root.path("message").asText());
+        }
+
+        @Test
         public void deleteProduct_ValidProductId_Success() throws Exception {
                 User user = new User("tester2", "blabla@hotmail.com",
                                 encoder.encode("password"));

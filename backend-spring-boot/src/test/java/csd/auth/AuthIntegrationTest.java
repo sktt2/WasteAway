@@ -225,4 +225,104 @@ public class AuthIntegrationTest {
         assertEquals(200, result.getStatusCode().value());
         assertEquals("You've been signed out!", root.path("message").asText());
     }
+
+    @Test
+    public void chngPwd_Success() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/auth/changepassword");
+        User user = new User("testerPwd", "tester3@email.com", encoder.encode("password"));
+        users.save(user);
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerPwd");
+        personJsonObject.put("currentPassword", "password");
+        personJsonObject.put("newPassword", "password123");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals("Password changed successfully", root.path("message").asText());
+    }
+
+    @Test
+    public void chngPwd_InvalidUsername_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/auth/changepassword");
+        User user = new User("testerPwd", "tester3@email.com", encoder.encode("password"));
+        users.save(user);
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerPwd0");
+        personJsonObject.put("currentPassword", "password");
+        personJsonObject.put("newPassword", "password123");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("User not found", root.path("message").asText());
+    }
+
+    @Test
+    public void chngPwd_PwdTooShort_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/auth/changepassword");
+        User user = new User("testerPwd", "tester3@email.com", encoder.encode("password"));
+        users.save(user);
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerPwd");
+        personJsonObject.put("currentPassword", "password");
+        personJsonObject.put("newPassword", "pass1");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+    }
+
+    @Test
+    public void chngPwd_PwdNoNumber_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/auth/changepassword");
+        User user = new User("testerPwd", "tester3@email.com", encoder.encode("password"));
+        users.save(user);
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerPwd0");
+        personJsonObject.put("currentPassword", "password");
+        personJsonObject.put("newPassword", "passwording");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+    }
+
+    @Test
+    public void chngPwd_PwdNoChar_Failure() throws Exception {
+        URI uri = new URI(baseUrl + port + "/api/auth/changepassword");
+        User user = new User("testerPwd", "tester3@email.com", encoder.encode("password"));
+        users.save(user);
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerPwd0");
+        personJsonObject.put("currentPassword", "password");
+        personJsonObject.put("newPassword", "19191919191");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Password should be at least 8 characters long and should contain with at least 1 number and 1 letter", root.path("message").asText());
+    }
 }

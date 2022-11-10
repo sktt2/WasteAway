@@ -16,7 +16,7 @@ public class ChangePasswordRequest {
     private String currentPassword;
 
     @NotBlank(message = "New password should not be empty")
-    @Size(min = 8, max = 40, message = "Password should be at least 8 characters long")
+    //pattern checks for both length of the string to be within 8-40 char long, and checks there is at least 1 num and 1 letter.
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Password should be at least 8 characters long and should contain with at least 1 number and 1 letter")
     private String newPassword;
 }
