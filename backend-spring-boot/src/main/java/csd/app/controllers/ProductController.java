@@ -259,10 +259,6 @@ public class ProductController {
     @GetMapping("api/products/product/interests/{id}")
     public ResponseEntity<?> getProductInterestByProduct(@PathVariable Long id) {
         Long productId = id;
-        if (userService.getProductInterest(productId) == null){
-            return ResponseEntity.badRequest().body(new MessageResponse("Interest for this product does not exist"));
-        }
-
         List<ProductInterest> productInterests = userService.listProductInterests();
         List<ProductInterestResponse> resp = new ArrayList<>();
         for (ProductInterest productInterest : productInterests) {

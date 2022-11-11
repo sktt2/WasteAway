@@ -58,7 +58,7 @@ public class ChatServiceImpl implements ChatService {
         }
 
         // Caught by RestExceptionHandler for badRequest()
-        if (ownerId == takerId) {
+        if (ownerId.equals(takerId)) {
             throw new RuntimeException("Owner cannot be taker.");
         }
 
