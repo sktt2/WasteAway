@@ -1,6 +1,6 @@
 package csd.app.chat;
 
-import java.util.*;
+import java.util.List;
 
 import javax.persistence.*;
 

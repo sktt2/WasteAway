@@ -54,6 +54,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         when(chats.findById(any(Long.class))).thenReturn(Optional.of(chat));
@@ -73,6 +74,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         when(chats.findById(any(Long.class))).thenThrow(new RuntimeException("Chat 9999 not found."));
@@ -90,6 +92,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         when(productService.getProduct(any(Long.class))).thenReturn(product);
@@ -113,6 +116,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         when(productService.getProduct(any(Long.class))).thenThrow(new ProductNotFoundException(9999L));
@@ -123,6 +127,7 @@ public class ChatServiceTest {
         verify(productService).getProduct(9999L);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void getChatByUsername_ValidUsernameAndHasOnlyOwner_ReturnChats() {
         User owner = new User("owner1", "owner1@email.com", encoder.encode("password1"));
@@ -131,6 +136,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         List<Chat> chatList = new ArrayList<>();
@@ -153,6 +159,7 @@ public class ChatServiceTest {
         verify(chatList).addAll(emptyChatList);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void getChatByUsername_ValidUsernameAndHasOnlyTaker_ReturnChats() {
         User owner = new User("owner1", "owner1@email.com", encoder.encode("password1"));
@@ -161,6 +168,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         List<Chat> chatList = new ArrayList<>();
@@ -183,6 +191,7 @@ public class ChatServiceTest {
         verify(emptyChatList).addAll(chatList);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void getChatByUsername_ValidUsernameAndHasOwnerAndTaker_ReturnChats() {
         User user1 = new User("owner1", "owner1@email.com", encoder.encode("password1"));
@@ -191,8 +200,10 @@ public class ChatServiceTest {
         user2.setId(2L);
         Product product1 = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product1.setId(1L);
+        product1.setUser(user2);
         Product product2 = new Product("yPhone 18 XL", "OLD", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product2.setId(2L);
+        product2.setUser(user1);
         Chat chat1 = new Chat(user1, user2, product1);
         chat1.setId(1L);
         Chat chat2 = new Chat(user2, user1, product2);
@@ -236,6 +247,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         Message message = new Message("a message", LocalDateTime.now().toString(), chat, owner, taker);
@@ -259,6 +271,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         Message message = new Message("a message", LocalDateTime.now().toString(), chat, owner, taker);
@@ -280,6 +293,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         chatService = Mockito.spy(chatService);
@@ -307,6 +321,7 @@ public class ChatServiceTest {
         taker.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(taker, owner, product);
         chat.setId(1L);
         chatService = Mockito.spy(chatService);
@@ -326,6 +341,7 @@ public class ChatServiceTest {
         owner.setId(1L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(owner);
         Chat chat = new Chat(owner, owner, product);
         chat.setId(1L);
         chatService = Mockito.spy(chatService);
@@ -345,6 +361,7 @@ public class ChatServiceTest {
         receiver.setId(2L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(sender);
         Chat chat = new Chat(receiver, sender, product);
         chat.setId(1L);
         Message message = new Message("a message", LocalDateTime.now().toString(), chat, sender, receiver);
@@ -370,6 +387,7 @@ public class ChatServiceTest {
         sender.setId(1L);
         Product product = new Product("yPhone 15 XL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 512GB");
         product.setId(1L);
+        product.setUser(sender);
         Chat chat = new Chat(sender, sender, product);
         chat.setId(1L);
         Message message = new Message("a message", LocalDateTime.now().toString(), chat, sender, sender);

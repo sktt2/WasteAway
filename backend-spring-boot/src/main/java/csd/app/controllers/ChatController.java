@@ -9,6 +9,7 @@ import csd.app.notification.NotificationService;
 import csd.app.payload.request.ChatRequest;
 import csd.app.payload.request.MessageRequest;
 import csd.app.payload.response.ChatResponse;
+import csd.app.user.UserService;
 import csd.app.payload.response.ChatMessageResponse;
 
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +23,22 @@ import javax.validation.Valid;
 public class ChatController {
 
     private ChatService chatService;
+    private UserService userService;
     private NotificationService notificationService;
 
     @Autowired
-    public ChatController(ChatService chatService, NotificationService notificationService) {
+    public ChatController(ChatService chatService, UserService userService,
+            NotificationService notificationService) {
         this.chatService = chatService;
+        this.userService = userService;
         this.notificationService = notificationService;
     }
 
     @GetMapping("/api/chat")
     public ResponseEntity<?> getChatByUsername(@RequestParam("username") @PathVariable String username) {
+        if (userService.getUserByUsername(username) == null) {
+            throw new RuntimeException("User does not exist.");
+        }
         List<Chat> chats = chatService.getChatByUsername(username);
         List<ChatResponse> response = new ArrayList<>();
         for (Chat chat : chats) {
