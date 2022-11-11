@@ -1,10 +1,6 @@
 import axios from "axios"
 
 const API_URL = process.env.REACT_APP_API_URL + ":" + process.env.REACT_APP_API_PORT + "/api/chat"
-const config = {
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-}
 
 class ChatService {
     async createChat(body) {

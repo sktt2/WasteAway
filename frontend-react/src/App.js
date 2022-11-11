@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css"
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import Header from "./components/Header.js"
 import Login from "./pages/Login.js"
@@ -32,7 +31,7 @@ class App extends Component {
                 <Container fluid style={{ padding: "0px 0px" }}>
                     <Router forceRefresh={true}>
                         <Header />
-                        <Container>
+                        <Container style={{ marginLeft: "5vw", marginRight: "5vw" }}>
                             <Switch>
                                 <Route path="/login" component={Login} />
                                 <Route path="/error" component={Error}></Route>
