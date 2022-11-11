@@ -32,7 +32,7 @@ public class ChatController {
 
     @GetMapping("/api/chat")
     public ResponseEntity<?> getChatByUsername(@RequestParam("username") @PathVariable String username) {
-        List<Chat> chats = chatService.getChatbyUsername(username);
+        List<Chat> chats = chatService.getChatByUsername(username);
         List<ChatResponse> response = new ArrayList<>();
         for (Chat chat : chats) {
             ChatResponse chatResp = new ChatResponse(chat.getId(), chat.getOwner(),

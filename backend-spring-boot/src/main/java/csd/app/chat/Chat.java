@@ -54,4 +54,8 @@ public class Chat {
 
     public Chat() {
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

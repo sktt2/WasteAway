@@ -4,7 +4,7 @@ import java.util.*;
 
 public interface ChatService {
     Chat getChatByProductIdAndTakerId(Long productId, Long takerId);
-    List<Chat> getChatbyUsername(String username);
+    List<Chat> getChatByUsername(String username);
     Chat getChatById(Long id);
     List<Message> getMessagesByChat(Chat chat);
     Chat addChat(Long takerId, Long ownerId, Long productId);

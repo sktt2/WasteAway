@@ -31,7 +31,7 @@ public class ChatServiceImpl implements ChatService {
         return chats.findByProductAndTaker(product, taker);
     }
 
-    public List<Chat> getChatbyUsername(String username) {
+    public List<Chat> getChatByUsername(String username) {
         User user = userService.getUserByUsername(username);
         List<Chat> chatOwner = chats.findByOwner(user);
         List<Chat> chatTaker = chats.findByTaker(user);
@@ -40,10 +40,13 @@ public class ChatServiceImpl implements ChatService {
     }
 
     public Chat getChatById(Long id) {
-        return chats.findById(id).get();
+        return chats.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chat " + id + " not found."));
     }
 
     public List<Message> getMessagesByChat(Chat chat) {
+
+        // Throws illegalargumentexception if chat is null
         return messages.findByChat(chat);
     }
 
@@ -56,7 +59,7 @@ public class ChatServiceImpl implements ChatService {
 
         // Caught by RestExceptionHandler for badRequest()
         if (ownerId == takerId) {
-            throw new RuntimeException("Owner cannot be Taker");
+            throw new RuntimeException("Owner cannot be taker.");
         }
 
         User taker = userService.getUser(takerId);
@@ -68,7 +71,7 @@ public class ChatServiceImpl implements ChatService {
 
     public Message addMessage(String content, String dateTime, String senderUsername, String receiverUsername, Long chatId) {
         if (senderUsername.equals(receiverUsername)) {
-            throw new RuntimeException("Sender cannot be receiver");
+            throw new RuntimeException("Sender cannot be receiver.");
         }
         User sender = userService.getUserByUsername(senderUsername);
         User receiver = userService.getUserByUsername(receiverUsername);

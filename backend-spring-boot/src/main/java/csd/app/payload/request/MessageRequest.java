@@ -8,6 +8,7 @@ import lombok.*;
 public class MessageRequest {
 
     @NotBlank(message = "Content cannot be empty")
+    @Size(max = 2000, message = "Message content must be 2000 characters or lower.")
     private String content;
 
     @NotBlank(message = "Date time cannot be empty")

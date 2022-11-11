@@ -10,7 +10,8 @@ import lombok.*;
 @Getter
 public class ChatMessageResponse {
 
-    @NotBlank(message = "Message conte cannot be empty or null")
+    @NotBlank(message = "Message content cannot be empty or null")
+    @Size(max = 2000, message = "Message content must be 2000 characters or lower.")
     private String content;
 
     @NotBlank(message = "Date and time cannot be empty or null")
