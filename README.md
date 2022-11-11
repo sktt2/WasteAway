@@ -28,7 +28,13 @@ Open Terminal & Run the following commands:
 Open Terminal & Run the following commands:
 1. cd frontend-react
 2. npm install
-3. npm start
+3. create a .env file in WasteAway/frontend-react/ directory containing the address and port number of the backend server\
+In the following format:
+```
+REACT_APP_API_URL="http://localhost"
+REACT_APP_API_PORT=8080
+```
+4. npm start
 
 You should be directed to a webpage upon completing the above instructions.
 <p align="center">
