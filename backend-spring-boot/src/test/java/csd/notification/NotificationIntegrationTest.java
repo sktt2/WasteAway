@@ -17,11 +17,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -31,8 +26,6 @@ import csd.app.user.User;
 import csd.app.user.UserRepository;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
-import csd.app.user.UserRecommendation;
-import csd.app.user.UserRecommendationRepository;
 import csd.app.chat.Chat;
 import csd.app.chat.ChatRepository;
 import csd.app.chat.MessageRepository;
@@ -87,8 +80,8 @@ class NotificationIntegrationTest {
         void tearDown() {
                 // clear the database after each test
                 products.deleteAll();
-                users.deleteAll();
                 userInfos.deleteAll();
+                users.deleteAll();
         }
 
         @Test
