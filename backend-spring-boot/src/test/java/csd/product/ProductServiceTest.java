@@ -1,9 +1,10 @@
 package csd.product;
 
+import csd.app.exception.UserNotFoundException;
+import csd.app.exception.ProductNotFoundException;
 import csd.app.product.Product;
 import csd.app.product.ProductGA;
 import csd.app.product.ProductGARepository;
-import csd.app.product.ProductNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,16 +54,13 @@ public class ProductServiceTest {
         assertNotNull(savedProduct);        
     }
 
-    //test if addProduct returns null if product has no user
+    //test if addProduct throws UserNotFoundException if product has no user
     @Test
-    void addProduct_NoUser_ReturnNull() {
+    void addProduct_NoUser_ThrowException() {
         // arrange ***
         Product product = new Product("yPhone 15 XXL", "NEW", LocalDateTime.now().toString(), "ELECTRONICS", "WHITE 1024GB");        
-        // act ***
-        Product savedProduct = productService.addProduct(product);
-
         // assert ***
-        assertNull(savedProduct);        
+        assertThrows(UserNotFoundException.class, () -> {productService.addProduct(product);});
     }
 
     @Test 

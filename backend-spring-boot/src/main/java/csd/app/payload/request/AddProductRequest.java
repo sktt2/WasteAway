@@ -8,24 +8,27 @@ import lombok.*;
 
 public class AddProductRequest {
     
-    @NotBlank
+    @NotBlank(message = "Product name should not be empty")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     private String productName;
 
-    @NotBlank
+    @NotBlank(message = "Category should not be empty")
     private String category;
 
-    @NotBlank
-    @Size(min = 5, max = 50)
+    @NotBlank(message = "Product description should not be empty")
+    @Size(min = 5, max = 200, message = "Product description should be between 5-200 characters long")
     private String description;
 
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "Product condition should not be empty")
+    @Size(min = 1, max = 100, message = "Product name should be between 1-100 character long")
     private String condition;
 
-    @NotBlank
+    @NotBlank(message = "Date and time should not be empty")
     private String dateTime;
 
+    @NotBlank(message = "Image url should not be empty")
     private String imageUrl;
 
+    @NotNull(message = "User Id should not be empty")
     private Long userId;
 }

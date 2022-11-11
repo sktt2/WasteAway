@@ -2,8 +2,6 @@ package csd.app.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +19,9 @@ import csd.app.product.Product;
 import csd.app.product.ProductService;
 import csd.app.product.ProductGA;
 import csd.app.user.ProductInterest;
-import csd.app.user.SameUserException;
 import csd.app.user.User;
 import csd.app.user.UserRecommendation;
 import csd.app.user.UserService;
-import csd.app.user.UserServiceImpl;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -39,7 +35,6 @@ public class ProductController {
 
     @Autowired
     private UserService userService;
-
 
     public ProductController(ProductService productService, UserService userService) {
         this.productService = productService;
@@ -66,6 +61,12 @@ public class ProductController {
     @GetMapping("/api/products/{id}")
     public ResponseEntity<?> getProduct(@PathVariable Long id) {
         Product product = productService.getProduct(id);
+
+        // Check product exist
+        if (product == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("Product does not exist"));
+        }
+
         ProductResponse resp = new ProductResponse(id, product.getProductName(), product.getCondition(),
                 product.getDateTime(), product.getDescription(), product.getCategory(), product.getImageUrl(),
                 product.getUser());
@@ -79,7 +80,13 @@ public class ProductController {
         Product newProduct = new Product(addProductRequest.getProductName(), addProductRequest.getCondition(),
                 addProductRequest.getDateTime(), addProductRequest.getCategory(),
                 addProductRequest.getDescription(), addProductRequest.getImageUrl());
+        
+        // Check if user exist
         User user = userService.getUser(addProductRequest.getUserId());
+        if(user == null) {
+            return ResponseEntity.badRequest().body(new MessageResponse("User does not exist"));
+        }
+
         newProduct.setUser(user);
         if (productService.addProduct(newProduct) == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("User is not logged in."));
@@ -89,7 +96,12 @@ public class ProductController {
 
     // Get all products owned by user
     @GetMapping("api/products/user/{id}")
-    public List<ProductResponse> getProductByOwner(User user) {
+    public ResponseEntity<?> getProductByOwner(User user) {
+        // Check user exist
+        if (userService.getUser(user.getId()) == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("User does not exist"));
+        }
+
         List<Product> products = productService.getProductsByUser(user);
         List<ProductResponse> resp = new ArrayList<>();
         for (Product product : products) {
@@ -98,11 +110,11 @@ public class ProductController {
                     product.getImageUrl(), product.getUser());
             resp.add(prodResp);
         }
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 
     @PutMapping("api/products/update")
-    public ResponseEntity<?> updateProductDetail(@RequestBody Product PR) {
+    public ResponseEntity<?> updateProductDetail(@Valid @RequestBody Product PR) {
         Product product = productService.getProduct(PR.getId());
 
         // Validation check for updating user details
@@ -123,6 +135,9 @@ public class ProductController {
     @DeleteMapping("api/products/remove/{id}")
     public ResponseEntity<?> removeProduct(@PathVariable Long id) {
         Product product = productService.getProduct(id);
+        if (product == null){
+            return ResponseEntity.badRequest().body((new MessageResponse("Product not found")));
+        }
         productService.deleteProduct(product);
         return ResponseEntity.ok(new MessageResponse("Product has been removed"));
     }
@@ -132,24 +147,37 @@ public class ProductController {
     public ResponseEntity<?> giveProduct(@Valid @RequestBody GiveProductRequest giveProductRequest) {
         Long productId = giveProductRequest.getProductId();
         String receiverUsername = giveProductRequest.getReceiverUsername();
+
         // Check product exists
         Product product = productService.getProduct(productId);
+        if (product == null){
+            return ResponseEntity.badRequest().body((new MessageResponse("Product does not exist")));
+        }
         User owner = product.getUser();
+
         // Check receiver exists
         User user = userService.getUserByUsername(receiverUsername);
-        if (user.getId() == owner.getId()) {
-            throw new SameUserException();
+        if (user == null){
+            return ResponseEntity.badRequest().body((new MessageResponse("Receiver does not exist")));
         }
+
+        // Owner cannot give item to himself
+        if (user.getId() == owner.getId()) {
+            return ResponseEntity.badRequest().body((new MessageResponse("Unable to give item to owner")));
+        }
+
         ProductGA productGA = new ProductGA(productId, user.getId());
         productService.addProductGA(productGA);
-
         return ResponseEntity.ok(new MessageResponse("Item given successfully"));
 
     }
 
     // Get all products that have been given away already by the owner
     @GetMapping("api/products/give/{id}")
-    public List<ProductGA> getGiveAwayByOwner(@PathVariable Long id) {
+    public ResponseEntity<?> getGiveAwayByOwner(@PathVariable Long id) {
+        if (userService.getUser(id) == null){
+            return ResponseEntity.badRequest().body((new MessageResponse("User does not exist")));
+        }
         List<ProductGA> productGAs = productService.listProductGAs();
         List<ProductGA> resp = new ArrayList<>();
         for (ProductGA productGA : productGAs) {
@@ -158,7 +186,7 @@ public class ProductController {
                 resp.add(productGA);
             }
         }
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/api/products/interest")
@@ -169,23 +197,15 @@ public class ProductController {
 
         //check product exist
         Product product = productService.getProduct(productId);
+        if (product == null){
+            return ResponseEntity.badRequest().body((new MessageResponse("Product does not exist")));
+        }
         User owner = product.getUser();
 
         // make sure owner cant fav their own product
         User interestedUser = userService.getUser(interestedUserId);
-
         if (interestedUserId == owner.getId()) {
             return ResponseEntity.badRequest().body(new MessageResponse("User cannot be interested in own product"));
-        }
-
-        //get list of Product Interest
-        List<ProductInterest> productInterestList = userService.listProductInterests();
-
-        //check for duplicate Product Interest
-        for (ProductInterest productInterest: productInterestList) {
-            if (productInterest.getUser().getUsername().equals(interestedUser.getUsername()) && productInterest.getProduct().equals(product)) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Product interest made is duplicate of existing one"));
-            }
         }
 
         ProductInterest productInterest = new ProductInterest(interestedUser, product);
@@ -196,24 +216,31 @@ public class ProductController {
 
     @DeleteMapping("api/products/interest/delete")
     public ResponseEntity<?> removeProductInterest(@Valid @RequestBody DeleteProductInterestRequest deleteProductInterestRequest) {
-        List<ProductInterest> prodInterests = userService.listProductInterests();
-        Long userid = deleteProductInterestRequest.getInterestedUserId();
-        Long productid = deleteProductInterestRequest.getProductId();
-        Long piid = 0L;
-
-        for (ProductInterest PI : prodInterests) {
-            if(PI.getUser().getId().equals(userid) && PI.getProduct().getId().equals(productid)) {
-                piid = PI.getProductInterestId();
-            }
+        Long userId = deleteProductInterestRequest.getInterestedUserId();
+        Long productId = deleteProductInterestRequest.getProductId();
+        
+        // Product interest does not exist
+        ProductInterest productInterest = userService.getProductInterest(productId);
+        if (productInterest == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("Product interest does not exist"));
         }
-        ProductInterest productInterest = userService.getProductInterest(piid);
+
+        // User does not match the product interest
+        if (!productInterest.getUser().getId().equals(userId)){
+            return ResponseEntity.badRequest().body(new MessageResponse("Wrong user for this product interest"));
+        }
+    
         userService.deleteProductInterest(productInterest);
         return ResponseEntity.ok(new MessageResponse("Interest in product has been removed"));
     }
 
     @GetMapping("api/products/interests/{id}")
-    public List<ProductInterestResponse> getProductInterestsByUser(@PathVariable Long id) {
+    public ResponseEntity<?> getProductInterestsByUser(@PathVariable Long id) {
         Long interestUserId = id; 
+        if (userService.getUser(interestUserId) == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("User does not exist"));
+        }
+        
         List<ProductInterest> productInterests = userService.listProductInterests();
         List<ProductInterestResponse> resp = new ArrayList<>();
         for (ProductInterest productInterest : productInterests) {
@@ -222,16 +249,20 @@ public class ProductController {
                 Long productId = productInterest.getProduct().getId();
                 Long ownerId = productInterest.getProduct().getUser().getId();
                 String interestedUsername  = productInterest.getUser().getUsername();
-                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
-                resp.add(piresp);
+                ProductInterestResponse productInterestResponse = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
+                resp.add(productInterestResponse);
             }
         }
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("api/products/product/interests/{id}")
-    public List<ProductInterestResponse> getProductInterestByProduct(@PathVariable Long id) {
-        Long productId = id; 
+    public ResponseEntity<?> getProductInterestByProduct(@PathVariable Long id) {
+        Long productId = id;
+        if (userService.getProductInterest(productId) == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("Interest for this product does not exist"));
+        }
+
         List<ProductInterest> productInterests = userService.listProductInterests();
         List<ProductInterestResponse> resp = new ArrayList<>();
         for (ProductInterest productInterest : productInterests) {
@@ -240,44 +271,53 @@ public class ProductController {
                 Long productInterestId = productInterest.getProductInterestId();
                 Long ownerId = productInterest.getProduct().getUser().getId();
                 String interestedUsername  = productInterest.getUser().getUsername();
-                ProductInterestResponse piresp = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
-                resp.add(piresp);
+                ProductInterestResponse productInterestResponse = new ProductInterestResponse(productInterestId, productId, ownerId, interestUserId, interestedUsername);
+                resp.add(productInterestResponse);
             }
         }
-        return resp;
+        return ResponseEntity.ok(resp);
     }
 
-    // Updates user recommendation setting
+    // Update user recommendation
     @PutMapping("/api/products/recommendation/update")
-    public ResponseEntity<?> updateRecommendation(@RequestBody RecommendationRequest UR) {
-        String recommendation = UR.getRecommendation();
+    public ResponseEntity<?> updateRecommendation(@Valid @RequestBody RecommendationRequest UR) {
         String username = UR.getUsername();
+
         User user = userService.getUserByUsername(username);
-        if (recommendation != null && user != null) {
-            UserRecommendation userRecommendation = new UserRecommendation();
-            userRecommendation.setUser_Id(user.getId());
-            userRecommendation.setRecommendation(recommendation);
-            userService.updateRecommendation(userRecommendation);
-            user.setFirstTime(false);
-            userService.updateUser(user);
-            return ResponseEntity.ok(new MessageResponse("User recommendation updated successfully"));
+        if (user == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("User does not exist"));
         }
-        return ResponseEntity.badRequest().body((new MessageResponse("Failed to update user recommendation")));
+        
+        UserRecommendation userRecommendation = new UserRecommendation();
+        userRecommendation.setUserId(user.getId());
+        userRecommendation.setRecommendation(UR.getRecommendation());
+        userService.updateRecommendation(userRecommendation);
+        user.setFirstTime(false);
+        userService.updateUser(user);
+        return ResponseEntity.ok(new MessageResponse("User recommendation updated successfully"));
+        
+
     }
 
     // Carousel will show products matching user recommended category first
     @GetMapping("api/products/recommendation/{id}")
-    public String getProductsByUserRecommendation(@PathVariable Long id) {
-        return userService.getRecommendation(id).getRecommendation();
+    public ResponseEntity<?> getProductsByUserRecommendation(@PathVariable Long id) {
+        UserRecommendation userRecommendation =  userService.getRecommendation(id);
+        if (userRecommendation == null){
+            return ResponseEntity.badRequest().body(new MessageResponse("User recommendation does not exist"));
+        }
+        String recommendation = userRecommendation.getRecommendation();
+
+        return ResponseEntity.ok(recommendation);
     }
 
     @GetMapping("api/products/give")
-    public Boolean getBooleanIfProductGAExist(@RequestParam("productId") @PathVariable Long productId) {
+    public ResponseEntity<?> getBooleanIfProductGAExist(@RequestParam("productId") @PathVariable Long productId) {
         ProductGA productGA = productService.getProductGA(productId);
         if (productGA == null) {
-            return false;
+            return ResponseEntity.badRequest().body(new MessageResponse("Product give away does not exist"));
         }
-        return true;
+        return ResponseEntity.ok(true);
     }
 
 }

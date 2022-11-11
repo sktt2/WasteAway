@@ -49,7 +49,7 @@ public class Main {
         Role userRole = roles.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         if (!testuser.isPresent()) {
-            User user = new User("testuser", "testuser@email.com", encoder.encode("password"));
+            User user = new User("testuser", "testuser@email.com", encoder.encode("password1"));
             Set<Role> role = new HashSet<>();
             role.add(userRole);
             user.setRoles(role);
@@ -88,7 +88,7 @@ public class Main {
         }
 
         if (!testadmin.isPresent()) {
-            User user = new User("testadmin", "testadmin@email.com", encoder.encode("password"));
+            User user = new User("testadmin", "testadmin@email.com", encoder.encode("password1"));
             Set<Role> role = new HashSet<>();
             role.add(userRole);
             role.add(adminRole);
@@ -129,7 +129,7 @@ public class Main {
         }
 
         if (!testuser2.isPresent()) {
-            User user = new User("Shaker", "drxwon@email.com", encoder.encode("password"));
+            User user = new User("Shaker", "drxwon@email.com", encoder.encode("password1"));
             Set<Role> role = new HashSet<>();
             role.add(userRole);
             role.add(adminRole);

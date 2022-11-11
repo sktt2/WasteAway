@@ -15,10 +15,12 @@ public class ProductResponse {
     private String description;
     private int contactDetail;
     private String ownerName;
+    private Long ownerId;
     private String category;
     private String imageUrl;
 
-    public ProductResponse(Long id, String productName, String condition, String dateTime, String description, String category, String imageUrl, User user) {
+    public ProductResponse(Long id, String productName, String condition, String dateTime,
+            String description, String category, String imageUrl, User user) {
         this.id = id;
         this.productName = productName;
         this.condition = condition;
@@ -27,6 +29,7 @@ public class ProductResponse {
         this.description = description;
         this.contactDetail = user.getUserInfo().getPhoneNumber();
         this.ownerName = user.getUsername();
+        this.ownerId = user.getId();
         this.imageUrl = imageUrl;
         this.category = category;
     }

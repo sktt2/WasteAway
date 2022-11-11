@@ -15,12 +15,13 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> allnotifs = notifications.findAll();
         List<Notification> notiflist = new ArrayList<Notification>();
         for (Notification notif : allnotifs) {
-            if (notif.getChat().getOwner().getUsername().equals(username)) {
+            if (notif.getReceiver().getUsername().equals(username)) {
                 notiflist.add(notif);
             }
         }
         return notiflist;
     };
+
     public Notification getNotificationById(Long id) {
         if (notifications.existsById(id)) {
             return notifications.findById(id)
@@ -28,6 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return null;
     };
+    
     public Notification addNotification(Notification notif) {
         return notifications.save(notif);
     };

@@ -1,4 +1,4 @@
-package csd.app.user;
+package csd.app.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

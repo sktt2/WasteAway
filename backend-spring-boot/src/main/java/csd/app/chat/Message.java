@@ -1,5 +1,6 @@
 package csd.app.chat;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -10,16 +11,15 @@ import csd.app.user.*;
 
 @Entity
 @Getter
-@Setter
 public class Message {
     
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @NotNull(message = "Message cannot be empty")
-    @Size(min = 1, message = "Message cannot be empty")
+    @NotBlank(message = "Message content cannot be empty or null")
+    @Size(max = 2000, message = "Message content must be 2000 characters or lower.")
     private String content;
 
-    @NotNull(message = "Date and time should not be empty")
+    @NotBlank(message = "Date and time cannot be empty or null")
     private String dateTime;
 
     @ManyToOne
@@ -37,11 +37,19 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
+    @Autowired
+    public Message(String content, String dateTime, Chat chat, User sender, User receiver) {
+        this.content = content;
+        this.dateTime = dateTime;
+        this.chat = chat;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
     public Message() {
     }
 
-    public Message(String content, String dateTime) {
-        this.content = content;
-        this.dateTime = dateTime;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

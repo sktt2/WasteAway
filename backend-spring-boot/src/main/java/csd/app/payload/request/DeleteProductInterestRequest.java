@@ -1,12 +1,16 @@
 package csd.app.payload.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.constraints.*;
+import lombok.*;
 
 @Getter
 @Setter
 public class DeleteProductInterestRequest {
+	
+	@NotNull(message = "Interested User ID cannot be null")
 	private Long interestedUserId;
+
+	@NotNull(message = "Product ID cannot be null")
 	private Long productId;
 
 	public DeleteProductInterestRequest() {

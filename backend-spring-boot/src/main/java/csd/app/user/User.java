@@ -2,6 +2,8 @@ package csd.app.user;
 import csd.app.product.Product;
 import csd.app.roles.*;
 import csd.app.chat.*;
+import csd.app.notification.Notification;
+
 import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,16 +22,16 @@ public class User {
 
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-    @NotNull(message = "Username should not be null")
+    @NotBlank(message = "Username should not be null")
     @Column(unique = true)
     private String username;
 
     @Email
     @Column(unique = true)
-    @NotNull(message = "email should not be null")
+    @NotBlank(message = "email should not be null")
     private String email;
 
-    @NotNull(message = "Password should not be null")
+    @NotBlank(message = "Password should not be null")
     private String password;
 
     private boolean firstTime = true;
@@ -69,7 +71,17 @@ public class User {
     @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Product> products;
+    
+    @JsonIgnore
+    @JsonManagedReference
+    @OneToMany(mappedBy = "sender", cascade= CascadeType.ALL)
+    private List<Notification> notificationSenders;
 
+    @JsonIgnore
+    @JsonManagedReference
+    @OneToMany(mappedBy = "receiver", cascade= CascadeType.ALL)
+    private List<Notification> notificationReceivers;
+    
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
