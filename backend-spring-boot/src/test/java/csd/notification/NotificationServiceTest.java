@@ -43,11 +43,8 @@ public class NotificationServiceTest {
     "password");
     user.setId(1L);
     user2.setId(2L);
-    Chat validChat = new Chat();
+    Chat validChat = new Chat(user2, user, product);
     validChat.setId(1L);
-    validChat.setTaker(user2);
-    validChat.setOwner(user);
-    validChat.setProduct(product);
 
     Notification validnotif = new Notification(validChat, user2, user, false);
     // mock the "save" operation
@@ -69,11 +66,8 @@ public class NotificationServiceTest {
     "password");
     user.setId(1L);
     user2.setId(2L);
-    Chat validChat = new Chat();
+    Chat validChat = new Chat(user2, user, product);
     validChat.setId(1L);
-    validChat.setTaker(user2);
-    validChat.setOwner(user);
-    validChat.setProduct(product);
 
     Notification validnotif = new Notification(validChat, user2, user, false);
     // mock the "save" operation

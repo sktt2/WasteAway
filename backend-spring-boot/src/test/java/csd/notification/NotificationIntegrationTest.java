@@ -129,11 +129,7 @@ class NotificationIntegrationTest {
                                 "SINGAPORE1234568", 87231234);
                 users.save(user2);
                 userInfos.save(userInfo2);
-                Chat validChat = new Chat();
-
-                validChat.setTaker(user2);
-                validChat.setOwner(user);
-                validChat.setProduct(product);
+                Chat validChat = new Chat(user2, user, product);
 
                 chats.save(validChat);
 
