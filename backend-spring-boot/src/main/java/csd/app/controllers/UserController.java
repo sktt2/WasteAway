@@ -10,6 +10,7 @@ import csd.app.payload.request.UpdateUserRequest;
 import csd.app.payload.response.MessageResponse;
 import csd.app.payload.response.UserInfoResponse;
 import csd.app.user.*;
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping("api/users/update")
-    public ResponseEntity<?> updateUserDetail(@RequestBody UpdateUserRequest updateUser) {
+    public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UpdateUserRequest updateUser) {
 
         // Validation check for updating user email
         User checkUser = userService.getUserByEmail(updateUser.getEmail());
@@ -43,10 +44,12 @@ public class UserController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        UserInfo userInfo = user.getUserInfo();
+        
 
         // Validation check for updating user details 
         try {
+            UserInfo userInfo = user.getUserInfo();
+
             userInfo.setAddress(updateUser.getAddress());
             userInfo.setName(updateUser.getName());
             userInfo.setPhoneNumber(updateUser.getPhoneNumber());

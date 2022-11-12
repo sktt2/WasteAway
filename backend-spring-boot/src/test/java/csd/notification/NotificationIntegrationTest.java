@@ -25,7 +25,6 @@ import csd.app.user.User;
 import csd.app.user.UserRepository;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
-
 import csd.app.chat.Chat;
 import csd.app.chat.ChatRepository;
 import csd.app.notification.Notification;
@@ -76,8 +75,8 @@ class NotificationIntegrationTest {
         void tearDown() {
                 // clear the database after each test
                 products.deleteAll();
-                users.deleteAll();
                 userInfos.deleteAll();
+                users.deleteAll();
         }
 
         @Test
@@ -118,11 +117,7 @@ class NotificationIntegrationTest {
                                 "SINGAPORE1234568", 87231234);
                 users.save(user2);
                 userInfos.save(userInfo2);
-                Chat validChat = new Chat();
-
-                validChat.setTaker(user2);
-                validChat.setOwner(user);
-                validChat.setProduct(product);
+                Chat validChat = new Chat(user2, user, product);
 
                 chats.save(validChat);
 

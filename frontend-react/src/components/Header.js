@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react"
 import ListItemAvatar from "@mui/material/ListItemAvatar"
 import Avatar from "@mui/material/Avatar"
@@ -15,9 +16,7 @@ import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import Badge from "@mui/material/Badge"
 import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import MenuItem from "@mui/material/MenuItem"
@@ -30,7 +29,6 @@ import Popper from "@mui/material/Popper"
 import Paper from "@mui/material/Paper"
 import DeleteIcon from "@mui/icons-material/Delete"
 import NotificationService from "../services/NotificationService"
-import { Icon } from "@mui/material"
 
 const pages = ["products"]
 const settings = ["profile", "chats", "logout"]
@@ -49,21 +47,15 @@ const Header = (props) => {
     }
     const handleNotifClick = async (data) => {
         if (data.read === false) {
-            const response = await NotificationService.updateNotificationIfRead(data.notifid).catch(
-                (error) => {
-                    console.log(error)
-                }
-            )
+            await NotificationService.updateNotificationIfRead(data.notifid).catch((error) => {
+                console.log(error)
+            })
         }
         history.push("/chat/" + data.chatid)
     }
 
     const openNotif = Boolean(anchorElNotif)
     const popperid = openNotif ? "notif-popper" : undefined
-    const notifcolors = {
-        true: "#bdbdbd",
-        false: "#fafafa",
-    }
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget)

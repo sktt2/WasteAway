@@ -96,6 +96,7 @@ class ProductDetail extends Component {
 	linkChat = (event) => {
 		event.preventDefault();
 		let newChat = {
+			ownerId: this.state.data.ownerId,
 			takerId: StorageHelper.getUserId(),
 			productId: this.state.id,
 		};

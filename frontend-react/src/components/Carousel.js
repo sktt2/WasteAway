@@ -1,9 +1,9 @@
 function CarouselComponent(props) {
-    const title = props.title;
+    const title = props.title
     //   const description = props.description;
-    const condition = props.condition;
-    const imgSource = props.imgSource;
-    const address = props.address;
+    const condition = props.condition
+    const imgSource = props.imgSource
+    const address = props.address
 
     return (
         <div style={{ borderStyle: "solid" }}>
@@ -13,12 +13,17 @@ function CarouselComponent(props) {
                     display: "flex",
                     alignItems: "stretched",
                     alignContent: "center",
-                    borderStyle: "solid",
+                    borderBottom: "solid",
                 }}>
                 <img
                     src={imgSource || ""}
                     alt={imgSource}
-                    style={{ minWidth: "80%", maxWidth: "80%", minHeight: 250, maxHeight: 250 }}></img>
+                    style={{
+                        minWidth: "80%",
+                        maxWidth: "80%",
+                        minHeight: 250,
+                        maxHeight: 250,
+                    }}></img>
             </div>
             <div style={{ paddingLeft: "5%" }}>
                 <h1>{title}</h1>
@@ -27,7 +32,7 @@ function CarouselComponent(props) {
                 <div>{address}</div>
             </div>
         </div>
-    );
+    )
 }
 
-export default CarouselComponent;
+export default CarouselComponent

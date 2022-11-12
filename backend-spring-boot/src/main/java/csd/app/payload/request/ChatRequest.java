@@ -4,13 +4,15 @@ import javax.validation.constraints.*;
 import lombok.*;
 
 @Getter
-@Setter
 public class ChatRequest {
 
-    @NotNull(message="Taker ID cannot be empty")
+    @NotNull(message="Taker Id cannot be null")
     private Long takerId;
 
-    @NotNull(message="Product ID should not be empty")
+    @NotNull(message="Owner Id cannot be null")
+    private Long ownerId;
+
+    @NotNull(message="Product Id cannot be null")
 	private Long productId;
     
 }

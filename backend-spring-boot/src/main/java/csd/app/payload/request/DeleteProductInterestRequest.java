@@ -6,10 +6,11 @@ import lombok.*;
 @Getter
 @Setter
 public class DeleteProductInterestRequest {
-	@NotBlank (message = "Interested User ID should not be empty")
+	
+	@NotNull(message = "Interested User ID cannot be null")
 	private Long interestedUserId;
 
-	@NotBlank (message = "Product ID should not be empty")
+	@NotNull(message = "Product ID cannot be null")
 	private Long productId;
 
 	public DeleteProductInterestRequest() {

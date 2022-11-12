@@ -11,17 +11,19 @@ import csd.app.user.*;
 @Service
 public class ChatServiceImpl implements ChatService {
     
-    @Autowired
     private ChatRepository chats;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private ProductService productService;
+    private MessageRepository messages;
 
     @Autowired
-    private MessageRepository messages;
+    public ChatServiceImpl(ChatRepository chats, UserService userService,
+            ProductService productService, MessageRepository messages) {
+        this.chats = chats;
+        this.userService = userService;
+        this.productService = productService;
+        this.messages = messages;
+    }
 
     public Chat getChatByProductIdAndTakerId(Long productId, Long takerId) {
         Product product = productService.getProduct(productId);
@@ -29,7 +31,7 @@ public class ChatServiceImpl implements ChatService {
         return chats.findByProductAndTaker(product, taker);
     }
 
-    public List<Chat> getChatbyUsername(String username) {
+    public List<Chat> getChatByUsername(String username) {
         User user = userService.getUserByUsername(username);
         List<Chat> chatOwner = chats.findByOwner(user);
         List<Chat> chatTaker = chats.findByTaker(user);
@@ -38,31 +40,43 @@ public class ChatServiceImpl implements ChatService {
     }
 
     public Chat getChatById(Long id) {
-        return chats.findById(id).get();
+        return chats.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chat " + id + " not found."));
     }
 
     public List<Message> getMessagesByChat(Chat chat) {
+
+        // Throws illegalargumentexception if chat is null
         return messages.findByChat(chat);
     }
 
-    public Chat addChat(Chat chat, Long takerId, Long ownerId, Long productId) {
+    public Chat addChat(Long takerId, Long ownerId, Long productId) {
+
+        // Return chat if it exists already
         if (getChatByProductIdAndTakerId(productId, takerId) != null) {
             return getChatByProductIdAndTakerId(productId, takerId);
         }
-        // Separate this into another method
-        if (ownerId == takerId) {
-            return null;
+
+        // Caught by RestExceptionHandler for badRequest()
+        if (ownerId.equals(takerId)) {
+            throw new RuntimeException("Owner cannot be taker.");
         }
-        chat.setTaker(userService.getUser(takerId));
-        chat.setOwner(userService.getUser(ownerId));
-        chat.setProduct(productService.getProduct(productId));
+
+        User taker = userService.getUser(takerId);
+        User owner = userService.getUser(ownerId);
+        Product product = productService.getProduct(productId);
+        Chat chat = new Chat(taker, owner, product);
         return chats.save(chat);
     }
 
-    public Message addMessage(Message message, String senderUsername, String receiverUsername, Long chatId) {
-        message.setSender(userService.getUserByUsername(senderUsername));
-        message.setReceiver(userService.getUserByUsername(receiverUsername));
-        message.setChat(getChatById(chatId));
+    public Message addMessage(String content, String dateTime, String senderUsername, String receiverUsername, Long chatId) {
+        if (senderUsername.equals(receiverUsername)) {
+            throw new RuntimeException("Sender cannot be receiver.");
+        }
+        User sender = userService.getUserByUsername(senderUsername);
+        User receiver = userService.getUserByUsername(receiverUsername);
+        Chat chat = getChatById(chatId);
+        Message message = new Message(content, dateTime, chat, sender, receiver);
         return messages.save(message);
     }
 }

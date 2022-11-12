@@ -1,7 +1,7 @@
+/* eslint-disable no-sequences */
 import React, { Component } from "react"
 import { Box, Tab, Tabs, Typography, Button } from "@mui/material"
 import { Grid } from "@mui/material"
-import CartIcon from "@mui/icons-material/LocalGroceryStore"
 import SettingsIcon from "@mui/icons-material/Settings"
 import StorageHelper from "../services/StorageHelper"
 import AddIcon from "@mui/icons-material/Add"
@@ -59,7 +59,7 @@ class Profile extends Component {
         this.setState({ data: res.data })
         const object = give.data.reduce((obj, item) => ((obj[item.id] = item.receiverId), obj), {})
         this.setState({ give: object })
-        this.setState({ name: StorageHelper.getName(), username: StorageHelper.getUserId() })
+        this.setState({ name: StorageHelper.getName(), username: StorageHelper.getUsername() })
     }
 
     handleChange = (event, newValue) => {

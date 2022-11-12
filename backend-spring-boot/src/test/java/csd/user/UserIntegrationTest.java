@@ -16,10 +16,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpMethod;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.json.JSONObject;
 
 import csd.app.user.User;
 import csd.app.user.UserRepository;
@@ -143,29 +146,6 @@ class UserIntegrationTest {
     }
 
     @Test
-    public void updateUserRecommendation_InvalidFields_Failure() throws Exception {        
-        User user = new User("tester2", "blabla@hotmail.com",
-                encoder.encode("password1"));
-        users.save(user);
-        Long userId = user.getId();
-        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
-                "SINGAPORE01234567", 87231231);
-        userInfos.save(userInfo);
-        UserRecommendation userRecommendation = new UserRecommendation("NONE", userId);
-        userRecommendations.save(userRecommendation); 
-        RecommendationRequest recommendationRequest = new RecommendationRequest("", "");
-
-        URI uri = new URI(baseUrl + port + "/api/products/recommendation/update");
-
-        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT,
-                new HttpEntity<RecommendationRequest>(recommendationRequest), String.class);
-        JsonNode root = objectMapper.readTree(result.getBody());
-
-        assertEquals(400, result.getStatusCode().value());
-        assertEquals("Recommendation cannot be emptyUsername cannot be empty", root.path("message").asText());
-    }
-
-    @Test
     public void getUserRecommendation_Success() throws Exception {
         User user = new User("tester2", "blabla@hotmail.com",
                 encoder.encode("password1"));
@@ -195,5 +175,395 @@ class UserIntegrationTest {
 
         assertNotEquals(validRecommendation, "");
         assertEquals(400, result.getStatusCode().value(), "Username cannot be empty");
+    }
+    
+    @Test
+    public void updateUserDetails_Success() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals("User updated successfully", root.path("message").asText());
+        assertEquals(true, users.existsByUsername("testerDetail"));
+    }
+
+    @Test
+    public void updateUserDetails_InvalidUsername_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testering");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Error: Invalid Details", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmptyUsername_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "Username should not be empty");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", "81112111");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Username should be between 3 to 20 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmptyEmail_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", "81112111");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Email should not be empty", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_InvalidEmail_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10.com");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Invalid email", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmailTooLong_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz@email.com");
+        personJsonObject.put("name", "Tester 10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Email should be under 50 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmptyName_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Name should not be empty", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_NameTooShort_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "a");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Name should be between 3 to 50 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_NameTooLong_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Name should be between 3 to 50 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmptyAddress_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester10");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Address should not be empty", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_AddressTooShort_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester10");
+        personJsonObject.put("address", "a");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Address should be between 3 to 50 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_AddressTooLong_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester10");
+        personJsonObject.put("address", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        personJsonObject.put("phoneNumber", 81112111);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Address should be between 3 to 50 characters", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_EmptyPhoneNo_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Invalid phone number, phone number should be 8 digits starting with 8/9", root.path("message").asText());
+    }
+
+    @Test
+    public void updateUserDetails_InvalidPhoneNo_Failure() throws Exception {
+        User user = new User("testerDetail", "blabla@hotmail.com",
+                        encoder.encode("password1"));
+        users.save(user);
+        Long userId = user.getId();
+        UserInfo userInfo = new UserInfo(userId, user.getUsername(),
+                        "SINGAPORE01234567", 87231231);
+        userInfos.save(userInfo);
+
+        URI uri = new URI(baseUrl + port + "/api/users/update");
+        JSONObject personJsonObject = new JSONObject();
+        personJsonObject.put("username", "testerDetail");
+        personJsonObject.put("email", "tester10@email.com");
+        personJsonObject.put("name", "Tester10");
+        personJsonObject.put("address", "TesterVille Street 10");
+        personJsonObject.put("phoneNumber", "01112111");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<String>(personJsonObject.toString(), headers);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, request, String.class);
+        JsonNode root = objectMapper.readTree(result.getBody());
+
+        assertEquals(400, result.getStatusCode().value());
+        assertEquals("Invalid phone number, phone number should be 8 digits starting with 8/9", root.path("message").asText());
     }
 }
