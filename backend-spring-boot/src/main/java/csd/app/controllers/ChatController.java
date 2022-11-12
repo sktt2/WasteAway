@@ -75,7 +75,7 @@ public class ChatController {
     public ResponseEntity<?> createChat(@Valid @RequestBody ChatRequest chatRequest) {
         Chat savedChat = chatService.addChat(chatRequest.getTakerId(), chatRequest.getOwnerId(),
                 chatRequest.getProductId());
-        notificationService.addNotification((new Notification(savedChat, savedChat.getTaker(), savedChat.getOwner(), false)));
+        notificationService.addNotification((new Notification(savedChat, savedChat.getOwner(), false)));
         ChatResponse response = new ChatResponse(savedChat.getId(), savedChat.getOwner(),
                 savedChat.getTaker(), savedChat.getProduct());
         return ResponseEntity.created(URI.create("/api/chat")).body(response);
