@@ -2,9 +2,14 @@ package csd.app.notification;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType; 
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -14,11 +19,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 public class Notification {
 
-    @Id @GeneratedValue
-    private Long notifid;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
     @ManyToOne
     @JsonBackReference
@@ -27,26 +30,31 @@ public class Notification {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "notif_user")
+    @JoinColumn(name = "user_id")
     private User user;
     
-    private String messageContent;
+    @NotBlank(message = "Notification content cannot be empty or null")
+    private String notificationContent;
 
-    private boolean isRead;
+    @NotNull(message = "Notification read state cannot be null")
+    private Boolean isRead;
 
-    public boolean getIsRead() {
-        return isRead;
-    }
-
-    public Notification() {
-
-    }
-    
-    public Notification(Chat chat, User user, boolean isRead) {
+    @Autowired
+    public Notification(Chat chat, User user, String notificationContent) {
         this.chat = chat;
-        this.isRead = isRead;
+        this.isRead = false;
         this.user = user;
+        this.notificationContent = notificationContent;
     }
     
+    public Notification() {
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
+    }
 }

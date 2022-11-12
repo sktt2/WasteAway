@@ -75,7 +75,7 @@ public class User {
     @JsonIgnore
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade= CascadeType.ALL)
-    private List<Notification> notificationUser;
+    private List<Notification> notifications;
     
     public User(String username, String email, String password) {
         this.username = username;

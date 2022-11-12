@@ -46,7 +46,7 @@ public class NotificationServiceTest {
     Chat validChat = new Chat(user2, user, product);
     validChat.setId(1L);
 
-    Notification validnotif = new Notification(validChat, user, false);
+    Notification validnotif = new Notification(validChat, user, "Notification is valid.");
     // mock the "save" operation
     when(notifs.save(any(Notification.class))).thenReturn(validnotif);
     // act ***
@@ -69,7 +69,7 @@ public class NotificationServiceTest {
     Chat validChat = new Chat(user2, user, product);
     validChat.setId(1L);
 
-    Notification validnotif = new Notification(validChat, user, false);
+    Notification validnotif = new Notification(validChat, user, "Notification is valid.");
     // mock the "save" operation
     when(notifs.save(any(Notification.class))).thenReturn(validnotif);
     // act ***

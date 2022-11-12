@@ -38,11 +38,7 @@ public class NotificationController {
         List<NotificationResponse> resp = new ArrayList<NotificationResponse>();
         
         for (Notification notif : notiflist) {
-            String senderUsername = notificationService.getSenderUsername(notif);
-            NotificationResponse notifasresponse = new NotificationResponse(notif.getNotifid(), notif.getChat().getId(),
-                    senderUsername, notif.getChat().getProduct().getId(),
-                    notif.getChat().getProduct().getProductName(), notif.getChat().getProduct().getImageUrl(),
-                    notif.getMessageContent(), notif.getIsRead());
+            NotificationResponse notifasresponse = new NotificationResponse(notif);
             resp.add(notifasresponse);
         }
         return ResponseEntity.ok(resp);
@@ -53,7 +49,7 @@ public class NotificationController {
         Notification oldNotif = notificationService.getNotificationById(notifid);
         Notification updatedNotif = notificationService.updateNotificationIfRead(oldNotif);
         if (!updatedNotif.getIsRead()) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Notification is not read"));
+            throw new RuntimeException("Notification is not read!");
         }
         return ResponseEntity.ok(new MessageResponse("Notification is now read!"));
     }

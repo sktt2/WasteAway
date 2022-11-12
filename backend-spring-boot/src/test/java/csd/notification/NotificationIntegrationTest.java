@@ -74,6 +74,8 @@ class NotificationIntegrationTest {
         @AfterEach
         void tearDown() {
                 // clear the database after each test
+                notifications.deleteAll();
+                chats.deleteAll();
                 products.deleteAll();
                 userInfos.deleteAll();
                 users.deleteAll();
@@ -114,25 +116,25 @@ class NotificationIntegrationTest {
                                 "password");
                 users.save(user2);
                 UserInfo userInfo2 = new UserInfo(user2.getId(), user2.getUsername(),
-                                "SINGAPORE1234568", 87231234);
+                        "SINGAPORE1234568", 87231234);
                 users.save(user2);
                 userInfos.save(userInfo2);
                 Chat validChat = new Chat(user2, user, product);
 
                 chats.save(validChat);
 
-                Notification notif = new Notification(validChat, user, false);
+                Notification notif = new Notification(validChat, user, "Notification sent");
                 notifications.save(notif);
 
                 String username = user.getUsername();
                 URI uri = new URI(baseUrl + port + "/api/notifications/" + username);
 
-                ResponseEntity<NotificationResponse[]> result = restTemplate.getForEntity(uri,
-                                NotificationResponse[].class);
-                NotificationResponse[] notifArr = result.getBody();
+                ResponseEntity<String> result = restTemplate.getForEntity(uri,
+                        String.class);
+                JsonNode root = objectMapper.readTree(result.getBody());
 
-                assertNotNull(notifArr);
+                assertNotNull(root);
                 assertEquals(200, result.getStatusCode().value());
-                assertEquals(1, notifArr.length);
+                assertEquals(1, root.size());
         }
 }
