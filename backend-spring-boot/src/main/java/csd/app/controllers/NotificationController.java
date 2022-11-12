@@ -36,9 +36,11 @@ public class NotificationController {
 
         List<Notification> notiflist = notificationService.getNotificationbyUsername(username);
         List<NotificationResponse> resp = new ArrayList<NotificationResponse>();
+        
         for (Notification notif : notiflist) {
+            String senderUsername = notificationService.getSenderUsername(notif);
             NotificationResponse notifasresponse = new NotificationResponse(notif.getNotifid(), notif.getChat().getId(),
-                    notif.getSender().getUsername(), notif.getChat().getProduct().getId(),
+                    senderUsername, notif.getChat().getProduct().getId(),
                     notif.getChat().getProduct().getProductName(), notif.getChat().getProduct().getImageUrl(),
                     notif.getMessageContent(), notif.getIsRead());
             resp.add(notifasresponse);

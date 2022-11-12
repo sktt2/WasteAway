@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import csd.app.user.User;
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
@@ -15,7 +17,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> allnotifs = notifications.findAll();
         List<Notification> notiflist = new ArrayList<Notification>();
         for (Notification notif : allnotifs) {
-            if (notif.getReceiver().getUsername().equals(username)) {
+            if (notif.getUser().getUsername().equals(username)) {
                 notiflist.add(notif);
             }
         }
@@ -37,5 +39,14 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification updateNotificationIfRead(Notification notif) {
         notif.setRead(true);
         return notifications.save(notif);
+    }
+
+    public String getSenderUsername(Notification notif) {
+        User taker = notif.getChat().getTaker();
+        User owner = notif.getChat().getOwner();
+        if (taker.equals(notif.getUser())) {
+            return owner.getUsername();
+        }
+        return taker.getUsername();
     }
 }

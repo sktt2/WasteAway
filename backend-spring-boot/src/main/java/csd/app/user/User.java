@@ -71,16 +71,11 @@ public class User {
     @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Product> products;
-    
-    @JsonIgnore
-    @JsonManagedReference
-    @OneToMany(mappedBy = "sender", cascade= CascadeType.ALL)
-    private List<Notification> notificationSenders;
 
     @JsonIgnore
     @JsonManagedReference
-    @OneToMany(mappedBy = "receiver", cascade= CascadeType.ALL)
-    private List<Notification> notificationReceivers;
+    @OneToMany(mappedBy = "user", cascade= CascadeType.ALL)
+    private List<Notification> notificationUser;
     
     public User(String username, String email, String password) {
         this.username = username;

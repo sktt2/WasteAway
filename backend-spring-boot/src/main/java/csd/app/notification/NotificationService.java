@@ -7,4 +7,5 @@ public interface NotificationService {
     Notification getNotificationById(Long id);
     Notification addNotification(Notification notif);
     Notification updateNotificationIfRead(Notification notif);
+    String getSenderUsername(Notification notif);
 }

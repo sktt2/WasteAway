@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +16,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -31,11 +25,9 @@ import csd.app.user.User;
 import csd.app.user.UserRepository;
 import csd.app.user.UserInfo;
 import csd.app.user.UserInfoRepository;
-import csd.app.user.UserRecommendation;
-import csd.app.user.UserRecommendationRepository;
+
 import csd.app.chat.Chat;
 import csd.app.chat.ChatRepository;
-import csd.app.chat.MessageRepository;
 import csd.app.notification.Notification;
 import csd.app.notification.NotificationRepository;
 import csd.app.payload.response.NotificationResponse;
@@ -73,9 +65,6 @@ class NotificationIntegrationTest {
 
         @Autowired
         private ChatRepository chats;
-
-        @Autowired
-        private MessageRepository messages;
 
         @Autowired
         private NotificationRepository notifications;
@@ -137,7 +126,7 @@ class NotificationIntegrationTest {
 
                 chats.save(validChat);
 
-                Notification notif = new Notification(validChat, user2, user, false);
+                Notification notif = new Notification(validChat, user, false);
                 notifications.save(notif);
 
                 String username = user.getUsername();

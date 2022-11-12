@@ -24,16 +24,11 @@ public class Notification {
     @JsonBackReference
     @JoinColumn(name = "chat_id")
     private Chat chat;
-    
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "notif_sender_id")
-    private User sender;
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "notif_receiver_id")
-    private User receiver;
+    @JoinColumn(name = "notif_user")
+    private User user;
     
     private String messageContent;
 
@@ -47,11 +42,10 @@ public class Notification {
 
     }
     
-    public Notification(Chat chat, User sender, User receiver, boolean isRead) {
+    public Notification(Chat chat, User user, boolean isRead) {
         this.chat = chat;
         this.isRead = isRead;
-        this.receiver = receiver;
-        this.sender = sender;
+        this.user = user;
     }
     
 
