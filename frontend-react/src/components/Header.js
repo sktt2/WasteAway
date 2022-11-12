@@ -47,11 +47,11 @@ const Header = (props) => {
     }
     const handleNotifClick = async (data) => {
         if (data.read === false) {
-            await NotificationService.updateNotificationIfRead(data.notifid).catch((error) => {
+            await NotificationService.updateNotificationIfRead(data.notificationId).catch((error) => {
                 console.log(error)
             })
         }
-        history.push("/chat/" + data.chatid)
+        history.push("/chat/" + data.chatId)
     }
 
     const openNotif = Boolean(anchorElNotif)
@@ -92,9 +92,9 @@ const Header = (props) => {
         return filterChat(messages.data)
     }
     const filterChat = (messages) => {
-        const chats = [...new Map(messages.map((item) => [item["chatid"], item])).values()]
+        const chats = [...new Map(messages.map((item) => [item["chatId"], item])).values()]
         chats.sort((a, b) => {
-            return b.notifid - a.notifid
+            return b.notificationId - a.notificationId
         })
         return chats
     }
@@ -166,12 +166,12 @@ const Header = (props) => {
                                                 padding: "0 10px 10px 10px",
                                             }}>
                                             <Avatar sx={{ bgcolor: "#f44336" }}>
-                                                {data.takerusername.charAt(0).toUpperCase()}
+                                                {data.userUsername.charAt(0).toUpperCase()}
                                             </Avatar>
                                         </ListItemAvatar>
                                         <ListItemText
                                             sx={{ minWidth: "0" }}
-                                            primary={data.takeruserame}
+                                            primary={data.userUserame}
                                             secondary={
                                                 <React.Fragment>
                                                     <Typography
@@ -185,9 +185,9 @@ const Header = (props) => {
                                                         {data.productName}
                                                     </Typography>
                                                     <Typography color="text.primary">
-                                                        {data.takerusername}
+                                                        {data.userUsername}
                                                     </Typography>
-                                                    {data.chatMessage || "  "}
+                                                    {data.notificationContent || "  "}
                                                 </React.Fragment>
                                             }
                                         />{" "}
