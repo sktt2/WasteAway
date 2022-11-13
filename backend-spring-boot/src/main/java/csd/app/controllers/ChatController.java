@@ -75,7 +75,8 @@ public class ChatController {
     public ResponseEntity<?> createChat(@Valid @RequestBody ChatRequest chatRequest) {
         Chat savedChat = chatService.addChat(chatRequest.getTakerId(), chatRequest.getOwnerId(),
                 chatRequest.getProductId());
-        notificationService.addNotification((new Notification(savedChat, savedChat.getTaker(), savedChat.getOwner(), false)));
+        notificationService.addNotification((new Notification(savedChat, savedChat.getOwner(),
+                savedChat.getTaker().getUsername() + " has indicated interest on product!")));
         ChatResponse response = new ChatResponse(savedChat.getId(), savedChat.getOwner(),
                 savedChat.getTaker(), savedChat.getProduct());
         return ResponseEntity.created(URI.create("/api/chat")).body(response);
@@ -87,9 +88,8 @@ public class ChatController {
                 messageRequest.getSenderUsername(), messageRequest.getReceiverUsername(),
                 messageRequest.getChatId());
 
-        Notification chatNotification = new Notification(savedMessage.getChat(), savedMessage.getSender(), savedMessage.getReceiver(), false);
-        chatNotification.setMessageContent(savedMessage.getContent());
-        notificationService.addNotification(chatNotification);
+        notificationService.addNotification(new Notification(savedMessage.getChat(),
+                savedMessage.getReceiver(), savedMessage.getContent()));
 
         ChatMessageResponse response = new ChatMessageResponse(savedMessage, 
         savedMessage.getSender(), savedMessage.getReceiver(), savedMessage.getChat().getId());
